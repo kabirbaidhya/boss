@@ -1,8 +1,0 @@
-{
-    "services": {
-        "slack": {
-            "enabled": true,
-            "endpoint": "TestTest"
-        }
-    }
-}

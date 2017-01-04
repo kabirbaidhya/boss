@@ -1,10 +1,9 @@
 
-import json
-
+import yaml
 from boss.util import halt
 from boss import config as boss_config
 
-DEFAULT_CONFIG_FILE = 'boss.json'
+DEFAULT_CONFIG_FILE = 'boss.yml'
 
 
 def get_default():
@@ -31,7 +30,7 @@ def load(filename=DEFAULT_CONFIG_FILE):
 
     try:
         with open(filename) as file_contents:
-            loaded_config = json.load(file_contents)
+            loaded_config = yaml.load(file_contents)
             config.update(loaded_config)
             boss_config.update(config)
 

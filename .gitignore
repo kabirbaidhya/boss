@@ -5,3 +5,5 @@ build
 dist
 *.pyc
 pyboss
+boss.yml
+
