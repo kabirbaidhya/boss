@@ -1,4 +1,4 @@
-from fabric.api import run
+from fabric.api import run, hide
 
 
 def fetch(prune=True):
@@ -11,3 +11,14 @@ def checkout(branch):
 
 def pull(branch):
     run('git pull origin %s' % branch)
+
+
+def get_remote_branch():
+    with hide('everything'):
+        result = run('git rev-parse --abbrev-ref HEAD')
+
+    return result.strip()
+
+
+def sync_origin(branch):
+    run('git reset --hard origin/%s' % branch)
