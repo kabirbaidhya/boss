@@ -1,0 +1,5 @@
+[REPORTS]
+reports=no
+
+[MESSAGES CONTROL]
+disable=missing-docstring,invalid-name
