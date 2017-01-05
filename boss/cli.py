@@ -3,6 +3,7 @@ boss
 
 Usage:
   boss hello
+  boss <stage> <task>
   boss -h | --help
   boss --version
 
