@@ -1,45 +1,65 @@
-import json
-from boss import config
-from fabric.api import local
-from .util import get_user, get_branch_url
+'''
+Module for slack API.
+'''
 
-DEPLOYING_COLOR = 'good'
-DEPLOYED_COLOR = '#764FA5'
-HOOK_BASE_URI = 'https://hooks.slack.com/services'
+import json
+from fabric.api import local, parallel
+from ..config import get as _get_config
+
 DEPLOYING_MESSAGE = '{user} is deploying branch {branch_link} to {server_link} server.'
 DEPLOYED_SUCCESS_MESSAGE = 'Finished deploying branch {branch_link} to {server_link} server.'
 
 
+def config():
+    ''' Get slack configuration. '''
+    return _get_config()['services']['slack']
+
+
 def is_enabled():
-    return config['services']['slack']['enabled']
+    ''' Check if slack is enabled or not. '''
+    return config()['enabled']
 
 
+def create_link(url, title):
+    ''' Create a link for slack payload. '''
+    return '<{url}|{title}>'.format(
+        url=url,
+        title=title
+    )
+
+
+@parallel
 def notify(payload):
-    command = 'curl -X POST -H "Content-type: application/json" --data \'%s\' %s'
-    slack_url = HOOK_BASE_URI + config['services']['slack']['endpoint']
+    ''' Send a notification on Slack. '''
+    command = 'curl -X POST -H "Content-type: application/json" --data \'{data}\' {url}'
+    # TODO: Don't rely on curl to do this.
 
-    # TODO: Do builtin functions for invoking the shell command
-    local(command % (json.dumps(payload), slack_url))
+    local(command.format(
+        data=json.dumps(payload),
+        url=config()['base_uri'] + config()['endpoint']
+    ))
 
 
 def notify_deploying(**params):
-    branch_url = get_branch_url(params['branch'])
-    branch_link = create_link(branch_url, params['branch'])
+    ''' Send Deploying notification on Slack. '''
+    branch_link = create_link(params['branch_url'], params['branch'])
     server_link = create_link(params['public_url'], params['host'])
     server_short_link = create_link(
-        params['public_url'], params['server_name'])
+        params['public_url'], params['server_name']
+    )
 
     text = DEPLOYING_MESSAGE.format(
-        user=get_user(),
+        user=params['user'],
         branch_link=branch_link,
-        server_link=server_short_link)
+        server_link=server_short_link
+    )
 
     payload = {
         "text": text,
         "attachments": [
             {
                 "title": "Deploying",
-                "color": DEPLOYING_COLOR,
+                "color": config()['deploying_color'],
                 "fields": [
                     {
                         "title": "Branch",
@@ -61,22 +81,24 @@ def notify_deploying(**params):
 
 
 def notify_deployed(**params):
-    branch_url = get_branch_url(params['branch'])
-    branch_link = create_link(branch_url, params['branch'])
+    ''' Send Deployed notification on Slack. '''
+    branch_link = create_link(params['branch_url'], params['branch'])
     server_link = create_link(params['public_url'], params['host'])
     server_short_link = create_link(
-        params['public_url'], params['server_name'])
+        params['public_url'], params['server_name']
+    )
 
     text = DEPLOYED_SUCCESS_MESSAGE.format(
         branch_link=branch_link,
-        server_link=server_short_link)
+        server_link=server_short_link
+    )
 
     payload = {
         "text": text,
         "attachments": [
             {
                 "title": "Finished Deploying",
-                "color": DEPLOYED_COLOR,
+                "color": config()['deployed_color'],
                 "fields": [
                     {
                         "title": "Branch",
@@ -95,7 +117,3 @@ def notify_deployed(**params):
 
     # Notify on slack
     notify(payload)
-
-
-def create_link(url, title):
-    return '<%s|%s>' % (url, title)

@@ -1,3 +1,1 @@
-__version__ = '0.0.2'
-
-config = {}
+__version__ = '0.0.1'
