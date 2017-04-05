@@ -10,6 +10,11 @@ def enable(service):
     run('sudo systemctl enable %s' % service)
 
 
+def start(service):
+    ''' Start the service. '''
+    run('sudo systemctl start %s' % service)
+
+
 def restart(service):
     ''' Restart the service. '''
     run('sudo systemctl restart %s' % service)

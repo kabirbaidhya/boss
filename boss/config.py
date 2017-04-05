@@ -11,6 +11,7 @@ DEFAULT_CONFIG = {
     'app_dir': '~/',
     'branch': 'dev',
     'repository_url': '',
+    'branch_url': '{repository_url}/branch/{branch}',
     'service': '',
     'stages': {},
     'services': {
@@ -62,3 +63,16 @@ def get_stage_config(stage):
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
         ))
+
+
+def fallback_branch(stage):
+    ''' Get the fallback branch for the stage. '''
+    return get_stage_config(stage).get('branch') or _config['branch']
+
+
+def get_branch_url(branch):
+    ''' Get the branch url to view it on the Web (eg: GitHub, GitLab etc.). '''
+    return _config['branch_url'].format(
+        repository_url=_config['repository_url'],
+        branch=branch
+    )
