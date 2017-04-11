@@ -3,6 +3,7 @@ Default tasks Module.
 '''
 
 from fabric.api import run, hide, task
+from fabric.context_managers import shell_env
 from .api import git, notif, shell, npm, systemctl
 from .util import info
 from .config import fallback_branch, get_service
@@ -67,9 +68,10 @@ def sync(branch=None):
 
 
 @task
-def build(stage=None):
+def build(stage_name=None):
     ''' Build the application. '''
-    npm.run('build')
+    with shell_env(STAGE=(stage_name or stage)):
+        npm.run('build')
 
 
 @task
