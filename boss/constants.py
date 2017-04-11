@@ -7,7 +7,7 @@ DEFAULT_CONFIG = {
     'branch': 'dev',
     'repository_url': '',
     'branch_url': '{repository_url}/branch/{branch}',
-    'service': '',
+    'service': None,
     'stages': {},
     'services': {
         'slack': {

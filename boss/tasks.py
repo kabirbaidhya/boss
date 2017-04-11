@@ -5,7 +5,7 @@ Default tasks Module.
 from fabric.api import run, hide, task
 from .api import git, notif, shell, npm, systemctl
 from .util import info
-from .config import get as get_config, fallback_branch
+from .config import fallback_branch, get_service
 
 stage = shell.get_stage()
 
@@ -24,8 +24,8 @@ def check():
 @task
 def deploy(branch=None):
     ''' The deploy task. '''
-    config = get_config()
     branch = branch or fallback_branch(stage)
+    service = get_service()
     notif.send(notif.DEPLOYMENT_STARTED, {
         'user': shell.get_user(),
         'branch': branch,
@@ -35,7 +35,7 @@ def deploy(branch=None):
     # Get the latest code from the repository
     sync(branch)
 
-    systemctl.stop(config['service'])
+    systemctl.stop(service)
     # Installing dependencies
     npm.install()
 
@@ -43,9 +43,9 @@ def deploy(branch=None):
     build(stage)
 
     # Enable and Restart the service
-    systemctl.enable(config['service'])
-    systemctl.restart(config['service'])
-    systemctl.status(config['service'])
+    systemctl.enable(service)
+    systemctl.restart(service)
+    systemctl.status(service)
 
     notif.send(notif.DEPLOYMENT_FINISHED, {
         'branch': branch,
@@ -72,4 +72,28 @@ def build(stage=None):
     npm.run('build')
 
 
-__all__ = ['deploy', 'check', 'sync', 'build']
+@task
+def stop():
+    ''' Stop the service. '''
+    systemctl.stop(get_service())
+
+
+@task
+def restart():
+    ''' Restart the service. '''
+    systemctl.restart(get_service())
+
+
+@task
+def status():
+    ''' Get the status of the service. '''
+    systemctl.status(get_service())
+
+
+@task
+def logs():
+    ''' Tail the logs. '''
+    run('sudo journalctl -f -u %s' % get_service())
+
+__all__ = ['deploy', 'check', 'sync', 'build',
+           'stop', 'restart', 'status', 'logs']
