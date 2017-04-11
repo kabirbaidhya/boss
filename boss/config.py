@@ -1,8 +1,7 @@
-'''
-The configuration specific Module.
-'''
+''' The configuration specific Module. '''
 
 from copy import deepcopy
+from fabric.api import env
 import yaml
 from .util import halt, merge
 
