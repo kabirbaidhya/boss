@@ -1,33 +1,9 @@
 ''' The configuration specific Module. '''
 
 from copy import deepcopy
-from fabric.api import env
 import yaml
 from .util import halt, merge
-
-DEFAULT_CONFIG = {
-    'user': 'boss',
-    'app_dir': '~/',
-    'branch': 'dev',
-    'repository_url': '',
-    'branch_url': '{repository_url}/branch/{branch}',
-    'service': '',
-    'stages': {},
-    'services': {
-        'slack': {
-            'enabled': False,
-            'endpoint': '',
-            'deploying_color': 'good',
-            'deployed_color': '#764FA5',
-            'base_uri': 'https://hooks.slack.com/services'
-        },
-        'hipchat': {
-            'enabled': False,
-            'endpoint': ''
-        }
-    }
-}
-DEFAULT_FILENAME = 'boss.yml'
+from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE
 
 _config = deepcopy(DEFAULT_CONFIG)
 
@@ -40,7 +16,7 @@ def get():
     return deepcopy(_config)
 
 
-def load(filename=DEFAULT_FILENAME):
+def load(filename=DEFAULT_CONFIG_FILE):
     ''' Load the configuration and return it. '''
     try:
         with open(filename) as file_contents:
