@@ -23,7 +23,7 @@ def send(notif_type, params):
 def send_deploying_notification(params):
     ''' Send deploying status notification. '''
     stage_config = get_stage_config(params['stage'])
-
+    
     # Notify on slack
     if slack.is_enabled():
         slack.notify_deploying(

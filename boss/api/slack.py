@@ -12,7 +12,7 @@ DEPLOYED_SUCCESS_MESSAGE = 'Finished deploying branch {branch_link} to {server_l
 
 def config():
     ''' Get slack configuration. '''
-    return _get_config()['services']['slack']
+    return _get_config()['notifications']['slack']
 
 
 def is_enabled():
