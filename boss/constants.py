@@ -6,6 +6,8 @@ DEFAULT_CONFIG = {
     'app_dir': '~/',
     'branch': 'dev',
     'repository_url': '',
+    'project_name': 'untitled',
+    'project_description': '',
     'branch_url': '{repository_url}/branch/{branch}',
     'service': None,
     'stages': {},

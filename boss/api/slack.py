@@ -6,8 +6,8 @@ import json
 from fabric.api import local, parallel
 from ..config import get as _get_config
 
-DEPLOYING_MESSAGE = '{user} is deploying branch {branch_link} to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE = 'Finished deploying branch {branch_link} to {server_link} server.'
+DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE = 'Finished deploying {project_link}:{branch_link} to {server_link} server.'
 
 
 def config():
@@ -44,6 +44,11 @@ def notify_deploying(**params):
     ''' Send Deploying notification on Slack. '''
     branch_link = create_link(params['branch_url'], params['branch'])
     server_link = create_link(params['public_url'], params['host'])
+    project_link = create_link(
+        params['repository_url'],
+        params['project_name']
+    )
+
     server_short_link = create_link(
         params['public_url'], params['server_name']
     )
@@ -51,6 +56,7 @@ def notify_deploying(**params):
     text = DEPLOYING_MESSAGE.format(
         user=params['user'],
         branch_link=branch_link,
+        project_link=project_link,
         server_link=server_short_link
     )
 
@@ -85,11 +91,17 @@ def notify_deployed(**params):
     branch_link = create_link(params['branch_url'], params['branch'])
     server_link = create_link(params['public_url'], params['host'])
     server_short_link = create_link(
-        params['public_url'], params['server_name']
+        params['public_url'],
+        params['server_name']
+    )
+    project_link = create_link(
+        params['repository_url'],
+        params['project_name']
     )
 
     text = DEPLOYED_SUCCESS_MESSAGE.format(
         branch_link=branch_link,
+        project_link=project_link,
         server_link=server_short_link
     )
 
