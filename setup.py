@@ -57,7 +57,7 @@ setup(
     ],
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
-    install_requires=['docopt', 'fabric', 'pyyaml'],
+    install_requires=['fabric', 'pyyaml'],
     extras_require={
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
