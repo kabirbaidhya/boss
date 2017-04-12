@@ -61,21 +61,21 @@ def notify_deploying(**params):
     )
 
     payload = {
-        "text": text,
-        "attachments": [
+        'text': text,
+        'attachments': [
             {
-                "title": "Deploying",
-                "color": config()['deploying_color'],
-                "fields": [
+                'title': 'Deploying',
+                'color': config()['deploying_color'],
+                'fields': [
                     {
-                        "title": "Branch",
-                        "value": branch_link,
-                        "short": True
+                        'title': 'Branch',
+                        'value': branch_link,
+                        'short': True
                     },
                     {
-                        "title": "To",
-                        "value": server_link,
-                        "short": True
+                        'title': 'To',
+                        'value': server_link,
+                        'short': True
                     }
                 ]
             }
@@ -106,21 +106,21 @@ def notify_deployed(**params):
     )
 
     payload = {
-        "text": text,
-        "attachments": [
+        'text': text,
+        'attachments': [
             {
-                "title": "Finished Deploying",
-                "color": config()['deployed_color'],
-                "fields": [
+                'title': 'Finished Deploying',
+                'color': config()['deployed_color'],
+                'fields': [
                     {
-                        "title": "Branch",
-                        "value": branch_link,
-                        "short": True
+                        'title': 'Branch',
+                        'value': branch_link,
+                        'short': True
                     },
                     {
-                        "title": "To",
-                        "value": server_link,
-                        "short": True
+                        'title': 'To',
+                        'value': server_link,
+                        'short': True
                     }
                 ]
             }
