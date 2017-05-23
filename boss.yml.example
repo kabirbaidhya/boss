@@ -1,0 +1,43 @@
+app_dir: /path/to/remote/app/directory
+project_name: 'projectname'
+project_description: 'Project Description'
+repository_url: YOUR_GIT_REPOSITORY_URL
+branch_url: '{repository_url}/tree/{branch}'
+user: ontarget
+
+# systemctl service name for your application
+# NOTE: Currently, this is tightly coupled with systemd for process management
+# we'll make it usable without systemd in the future releases.
+service: your-app.service
+stages:
+    dev:
+        host: dev.your-application.com
+        public_url: 'https://dev.your-application.com'
+        branch: dev
+
+    qa:
+        host: qa.your-application.com
+        public_url: 'https://qa.your-application.com'
+        branch: qa
+
+    staging:
+        host: staging.your-application.com
+        public_url: 'https://staging.your-application.com'
+        branch: staging
+
+    production:
+        host: platform.your-application.com
+        public_url: 'https://platform.your-application.com'
+        branch: master
+
+notifications:
+    slack:
+        enabled: true
+        # Slack path that identifies your slack channel
+        # following https://hooks.slack.com/services.
+        # Note: Leading slash is required.
+        # For example: 
+        #   endpoint: /xxxxxxxxx/xxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxx
+        #
+        endpoint: SLACK_ENDPOINT_HERE
+
