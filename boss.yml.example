@@ -40,4 +40,10 @@ notifications:
         #   endpoint: /xxxxxxxxx/xxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxx
         #
         endpoint: SLACK_ENDPOINT_HERE
-
+    hipchat:
+        enabled: true
+        # Hipchat path that identifies your chat room.
+        # For example:
+        #   endpoint: https://companyname.hipchat.com/v2/room/xxxxxx/notification?auth_token=xxxxxx
+        #
+        endpoint: HIPCHAT_ENDPOINT_HERE

@@ -36,7 +36,7 @@ def notify(payload):
 
     local(command.format(
         data=json.dumps(payload),
-        url=config()['base_uri'] + config()['endpoint']
+        url=config()['endpoint']
     ))
 
 
