@@ -21,7 +21,9 @@ DEFAULT_CONFIG = {
         },
         'hipchat': {
             'enabled': False,
-            'endpoint': ''
+            'endpoint': '',
+            'deploying_color': 'yellow',
+            'deployed_color': 'green',
         }
     }
 }
