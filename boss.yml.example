@@ -40,4 +40,22 @@ notifications:
         #   endpoint: /xxxxxxxxx/xxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxx
         #
         endpoint: SLACK_ENDPOINT_HERE
+    hipchat:
+        enabled: true
+        # 
+        # Whether this message should trigger a user 
+        # notification (change the tab color, play a sound,
+        # notify mobile phones, etc).
+        notify: true
+        #
+        # Company name used in Hipchat. You can find it in your
+        # Hipchat url
+        company_name: COMPANY_NAME
+        #
+        # Room id
+        room_id: ROOM_ID
+        #
+        # Access token
+        auth_token: AUTH_TOKEN
+
 
