@@ -48,8 +48,14 @@ notifications:
         # notify mobile phones, etc).
         notify: true
         #
-        # Hipchat path that identifies your chat room.
-        # For example:
-        #   endpoint: https://companyname.hipchat.com/v2/room/xxxxxx/notification?auth_token=xxxxxx
+        # Company name used in Hipchat. You can find it in your
+        # Hipchat url
+        company_name: COMPANY_NAME
         #
-        endpoint: HIPCHAT_ENDPOINT_HERE
+        # Room id
+        room_id: ROOM_ID
+        #
+        # Access token
+        auth_token: AUTH_TOKEN
+
+

@@ -21,7 +21,10 @@ DEFAULT_CONFIG = {
         },
         'hipchat': {
             'enabled': False,
-            'endpoint': '',
+            'notify': True,
+            'company_name': '',
+            'room_id': '',
+            'auth_token': '',
             'deploying_color': 'yellow',
             'deployed_color': 'green',
         }

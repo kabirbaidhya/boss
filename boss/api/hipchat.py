@@ -31,12 +31,19 @@ def create_link(url, title):
 @parallel
 def notify(payload):
     ''' Send a notification on hipchat. '''
+
+    url = 'https://{company_name}.hipchat.com/v2/room/{room_id}/notification?auth_token={auth_token}'.format(
+      company_name=config()['company_name'],
+      room_id=config()['room_id'],
+      auth_token=config()['auth_token']
+    )
+
     command = 'curl -X POST -H "Content-type: application/json" --data \'{data}\' {url}'
     # TODO: Don't rely on curl to do this.
 
     local(command.format(
         data=json.dumps(payload),
-        url=config()['endpoint']
+        url=url
     ))
 
 
