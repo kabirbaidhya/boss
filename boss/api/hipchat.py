@@ -3,6 +3,7 @@ Module for hipchat API.
 '''
 
 import json
+import requests
 from fabric.api import local, parallel
 from ..config import get as _get_config
 
@@ -37,14 +38,7 @@ def notify(payload):
       room_id=config()['room_id'],
       auth_token=config()['auth_token']
     )
-
-    command = 'curl -X POST -H "Content-type: application/json" --data \'{data}\' {url}'
-    # TODO: Don't rely on curl to do this.
-
-    local(command.format(
-        data=json.dumps(payload),
-        url=url
-    ))
+    requests.post(url, json=payload)
 
 
 def notify_deploying(**params):

@@ -3,6 +3,7 @@ Module for slack API.
 '''
 
 import json
+import requests
 from fabric.api import local, parallel
 from ..config import get as _get_config
 
@@ -31,13 +32,8 @@ def create_link(url, title):
 @parallel
 def notify(payload):
     ''' Send a notification on Slack. '''
-    command = 'curl -X POST -H "Content-type: application/json" --data \'{data}\' {url}'
-    # TODO: Don't rely on curl to do this.
-
-    local(command.format(
-        data=json.dumps(payload),
-        url=config()['base_uri'] + config()['endpoint']
-    ))
+    url = config()['base_url'] + config()['endpoint']
+    requests.post(url, json=payload)
 
 
 def notify_deploying(**params):
