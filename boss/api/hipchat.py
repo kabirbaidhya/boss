@@ -23,10 +23,9 @@ def is_enabled():
 
 def create_link(url, title):
     ''' Create a link for hipchat payload. '''
-    return '<{url}|{title}>'.format(
-        url=url,
-        title=title
-    )
+    markup = '<a href="{url}">{title}</a>'
+
+    return markup.format(url=url, title=title)
 
 
 @parallel
@@ -34,9 +33,9 @@ def notify(payload):
     ''' Send a notification on hipchat. '''
 
     url = 'https://{company_name}.hipchat.com/v2/room/{room_id}/notification?auth_token={auth_token}'.format(
-      company_name=config()['company_name'],
-      room_id=config()['room_id'],
-      auth_token=config()['auth_token']
+        company_name=config()['company_name'],
+        room_id=config()['room_id'],
+        auth_token=config()['auth_token']
     )
     requests.post(url, json=payload)
 
@@ -65,7 +64,7 @@ def notify_deploying(**params):
         'color': config()['deploying_color'],
         'message': text,
         'notify': config()['notify'],
-        'message_format': 'text'
+        'message_format': 'html'
     }
 
     # Notify on hipchat
@@ -95,7 +94,7 @@ def notify_deployed(**params):
         'color': config()['deployed_color'],
         'message': text,
         'notify': config()['notify'],
-        'message_format': 'text'
+        'message_format': 'html'
     }
 
     # Notify on hipchat
