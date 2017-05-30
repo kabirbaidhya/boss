@@ -57,7 +57,7 @@ setup(
     ],
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
-    install_requires=['fabric', 'pyyaml'],
+    install_requires=['fabric', 'pyyaml', 'requests'],
     extras_require={
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
