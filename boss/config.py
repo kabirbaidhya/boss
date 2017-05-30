@@ -24,16 +24,34 @@ def load(filename=DEFAULT_CONFIG_FILE):
             merged_config = merge(DEFAULT_CONFIG, loaded_config)
             _config.update(merged_config)
 
+            # Add base config to each of the stage config
+            for (stage, stage_config) in _config['stages'].items():
+                _config['stages'][stage].update(get_stage_config(stage))
+
             return get()
 
     except IOError:
         halt('Error loading config file "%s"' % filename)
 
 
+def get_base_config():
+    ''' Get the base configuration. '''
+    return {
+        'user': _config.get('user'),
+        'port': _config.get('port'),
+        'branch': _config.get('branch'),
+        'app_dir': _config.get('app_dir'),
+        'repository_url': _config.get('app_dir')
+    }
+
+
 def get_stage_config(stage):
     ''' Retrieve the configuration for the given stage. '''
     try:
-        return _config['stages'][stage]
+        stage_config = _config['stages'][stage]
+        base_config = get_base_config()
+
+        return merge(base_config, stage_config)
     except KeyError:
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
