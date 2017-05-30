@@ -29,5 +29,6 @@ def configure_env():
     stage = get_stage()
     stage_config = get_stage_config(stage)
     env.user = config['user']
+    env.port = config['port']
     env.cwd = stage_config.get('app_dir') or config['app_dir']
     env.hosts = [stage_config['host']]

@@ -3,6 +3,7 @@
 DEFAULT_CONFIG_FILE = 'boss.yml'
 DEFAULT_CONFIG = {
     'user': 'boss',
+    'port': 22,
     'app_dir': '~/',
     'branch': 'dev',
     'repository_url': '',
