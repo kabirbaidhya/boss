@@ -1,7 +1,5 @@
-appdirs==1.4.3
+Fabric==1.13.2
 packaging==16.8
-pkg-resources==0.0.0
+paramiko==2.1.2
 pyparsing==2.2.0
-six==1.10.0
-fabric>=1.13.1
-pyyaml
+PyYAML==3.12
