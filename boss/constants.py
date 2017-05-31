@@ -18,7 +18,7 @@ DEFAULT_CONFIG = {
             'endpoint': '',
             'deploying_color': 'good',
             'deployed_color': '#764FA5',
-            'base_uri': 'https://hooks.slack.com/services'
+            'base_url': 'https://hooks.slack.com/services'
         },
         'hipchat': {
             'enabled': False,
