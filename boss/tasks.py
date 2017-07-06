@@ -62,7 +62,7 @@ def sync(branch=None):
     git.fetch()
     branch = branch or git.remote_branch()
     info('Checking out to %s branch' % branch)
-    git.checkout(branch)
+    git.checkout(branch, True)
     info('Syncing the latest changes of the %s branch' % branch)
     git.sync(branch)
 

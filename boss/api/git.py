@@ -6,9 +6,10 @@ def fetch(prune=True):
     run('git fetch' + (' --prune' if prune else ''))
 
 
-def checkout(branch):
+def checkout(branch, force=False):
     ''' The git checkout command. '''
-    run('git checkout %s' % branch)
+    force_flag = '-f ' if force else ''
+    run('git checkout {0}{1}'.format(force_flag, branch))
 
 
 def pull(branch):
