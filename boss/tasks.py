@@ -5,7 +5,7 @@ Default tasks Module.
 from fabric.api import run, hide, task
 from fabric.context_managers import shell_env
 from .api import git, notif, shell, npm, systemctl
-from .util import info
+from .util import info, warn_deprecated
 from .config import fallback_branch, get_service
 
 stage = shell.get_stage()
@@ -77,19 +77,35 @@ def build(stage_name=None):
 
 @task
 def stop():
-    ''' Stop the service. '''
+    ''' Stop the systemctl service. '''
+    # Deprecate everything that is tightly coupled to systemd
+    # as they are subject to change in the major future release.
+    warn_deprecated(
+        'The `stop` task is deprecated and will be either removed' +
+        ' or subject to change in the major future release.'
+    )
     systemctl.stop(get_service())
 
 
 @task
 def restart():
     ''' Restart the service. '''
+    # Deprecate everything that is tightly coupled to systemd
+    # as they are subject to change in the major future release.
+    warn_deprecated(
+        'The `restart` task is deprecated and will be either removed' +
+        ' or subject to change in the major future release.'
+    )
     systemctl.restart(get_service())
 
 
 @task
 def status():
     ''' Get the status of the service. '''
+    warn_deprecated(
+        'The `status` task is deprecated and will be either removed' +
+        ' or subject to change in the major future release.'
+    )
     systemctl.status(get_service())
 
 
