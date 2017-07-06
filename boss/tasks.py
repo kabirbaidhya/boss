@@ -121,6 +121,16 @@ def logs():
             'You\'ll need to provide the config explicitly for logging.'
         )
         run('sudo journalctl -f -u %s' % get_service())
+        return
+
+    # Get the logging config
+    stage_specific_logging = get_stage_config(stage).get('logging')
+    logging_config = stage_specific_logging or get_config().get('logging')
+
+    if logging_config and logging_config.get('files'):
+        # Tail the logs from log files
+        log_paths = ' '.join(logging_config.get('files'))
+        run('tail -f ' + log_paths)
 
 
 __all__ = ['deploy', 'check', 'sync', 'build',
