@@ -36,7 +36,6 @@ def deploy(branch=None):
     # Get the latest code from the repository
     sync(branch)
 
-    systemctl.stop(service)
     # Installing dependencies
     npm.install()
 
