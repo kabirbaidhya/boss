@@ -4,9 +4,9 @@ Default tasks Module.
 
 from fabric.api import run, hide, task
 from fabric.context_managers import shell_env
-from .api import git, notif, shell, npm, systemctl
 from .util import info, warn_deprecated
-from .config import fallback_branch, get_service
+from .api import git, notif, shell, npm, systemctl
+from .config import fallback_branch, get_service, get_stage_config, get as get_config
 
 stage = shell.get_stage()
 
@@ -112,7 +112,16 @@ def status():
 @task
 def logs():
     ''' Tail the logs. '''
-    run('sudo journalctl -f -u %s' % get_service())
+    # Tail the logs from journalctl if
+    # systemctl service is configured
+    if get_service():
+        warn_deprecated(
+            'Using journalctl to tail the logs from ' +
+            'configured service is deprecated. ' +
+            'You\'ll need to provide the config explicitly for logging.'
+        )
+        run('sudo journalctl -f -u %s' % get_service())
+
 
 __all__ = ['deploy', 'check', 'sync', 'build',
            'stop', 'restart', 'status', 'logs']
