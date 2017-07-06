@@ -26,7 +26,6 @@ def check():
 def deploy(branch=None):
     ''' The deploy task. '''
     branch = branch or fallback_branch(stage)
-    service = get_service()
     notif.send(notif.DEPLOYMENT_STARTED, {
         'user': shell.get_user(),
         'branch': branch,
@@ -42,10 +41,13 @@ def deploy(branch=None):
     # Building the app
     build(stage)
 
-    # Enable and Restart the service
-    systemctl.enable(service)
-    systemctl.restart(service)
-    systemctl.status(service)
+    service = get_service()
+
+    if service:
+        # Enable and Restart the service if service is provided
+        systemctl.enable(service)
+        systemctl.restart(service)
+        systemctl.status(service)
 
     notif.send(notif.DEPLOYMENT_FINISHED, {
         'branch': branch,
