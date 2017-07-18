@@ -4,7 +4,7 @@ Module for utility functions
 
 import collections
 from copy import deepcopy
-from fabric.colors import red, green
+from fabric.colors import red, green, yellow
 
 
 def halt(msg):
@@ -14,7 +14,17 @@ def halt(msg):
 
 def info(msg):
     ''' Print a message (Information) '''
-    print '\n' + green(msg)
+    print('\n' + green(msg))
+
+
+def warn(msg):
+    ''' Print a warning message. '''
+    print('\n' + yellow(msg))
+
+
+def warn_deprecated(msg):
+    ''' Print a deprecated warning message. '''
+    warn('Deprecated: {}'.format(msg))
 
 
 def merge(dict1, dict2):

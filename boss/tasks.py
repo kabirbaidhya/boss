@@ -4,9 +4,9 @@ Default tasks Module.
 
 from fabric.api import run, hide, task
 from fabric.context_managers import shell_env
+from .util import info, warn_deprecated
 from .api import git, notif, shell, npm, systemctl
-from .util import info
-from .config import fallback_branch, get_service
+from .config import fallback_branch, get_service, get_stage_config, get as get_config
 
 stage = shell.get_stage()
 
@@ -26,7 +26,6 @@ def check():
 def deploy(branch=None):
     ''' The deploy task. '''
     branch = branch or fallback_branch(stage)
-    service = get_service()
     notif.send(notif.DEPLOYMENT_STARTED, {
         'user': shell.get_user(),
         'branch': branch,
@@ -36,17 +35,19 @@ def deploy(branch=None):
     # Get the latest code from the repository
     sync(branch)
 
-    systemctl.stop(service)
     # Installing dependencies
     npm.install()
 
     # Building the app
     build(stage)
 
-    # Enable and Restart the service
-    systemctl.enable(service)
-    systemctl.restart(service)
-    systemctl.status(service)
+    service = get_service()
+
+    if service:
+        # Enable and Restart the service if service is provided
+        systemctl.enable(service)
+        systemctl.restart(service)
+        systemctl.status(service)
 
     notif.send(notif.DEPLOYMENT_FINISHED, {
         'branch': branch,
@@ -76,26 +77,61 @@ def build(stage_name=None):
 
 @task
 def stop():
-    ''' Stop the service. '''
+    ''' Stop the systemctl service. '''
+    # Deprecate everything that is tightly coupled to systemd
+    # as they are subject to change in the major future release.
+    warn_deprecated(
+        'The `stop` task is deprecated and will be either removed' +
+        ' or subject to change in the major future release.'
+    )
     systemctl.stop(get_service())
 
 
 @task
 def restart():
     ''' Restart the service. '''
+    # Deprecate everything that is tightly coupled to systemd
+    # as they are subject to change in the major future release.
+    warn_deprecated(
+        'The `restart` task is deprecated and will be either removed' +
+        ' or subject to change in the major future release.'
+    )
     systemctl.restart(get_service())
 
 
 @task
 def status():
     ''' Get the status of the service. '''
+    warn_deprecated(
+        'The `status` task is deprecated and will be either removed' +
+        ' or subject to change in the major future release.'
+    )
     systemctl.status(get_service())
 
 
 @task
 def logs():
     ''' Tail the logs. '''
-    run('sudo journalctl -f -u %s' % get_service())
+    # Tail the logs from journalctl if
+    # systemctl service is configured
+    if get_service():
+        warn_deprecated(
+            'Using journalctl to tail the logs from ' +
+            'configured service is deprecated. ' +
+            'You\'ll need to provide the config explicitly for logging.'
+        )
+        run('sudo journalctl -f -u %s' % get_service())
+        return
+
+    # Get the logging config
+    stage_specific_logging = get_stage_config(stage).get('logging')
+    logging_config = stage_specific_logging or get_config().get('logging')
+
+    if logging_config and logging_config.get('files'):
+        # Tail the logs from log files
+        log_paths = ' '.join(logging_config.get('files'))
+        run('tail -f ' + log_paths)
+
 
 __all__ = ['deploy', 'check', 'sync', 'build',
            'stop', 'restart', 'status', 'logs']

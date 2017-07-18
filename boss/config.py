@@ -60,9 +60,6 @@ def get_stage_config(stage):
 
 def get_service():
     ''' Return the configured service name.'''
-    if not _config['service']:
-        halt('No service has been configured yet.')
-
     return _config['service']
 
 
