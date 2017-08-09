@@ -31,7 +31,7 @@ def define_stage_tasks(module, config):
     ''' Define tasks for the stages dynamically. '''
     for (stage_name, _) in config['stages'].iteritems():
         task_func = task(name=stage_name)(configure_env)
-        task_func.__doc__ = 'Configures the {} server environment'.format(stage_name)
+        task_func.__doc__ = 'Configures the {} server environment.'.format(stage_name)
         setattr(module, stage_name, task_func)
 
 
