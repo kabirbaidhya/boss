@@ -29,8 +29,9 @@ def init(module_name):
 
 def define_stage_tasks(module, config):
     ''' Define tasks for the stages dynamically. '''
-    for (stage_name, value) in config['stages'].iteritems():
+    for (stage_name, _) in config['stages'].iteritems():
         task_func = task(name=stage_name)(configure_env)
+        task_func.__doc__ = 'Configures the {} server environment'.format(stage_name)
         setattr(module, stage_name, task_func)
 
 
@@ -42,5 +43,6 @@ def configure_env():
     env.user = stage_config.get('user') or config['user']
     env.port = stage_config.get('port') or config['port']
     env.cwd = stage_config.get('app_dir') or config['app_dir']
-    env.key_filename = stage_config.get('key_filename') or config['key_filename']
+    env.key_filename = stage_config.get(
+        'key_filename') or config['key_filename']
     env.hosts = [stage_config['host']]
