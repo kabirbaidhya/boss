@@ -4,6 +4,7 @@ DEFAULT_CONFIG_FILE = 'boss.yml'
 DEFAULT_CONFIG = {
     'user': 'boss',
     'port': 22,
+    'key_filename': '~/.ssh/id_rsa',
     'app_dir': '~/',
     'branch': 'dev',
     'repository_url': '',
