@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.2.1](https://github.com/kabirbaidhya/boss-cli/tree/v0.2.1) (2017-08-09)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.0...v0.2.1)
+
+**Implemented enhancements:**
+
+- Allow setting private key \(pem\) file via boss.yml [\#11](https://github.com/kabirbaidhya/boss-cli/pull/11) [[enhancement](https://github.com/kabirbaidhya/boss-cli/labels/enhancement)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Closed issues:**
+
+- Support adding SSH pemfile for each stage in the boss.yml file [\#10](https://github.com/kabirbaidhya/boss-cli/issues/10)
+
 ## [v0.2.0](https://github.com/kabirbaidhya/boss-cli/tree/v0.2.0) (2017-07-20)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.1.1...v0.2.0)
 
