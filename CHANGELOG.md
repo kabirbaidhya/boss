@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.2.2](https://github.com/kabirbaidhya/boss-cli/tree/v0.2.2) (2017-08-10)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.1...v0.2.2)
+
+**Fixed bugs:**
+
+- Error installing boss-cli==0.2.1 due to README.md error [\#22](https://github.com/kabirbaidhya/boss-cli/issues/22) [[bug](https://github.com/kabirbaidhya/boss-cli/labels/bug)]
+
 ## [v0.2.1](https://github.com/kabirbaidhya/boss-cli/tree/v0.2.1) (2017-08-09)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.0...v0.2.1)
 
