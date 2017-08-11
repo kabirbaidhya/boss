@@ -17,7 +17,7 @@ Comming soon ;)
 ## Configuration
 
 ### Custom Scripts
-Custom scripts are one liner scripts/commands that could be defined directly in the config file without having to write any line of python in the `fabfile.py`. They're similar to the the [npm scripts](https://docs.npmjs.com/misc/scripts), if you're familiar with it.
+Custom scripts are scripts/commands that could be defined directly in the config file without having to write any line of python in the `fabfile.py`. They're similar to the [npm scripts](https://docs.npmjs.com/misc/scripts), if you're familiar with them.
 
 You can define the custom scripts under the `scripts` field in the `boss.yml`.
 
@@ -30,7 +30,7 @@ scripts:
   logs: pm2 logs
 ```
 
-Boss comes out of the box with a task `run` which you can use to run these scripts on the remote server something like this:
+Boss comes out of the box with a task `run` which you can use to run these scripts on the remote server like this:
 ```bash
 $ fab dev run:hello
 $ fab dev run:build
