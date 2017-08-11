@@ -136,8 +136,18 @@ def logs():
 @task
 def run(script):
     ''' Run a custom script. '''
-    print('Running {}'.format(script))
-    # TODO: Run a custom script defined in the config.
+    custom_scripts = get_config()['scripts']
+
+    # If the script is not defined just print the message.
+    if not custom_scripts.has_key(script):
+        print('Script "{}" is not defined'.format(script))
+        return
+
+    # Get the command defined in the script.
+    script_cmd = custom_scripts[script]
+
+    # Run a custom script defined in the config.
+    _run(script_cmd)
 
 
 __all__ = ['deploy', 'check', 'sync', 'build',
