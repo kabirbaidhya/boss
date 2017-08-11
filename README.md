@@ -24,6 +24,12 @@ You can define the custom scripts under the `scripts` field in the `boss.yml`.
 **For instance:**
 ```yaml
 # boss.yml
+stages:
+  prod:
+    host: your-server.com
+    public_url: 'https://your-server.com'
+    branch: master
+
 scripts:
   hello: 'echo "Hello World!"'
   build: npm run build
@@ -32,9 +38,9 @@ scripts:
 
 Boss comes out of the box with a task `run` which you can use to run these scripts on the remote server like this:
 ```bash
-$ fab dev run:hello
-$ fab dev run:build
-$ fab dev run:logs
+$ fab prod run:hello
+$ fab prod run:build
+$ fab prod run:logs
 ```
 
 ## Change Log
