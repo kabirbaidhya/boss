@@ -1,10 +1,10 @@
 ''' The configuration specific Module. '''
 
+import os
 from copy import deepcopy
 import yaml
 from .util import halt, merge
 from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE
-
 _config = deepcopy(DEFAULT_CONFIG)
 
 
@@ -20,7 +20,11 @@ def load(filename=DEFAULT_CONFIG_FILE):
     ''' Load the configuration and return it. '''
     try:
         with open(filename) as file_contents:
-            loaded_config = yaml.load(file_contents)
+            # Expand the environment variables used in the yaml config.
+            loaded_config = os.path.expandvars(file_contents.read())
+
+            # Parse the yaml configuration.
+            loaded_config = yaml.load(loaded_config)
             merged_config = merge(DEFAULT_CONFIG, loaded_config)
             _config.update(merged_config)
 
