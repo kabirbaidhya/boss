@@ -2,7 +2,9 @@
 
 import os
 from copy import deepcopy
+
 import yaml
+import dotenv
 from .util import halt, merge
 from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE
 _config = deepcopy(DEFAULT_CONFIG)
@@ -20,6 +22,12 @@ def load(filename=DEFAULT_CONFIG_FILE):
     ''' Load the configuration and return it. '''
     try:
         with open(filename) as file_contents:
+            # Load environment variables from .env file if it exists.
+            dotenv_path = os.path.join(os.path.dirname(filename), '.env')
+
+            if os.path.exists(dotenv_path):
+                dotenv.load_dotenv(dotenv_path)
+
             # Expand the environment variables used in the yaml config.
             loaded_config = os.path.expandvars(file_contents.read())
 
