@@ -4,8 +4,8 @@ Default tasks Module.
 
 from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
-from .util import info, warn_deprecated
-from .api import git, notif, shell, npm, systemctl
+from .util import info, warn_deprecated, halt
+from .api import git, notif, shell, npm, systemctl, runner
 from .config import fallback_branch, get_service, get_stage_config, get as get_config
 
 stage = shell.get_stage()
@@ -136,18 +136,11 @@ def logs():
 @task
 def run(script):
     ''' Run a custom script. '''
-    custom_scripts = get_config()['scripts']
-
-    # If the script is not defined just print the message.
-    if not custom_scripts.has_key(script):
-        print('Script "{}" is not defined'.format(script))
-        return
-
-    # Get the command defined in the script.
-    script_cmd = custom_scripts[script]
-
     # Run a custom script defined in the config.
-    _run(script_cmd)
+    try:
+        runner.run_script(script)
+    except RuntimeError, e:
+        halt(str(e))
 
 
 __all__ = ['deploy', 'check', 'sync', 'build',
