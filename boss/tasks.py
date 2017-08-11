@@ -2,7 +2,7 @@
 Default tasks Module.
 '''
 
-from fabric.api import run, hide, task
+from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
 from .util import info, warn_deprecated
 from .api import git, notif, shell, npm, systemctl
@@ -17,7 +17,7 @@ def check():
     with hide('running'):
         # Show the current branch
         remote_branch = git.remote_branch()
-        run('echo "Branch: %s"' % remote_branch)
+        _run('echo "Branch: %s"' % remote_branch)
         # Show the last commit
         git.show_last_commit()
 
@@ -120,7 +120,7 @@ def logs():
             'configured service is deprecated. ' +
             'You\'ll need to provide the config explicitly for logging.'
         )
-        run('sudo journalctl -f -u %s' % get_service())
+        _run('sudo journalctl -f -u %s' % get_service())
         return
 
     # Get the logging config
@@ -130,8 +130,15 @@ def logs():
     if logging_config and logging_config.get('files'):
         # Tail the logs from log files
         log_paths = ' '.join(logging_config.get('files'))
-        run('tail -f ' + log_paths)
+        _run('tail -f ' + log_paths)
+
+
+@task
+def run(script):
+    ''' Run a custom script. '''
+    print('Running {}'.format(script))
+    # TODO: Run a custom script defined in the config.
 
 
 __all__ = ['deploy', 'check', 'sync', 'build',
-           'stop', 'restart', 'status', 'logs']
+           'stop', 'restart', 'status', 'logs', 'run']
