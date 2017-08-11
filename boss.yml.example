@@ -48,6 +48,10 @@ stages:
                 - /path/to/production/log/file.log
                 - /path/to/production/another/log/file.log
 
+# Define custom scripts here.
+scripts:
+    hello: 'echo "Hello World"'
+
 notifications:
     slack:
         enabled: true
