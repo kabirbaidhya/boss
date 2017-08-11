@@ -13,6 +13,7 @@ DEFAULT_CONFIG = {
     'branch_url': '{repository_url}/branch/{branch}',
     'service': None,
     'stages': {},
+    'scripts': {},
     'notifications': {
         'slack': {
             'enabled': False,
