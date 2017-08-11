@@ -3,7 +3,18 @@ project_name: 'projectname'
 project_description: 'Project Description'
 repository_url: YOUR_GIT_REPOSITORY_URL
 branch_url: '{repository_url}/tree/{branch}'
-user: ontarget
+user: username
+
+# port defaults to 22
+port: SERVER_SSH_PORT
+
+# defaults to ~/.ssh/id_rsa
+key_filename: /path/to/private/key/file
+
+logging:
+    files:
+        - /path/to/log/file.log
+        - /path/to/another/log/file.log
 
 # systemctl service name for your application
 # NOTE: Currently, this is tightly coupled with systemd for process management
@@ -26,9 +37,16 @@ stages:
         branch: staging
 
     production:
-        host: platform.your-application.com
-        public_url: 'https://platform.your-application.com'
+        host: your-application.com
+        public_url: 'https://your-application.com'
         branch: master
+        user: priduction_username
+        port: PRODUCTION_SSH_PORT
+        key_filename: /path/to/production/private/key/file
+        logging:
+            files:
+                - /path/to/production/log/file.log
+                - /path/to/production/another/log/file.log
 
 notifications:
     slack:
@@ -36,14 +54,14 @@ notifications:
         # Slack path that identifies your slack channel
         # following https://hooks.slack.com/services.
         # Note: Leading slash is required.
-        # For example: 
+        # For example:
         #   endpoint: /xxxxxxxxx/xxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxx
         #
         endpoint: SLACK_ENDPOINT_HERE
     hipchat:
         enabled: true
-        # 
-        # Whether this message should trigger a user 
+        #
+        # Whether this message should trigger a user
         # notification (change the tab color, play a sound,
         # notify mobile phones, etc).
         notify: true
