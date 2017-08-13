@@ -1,5 +1,20 @@
 # Change Log
 
+## [Next](https://github.com/kabirbaidhya/boss-cli/tree/Next) (2017-08-13)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.2...Next)
+
+**Closed issues:**
+
+- Ability to inject environment variables in boss.yml  [\#21](https://github.com/kabirbaidhya/boss-cli/issues/21)
+- Add support for custom scripts [\#16](https://github.com/kabirbaidhya/boss-cli/issues/16)
+
+**Improvements:**
+
+- Add Code of Conduct [\#28](https://github.com/kabirbaidhya/boss-cli/pull/28) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Interpolate environment variables in boss.yml [\#27](https://github.com/kabirbaidhya/boss-cli/pull/27) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Support custom scripts similar to npm scripts [\#25](https://github.com/kabirbaidhya/boss-cli/pull/25) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Update boss.yml.example [\#23](https://github.com/kabirbaidhya/boss-cli/pull/23) ([sanjeevkpandit](https://github.com/sanjeevkpandit))
+
 ## [v0.2.2](https://github.com/kabirbaidhya/boss-cli/tree/v0.2.2) (2017-08-10)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.1...v0.2.2)
 
