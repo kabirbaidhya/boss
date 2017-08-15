@@ -18,10 +18,15 @@ def info(msg):
     print('\n' + green(msg))
 
 
+def remote_print(msg):
+    ''' Print a raw message on the remote logs. '''
+    with hide('running'):
+        _run('echo "{}"'.format(msg))
+
+
 def remote_info(msg):
     ''' Print a message (Information) on the remote logs. '''
-    with hide('running'):
-        _run('echo "{}"'.format(green(msg)))
+    remote_print(green(msg))
 
 
 def warn(msg):
@@ -36,12 +41,12 @@ def warn_deprecated(msg):
 
 def merge(dict1, dict2):
     ''' Merge Two dictionaries recursively. '''
-    result=deepcopy(dict1)
+    result = deepcopy(dict1)
 
     for key, value in dict2.iteritems():
         if isinstance(value, collections.Mapping):
-            result[key]=merge(result.get(key, {}), value)
+            result[key] = merge(result.get(key, {}), value)
         else:
-            result[key]=deepcopy(dict2[key])
+            result[key] = deepcopy(dict2[key])
 
     return result

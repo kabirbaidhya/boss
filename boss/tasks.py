@@ -5,7 +5,7 @@ Default tasks Module.
 from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
 import boss.constants as constants
-from .util import warn_deprecated, halt, remote_info
+from .util import warn_deprecated, halt, remote_info, remote_print
 from .api import git, notif, shell, npm, systemctl, runner
 from .config import fallback_branch, get_service, get_stage_config, get as get_config
 
@@ -18,7 +18,7 @@ def check():
     with hide('running'):
         # Show the current branch
         remote_branch = git.remote_branch()
-        _run('echo "Branch: %s"' % remote_branch)
+        remote_print('Branch: {}'.format(remote_branch))
         # Show the last commit
         git.show_last_commit()
 
