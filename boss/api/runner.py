@@ -1,6 +1,8 @@
 
+from fabric.colors import cyan
 from fabric.api import run as _run, local as _local
 from ..config import get as _get_config
+from ..util import remote_info
 
 
 def run(command, remote=True):
@@ -38,5 +40,6 @@ def run_script(script, remote=True):
     # Get the command defined in the script.
     script_cmd = custom_scripts[script]
 
+    remote_info('Running "{}"'.format(cyan(script)))
     # Run a custom script defined in the config.
     run(script_cmd, remote)
