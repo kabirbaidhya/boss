@@ -2,8 +2,11 @@
 Notification API module.
 '''
 
+from fabric.colors import cyan
+
 from . import slack
 from . import hipchat
+from ..util import remote_info
 from ..config import get_branch_url, get_stage_config, get as get_config
 
 DEPLOYMENT_STARTED = 1
@@ -16,6 +19,10 @@ def send(notif_type, params):
         DEPLOYMENT_STARTED: send_deploying_notification,
         DEPLOYMENT_FINISHED: send_deployed_notification
     }
+
+    # If notifications are enabled then, print a message (Info).
+    if slack.is_enabled() or hipchat.is_enabled():
+        remote_info('Sending notifications')
 
     # Trigger the corresponding handler by notif_type.
     handlers[notif_type](params)
@@ -85,4 +92,3 @@ def send_deployed_notification(params):
             public_url=stage_config['public_url'],
             host=stage_config['host']
         )
-

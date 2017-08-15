@@ -2,6 +2,7 @@
 Default tasks Module.
 '''
 
+from fabric.colors import cyan
 from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
 import boss.constants as constants
@@ -91,11 +92,12 @@ def install_dependencies():
 @task
 def sync(branch=None):
     ''' Sync the changes on the branch with the remote (origin). '''
+    remote_info('Fetching the latest changes.')
     git.fetch()
     branch = branch or git.remote_branch()
-    remote_info('Checking out to %s branch' % branch)
+    remote_info('Checking out to branch {}.'.format(cyan(branch)))
     git.checkout(branch, True)
-    remote_info('Syncing the latest changes of the %s branch' % branch)
+    remote_info('Synchronizing with the latest changes.')
     git.sync(branch)
 
 
