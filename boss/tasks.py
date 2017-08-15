@@ -4,10 +4,10 @@ Default tasks Module.
 
 from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
+import boss.constants as constants
 from .util import info, warn_deprecated, halt
 from .api import git, notif, shell, npm, systemctl, runner
 from .config import fallback_branch, get_service, get_stage_config, get as get_config
-import boss.constants as constants
 
 stage = shell.get_stage()
 
@@ -39,14 +39,7 @@ def deploy(branch=None):
 
     # Building the app
     build(stage)
-
-    service = get_service()
-
-    if service:
-        # Enable and Restart the service if service is provided
-        systemctl.enable(service)
-        systemctl.restart(service)
-        systemctl.status(service)
+    reload_service()
 
     notif.send(notif.DEPLOYMENT_FINISHED, {
         'branch': branch,
@@ -56,19 +49,42 @@ def deploy(branch=None):
     info('Deployment Completed')
 
 
+def reload_service():
+    ''' Reload the service after deployment. '''
+    service = get_service()
+
+    if service:
+        # TODO: Remove this in future release (BC Break).
+        # Enable and Restart the service if service is provided
+        warn_deprecated(
+            'Reloading service using systemctl is deprecated and ' +
+            'will be removed in major future release. ' +
+            'Define `{}` script in your config instead.'.format(
+                constants.SCRIPT_RELOAD)
+        )
+        systemctl.enable(service)
+        systemctl.restart(service)
+        systemctl.status(service)
+    else:
+        # Trigger reload script if it's defined.
+        runner.run_script_safely(constants.SCRIPT_RELOAD)
+        runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
+
+
 def install_dependencies():
     ''' Install dependencies. '''
-    # Installing dependencies via the install script if it's defined.
-    if runner.is_script_defined(constants.SCRIPT_INSTALL):
-        runner.run_script(constants.SCRIPT_INSTALL)
-    else:
-        # Fallback to old `npm install` for backwards compatilibity.
+    # Trigger install script.
+    runner.run_script_safely(constants.SCRIPT_INSTALL)
+
+    # If install script is not defined,
+    # Fallback to old `npm install` for backwards compatilibity.
+    # TODO: Remove this in the next release (BC break).
+    if not runner.is_script_defined(constants.SCRIPT_INSTALL):
         warn_deprecated(
-            'Define "{}" script explicitly if you need to '.format(constants.SCRIPT_INSTALL) +
+            'Define `{}` script explicitly if you need to '.format(constants.SCRIPT_INSTALL) +
             'install dependencies on deployment. ' +
-            'In future releases `npm install` won\'t be triggered on deployment.'.
+            'In future releases `npm install` won\'t be triggered on deployment.'
         )
-        # TODO: Remove this in the next release (BC break).
         npm.install()
 
 
