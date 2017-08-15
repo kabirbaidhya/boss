@@ -5,7 +5,7 @@ Default tasks Module.
 from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
 import boss.constants as constants
-from .util import info, warn_deprecated, halt
+from .util import warn_deprecated, halt, remote_info
 from .api import git, notif, shell, npm, systemctl, runner
 from .config import fallback_branch, get_service, get_stage_config, get as get_config
 
@@ -46,7 +46,7 @@ def deploy(branch=None):
         'stage': stage
     })
 
-    info('Deployment Completed')
+    remote_info('Deployment Completed')
 
 
 def reload_service():
@@ -93,9 +93,9 @@ def sync(branch=None):
     ''' Sync the changes on the branch with the remote (origin). '''
     git.fetch()
     branch = branch or git.remote_branch()
-    info('Checking out to %s branch' % branch)
+    remote_info('Checking out to %s branch' % branch)
     git.checkout(branch, True)
-    info('Syncing the latest changes of the %s branch' % branch)
+    remote_info('Syncing the latest changes of the %s branch' % branch)
     git.sync(branch)
 
 
