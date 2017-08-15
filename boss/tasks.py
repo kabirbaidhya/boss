@@ -7,6 +7,7 @@ from fabric.context_managers import shell_env
 from .util import info, warn_deprecated, halt
 from .api import git, notif, shell, npm, systemctl, runner
 from .config import fallback_branch, get_service, get_stage_config, get as get_config
+import boss.constants as constants
 
 stage = shell.get_stage()
 
@@ -34,9 +35,7 @@ def deploy(branch=None):
 
     # Get the latest code from the repository
     sync(branch)
-
-    # Installing dependencies
-    npm.install()
+    install_dependencies()
 
     # Building the app
     build(stage)
@@ -55,6 +54,22 @@ def deploy(branch=None):
     })
 
     info('Deployment Completed')
+
+
+def install_dependencies():
+    ''' Install dependencies. '''
+    # Installing dependencies via the install script if it's defined.
+    if runner.is_script_defined(constants.SCRIPT_INSTALL):
+        runner.run_script(constants.SCRIPT_INSTALL)
+    else:
+        # Fallback to old `npm install` for backwards compatilibity.
+        warn_deprecated(
+            'Define "{}" script explicitly if you need to '.format(constants.SCRIPT_INSTALL) +
+            'install dependencies on deployment. ' +
+            'In future releases `npm install` won\'t be triggered on deployment.'.
+        )
+        # TODO: Remove this in the next release (BC break).
+        npm.install()
 
 
 @task
