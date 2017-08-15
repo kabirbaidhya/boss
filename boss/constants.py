@@ -35,11 +35,10 @@ DEFAULT_CONFIG = {
 }
 
 # Predefined custom scripts/hooks
-SCRIPT_INSTALL = 'install'
-SCRIPT_RESTART = 'restart'
 SCRIPT_STOP = 'stop'
-SCRIPT_START = 'start'
-SCRIPT_RELOAD = 'reload'
 SCRIPT_LOGS = 'logs'
+SCRIPT_START = 'start'
 SCRIPT_BUILD = 'build'
+SCRIPT_RELOAD = 'reload'
+SCRIPT_INSTALL = 'install'
 SCRIPT_STATUS_CHECK = 'status_check'

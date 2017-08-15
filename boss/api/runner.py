@@ -18,6 +18,15 @@ def is_script_defined(script):
     return custom_scripts.has_key(script)
 
 
+def run_script_safely(script, remote=True):
+    '''
+    Run a script only if it is defined in the config.
+    Otherwise, it's skipped without throwing an error.
+    '''
+    if is_script_defined(script):
+        run_script(script, remote)
+
+
 def run_script(script, remote=True):
     ''' Run a script. '''
     custom_scripts = _get_config()['scripts']
