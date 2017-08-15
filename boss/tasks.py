@@ -2,10 +2,11 @@
 Default tasks Module.
 '''
 
+from fabric.colors import cyan
 from fabric.api import run as _run, hide, task
 from fabric.context_managers import shell_env
 import boss.constants as constants
-from .util import info, warn_deprecated, halt
+from .util import warn_deprecated, halt, remote_info, remote_print
 from .api import git, notif, shell, npm, systemctl, runner
 from .config import fallback_branch, get_service, get_stage_config, get as get_config
 
@@ -18,7 +19,7 @@ def check():
     with hide('running'):
         # Show the current branch
         remote_branch = git.remote_branch()
-        _run('echo "Branch: %s"' % remote_branch)
+        remote_print('Branch: {}'.format(remote_branch))
         # Show the last commit
         git.show_last_commit()
 
@@ -46,7 +47,7 @@ def deploy(branch=None):
         'stage': stage
     })
 
-    info('Deployment Completed')
+    remote_info('Deployment Completed')
 
 
 def reload_service():
@@ -91,11 +92,12 @@ def install_dependencies():
 @task
 def sync(branch=None):
     ''' Sync the changes on the branch with the remote (origin). '''
+    remote_info('Fetching the latest changes.')
     git.fetch()
     branch = branch or git.remote_branch()
-    info('Checking out to %s branch' % branch)
+    remote_info('Checking out to branch {}.'.format(cyan(branch)))
     git.checkout(branch, True)
-    info('Syncing the latest changes of the %s branch' % branch)
+    remote_info('Synchronizing with the latest changes.')
     git.sync(branch)
 
 

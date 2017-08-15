@@ -4,6 +4,7 @@ Module for utility functions
 
 import collections
 from copy import deepcopy
+from fabric.api import run as _run, hide
 from fabric.colors import red, green, yellow
 
 
@@ -15,6 +16,17 @@ def halt(msg):
 def info(msg):
     ''' Print a message (Information) '''
     print('\n' + green(msg))
+
+
+def remote_print(msg):
+    ''' Print a raw message on the remote logs. '''
+    with hide('running'):
+        _run('echo "{}"'.format(msg))
+
+
+def remote_info(msg):
+    ''' Print a message (Information) on the remote logs. '''
+    remote_print(green(msg))
 
 
 def warn(msg):
