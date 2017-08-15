@@ -120,35 +120,50 @@ def build(stage_name=None):
 @task
 def stop():
     ''' Stop the systemctl service. '''
-    # Deprecate everything that is tightly coupled to systemd
-    # as they are subject to change in the major future release.
-    warn_deprecated(
-        'The `stop` task is deprecated and will be either removed' +
-        ' or subject to change in the major future release.'
-    )
-    systemctl.stop(get_service())
+    runner.run_script_safely(constants.SCRIPT_STOP)
+
+    # Fallback to old systemctl stop, if the stop script is not defined.
+    # TODO: Remove this (BC Break).
+    if not runner.is_script_defined(constants.SCRIPT_STOP):
+        # Deprecate everything that is tightly coupled to systemd
+        # as they are subject to change in the major future release.
+        warn_deprecated(
+            'The `stop` using systemctl service task is deprecated. ' +
+            'Define `{}` script instead.'.format(constants.SCRIPT_STOP)
+        )
+        systemctl.stop(get_service())
 
 
 @task
 def restart():
     ''' Restart the service. '''
-    # Deprecate everything that is tightly coupled to systemd
-    # as they are subject to change in the major future release.
-    warn_deprecated(
-        'The `restart` task is deprecated and will be either removed' +
-        ' or subject to change in the major future release.'
-    )
-    systemctl.restart(get_service())
+    runner.run_script_safely(constants.SCRIPT_RELOAD)
+
+    # Fallback to old systemctl way, if the script is not defined.
+    # TODO: Remove this (BC Break).
+    if not runner.is_script_defined(constants.SCRIPT_RELOAD):
+        # Deprecate everything that is tightly coupled to systemd
+        # as they are subject to change in the major future release.
+        warn_deprecated(
+            'The `restart` using systemctl service task is deprecated. ' +
+            'Define `{}` script instead.'.format(constants.SCRIPT_RELOAD)
+        )
+        systemctl.restart(get_service())
 
 
 @task
 def status():
     ''' Get the status of the service. '''
-    warn_deprecated(
-        'The `status` task is deprecated and will be either removed' +
-        ' or subject to change in the major future release.'
-    )
-    systemctl.status(get_service())
+    runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
+
+    # Fallback to old systemctl way, if the script is not defined.
+    # TODO: Remove this (BC Break).
+    if not runner.is_script_defined(constants.SCRIPT_STATUS_CHECK):
+        warn_deprecated(
+            'The `status` using systemctl service task is deprecated. ' +
+            'Define `{}` script instead.'.format(constants.SCRIPT_STATUS_CHECK)
+        )
+        systemctl.status(get_service())
 
 
 @task
@@ -156,6 +171,7 @@ def logs():
     ''' Tail the logs. '''
     # Tail the logs from journalctl if
     # systemctl service is configured
+    # TODO: Remove this (BC Break)
     if get_service():
         warn_deprecated(
             'Using journalctl to tail the logs from ' +
@@ -169,10 +185,15 @@ def logs():
     stage_specific_logging = get_stage_config(stage).get('logging')
     logging_config = stage_specific_logging or get_config().get('logging')
 
+    # If log files are configured tail them.
     if logging_config and logging_config.get('files'):
         # Tail the logs from log files
         log_paths = ' '.join(logging_config.get('files'))
         _run('tail -f ' + log_paths)
+        return
+
+    # If logs script is defined, run it
+    runner.run_script_safely(constants.SCRIPT_LOGS)
 
 
 @task
