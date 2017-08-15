@@ -1,7 +1,12 @@
 # Change Log
 
-## [Next](https://github.com/kabirbaidhya/boss-cli/tree/Next) (2017-08-13)
-[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.2...Next)
+## [v0.3.0](https://github.com/kabirbaidhya/boss-cli/tree/v0.3.0) (2017-08-15)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.2...v0.3.0)
+
+**Implemented enhancements:**
+
+- Better informative info messages for deployment and remote tasks [\#30](https://github.com/kabirbaidhya/boss-cli/pull/30) [[enhancement](https://github.com/kabirbaidhya/boss-cli/labels/enhancement)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Make use of custom scripts in deployment and other tasks [\#29](https://github.com/kabirbaidhya/boss-cli/pull/29) [[deprecation](https://github.com/kabirbaidhya/boss-cli/labels/deprecation)] [[enhancement](https://github.com/kabirbaidhya/boss-cli/labels/enhancement)] [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
 **Closed issues:**
 
