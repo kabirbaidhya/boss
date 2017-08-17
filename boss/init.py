@@ -4,10 +4,10 @@ import sys
 from fabric.api import env, task
 from fabric.tasks import _is_task
 
-from . import constants
-from .util import warn_deprecated, halt
+from .util import warn_deprecated
 from .config import load as load_config, get as get_config, get_stage_config
 from .api.shell import get_stage
+from .api import deployer
 
 
 def init(module_name):
@@ -31,30 +31,9 @@ def init(module_name):
     return (config, stage)
 
 
-def import_configured_preset(config):
-    ''' Import the configured deployment preset module and return it. '''
-    preset = config['deployment']['preset']
-
-    if not preset:
-        warn_deprecated(
-            'Set deployment preset explicitly, if you need deployment tasks. ' +
-            'In the future releases, deployment tasks won\'t be available unless ' +
-            'you have set the preset.'
-        )
-        # TODO: In future release, don't import deployment tasks
-        # unless the preset is set. (BC Break)
-        from boss.api.deployment import remote_source as module
-    elif preset == constants.PRESET_REMOTE_SOURCE:
-        from boss.api.deployment import remote_source as module
-    else:
-        halt('Unsupported boss preset "{}".'.format(preset))
-
-    return module
-
-
 def define_preset_tasks(module, config):
     ''' Define tasks for the configured deployment preset. '''
-    deployment = import_configured_preset(config)
+    deployment = deployer.import_preset(config)
     # Now that we have deployment preset set, import all the tasks.
     for (task_name, func) in deployment.__dict__.iteritems():
         if not _is_task(func):

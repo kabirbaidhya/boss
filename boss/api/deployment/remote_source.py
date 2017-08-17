@@ -1,4 +1,11 @@
-''' Deployer for Remote Source deployment Preset. '''
+'''
+Remote Source deployment Preset.
+
+This is a generic deployment, where the project source code and the git repository
+exists at the remote end. The deploy task would fetch the latest changes of the
+provided branch on the remote respository, then it's built and service is reloaded.
+'''
+
 
 from fabric.api import task, hide
 from fabric.colors import cyan
