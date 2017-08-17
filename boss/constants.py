@@ -21,7 +21,7 @@ DEFAULT_CONFIG = {
     'stages': {},
     'scripts': {},
     'deployment': {
-        'preset': PRESET_REMOTE_SOURCE
+        'preset': None
     },
     'notifications': {
         'slack': {
