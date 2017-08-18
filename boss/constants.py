@@ -1,5 +1,11 @@
 ''' Application wide common constants module. '''
 
+# Predefined deployment presets
+PRESET_FRONTEND = 'frontend'
+PRESET_BACKEND_NODE = 'backend-node'
+PRESET_REMOTE_SOURCE = 'remote-source'
+
+# Default boss configuration
 DEFAULT_CONFIG_FILE = 'boss.yml'
 DEFAULT_CONFIG = {
     'user': 'boss',
@@ -14,6 +20,9 @@ DEFAULT_CONFIG = {
     'service': None,
     'stages': {},
     'scripts': {},
+    'deployment': {
+        'preset': None
+    },
     'notifications': {
         'slack': {
             'enabled': False,
