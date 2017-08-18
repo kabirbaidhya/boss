@@ -47,7 +47,7 @@ def run(script):
     # Run a custom script defined in the config.
     try:
         runner.run_script(script)
-    except RuntimeError, e:
+    except RuntimeError as e:
         halt(str(e))
 
 __all__ = ['run', 'logs']
