@@ -46,11 +46,18 @@ $ fab prod run:logs
 
 ## Deployment
 
-### 1. Remote Source
+### 1. Remote Source Deployment
 
 This is a generic deployment preset, where the remote host also contains the project source code and the git repository. The deploy task would synchronize the remote with the latest changes of the provided branch from the origin. It then builds the project and restarts the service if needed.
 
 This is general and could be used for deploying any kind of projects and languages. You just need to specify the relevent `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
+
+You'll need to set the deployment preset as `remote-source` in your configuration.
+
+```yml
+deployment:
+  preset: remote-source
+```
 
 #### Configuration
 Your `boss.yml` file for remote source deployment would look similar to this:
