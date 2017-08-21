@@ -1,5 +1,8 @@
 '''
 Module for utility functions
+
+TODO: Have a separate package `util` and have sub modules under it
+to better categorize utilities.
 '''
 
 import collections
@@ -37,6 +40,16 @@ def warn(msg):
 def warn_deprecated(msg):
     ''' Print a deprecated warning message. '''
     warn('Deprecated: {}'.format(msg))
+
+
+def is_string(obj):
+    ''' Check if the object is a string. '''
+    return isinstance(obj, basestring)
+
+
+def is_iterable(obj):
+    ''' Check if the object is iterable. '''
+    return hasattr(obj, '__iter__')
 
 
 def merge(dict1, dict2):
