@@ -11,12 +11,12 @@ import json
 from datetime import datetime
 
 from terminaltables import AsciiTable
-from fabric.colors import green
+from fabric.colors import green, cyan
 # from fabric.contrib import files
 from fabric.api import task, cd, shell_env, hide
 
 from boss import constants, __version__ as BOSS_VERSION
-from boss.util import info, remote_info
+from boss.util import info, remote_info, echo
 from boss.api import shell, notif, runner, hipchat, fs, git
 from boss.config import get_stage_config, get as get_config
 
@@ -273,9 +273,13 @@ def deploy():
     user = config['user']
     stage = shell.get_stage()
 
+    info('Deploying app to the {} server'.format(stage))
     # Get the current branch and commit (locally).
     branch = git.current_branch(remote=False)
     commit = git.last_commit(remote=False)
+
+    echo('  Branch: {}'.format(cyan(branch)))
+    echo('  Commit: {}'.format(cyan(commit)))
 
     tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['web']['build_dir']
