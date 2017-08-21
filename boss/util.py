@@ -16,9 +16,14 @@ def halt(msg):
     raise SystemExit(red(msg))
 
 
+def echo(msg):
+    ''' Pring a plain message on the console. '''
+    print(msg)
+
+
 def info(msg):
     ''' Print a message (Information) '''
-    print('\n' + green(msg))
+    echo('\n' + green(msg))
 
 
 def host_print(msg, remote=True, leading_chars='\n'):
