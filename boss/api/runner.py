@@ -8,9 +8,9 @@ from ..util import remote_info
 def run(command, remote=True):
     ''' Run a command using fabric. '''
     if remote:
-        _run(command)
+        return _run(command)
     else:
-        _local(command)
+        return _local(command)
 
 
 def is_script_defined(script):
