@@ -12,7 +12,6 @@ from datetime import datetime
 
 from terminaltables import AsciiTable
 from fabric.colors import green, cyan
-# from fabric.contrib import files
 from fabric.api import task, cd, shell_env, hide
 
 from boss import constants, __version__ as BOSS_VERSION
@@ -317,18 +316,12 @@ def deploy():
 
     info('Compressing the build')
     fs.tar_archive(build_compressed, build_dir, remote=False)
-    # with hide('stdout'):
-    # runner.run(
-    #     'tar -czvf {} {}'.format(build_compressed, build_dir),
-    #     remote=False
-    # )
 
     info('Uploading the build {} to {}'.format(build_compressed, tmp_path))
     fs.upload(build_compressed, tmp_path)
 
     # Remove the compressed build from the local directory.
     fs.rm(build_compressed, remote=False)
-    # local('rm {}'.format(build_compressed))
 
     # Once, the build is uploaded to the remote,
     # set things up in the remote server.
@@ -338,18 +331,15 @@ def deploy():
         fs.mkdir(build_name)
 
         # Extract the build.
-        # run('tar zxvf {} --strip-components=1 -C {}'.format(tmp_path, build_name))
         fs.tar_extract(tmp_path, build_name)
 
         # Remove the uploaded archived from the temp path.
         fs.rm_rf(tmp_path)
-        # run('rm -rf {}'.format(tmp_path))
 
         remote_info(
             'Changing ownership of {} to user {}'.format(deploy_dir, user)
         )
         fs.chown(release_path, user, user)
-        # run('chown -R {0}:{0} {1}'.format(user, release_path))
 
         remote_info('Pointing the current symlink to the latest build')
         fs.update_symlink(release_path, current_path)
