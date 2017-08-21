@@ -17,6 +17,71 @@ Comming soon ;)
 
 ## Configuration
 
+### Basic Configuration
+The basic configuration includes all the minimal configuration to deploy the app successfully. Create a file named `boss.yml` in your project's root directory. The file should include the following:
+
+```yml
+#boss.yml
+project_name: PROJECT_NAME
+project_description: PROJECT_DESCRIPTION
+repository_url: https://github.com/<username>/<project-name>
+user: USERNAME
+port: SERVER_PORT
+```
+
+### Stages
+This includes different instances of your application like `dev`, `qa`, `uat`, `staging`, `production`.
+
+```yml
+#boss.yml
+...
+stages:
+    dev:
+        host: dev.your-app.com
+        public_url: http://dev.your-app.com
+        app_dir: /path/to/your/app
+        logging:
+            files:
+                - /path/to/error/log/file
+                - /path/to/access/log/file
+    uat:
+        host: uat.your-app.com
+        public_url: http://uat.your-app.com
+        app_dir: /path/to/your/app
+        logging:
+            files:
+                - /path/to/error/log/file
+                - /path/to/access/log/file
+    production:
+        host: your-app.com
+        public_url: http://your-app.com
+        app_dir: /path/to/your/app
+        logging:
+            files:
+                - /path/to/error/log/file
+                - /path/to/access/log/file
+```
+
+### Notifications
+This includes the settings for notifying on deployment start and completion. Currently, only hipchat and slack are supported. Further integrations are welcome through pull-requests.
+
+```yml
+#boss.yml
+stages:
+    ...
+
+notifications:
+    slack:
+        enabled: true
+        endpoint: SLACK_TOKEN
+    hipchat:
+        enabled: true
+        notify: true
+        company_name: HIPCHAT_COMPANY_NAME
+        room_id: HIPCHAT_ROOM_ID
+        auth_token: HIPCHAT_TOKEN
+```
+
 ### Custom Scripts
 Custom scripts are scripts/commands that could be defined directly in the config file without having to write any line of python in the `fabfile.py`. They're similar to the [npm scripts](https://docs.npmjs.com/misc/scripts), if you're familiar with them.
 
