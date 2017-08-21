@@ -39,13 +39,30 @@ def sync(branch):
     # TODO: Custom origin
 
 
-def current_branch(remote=True):
+def last_commit(remote=True):
     '''
-    Get the current branch of the host.
+    Get the last commit of the git repository.
 
     Note: This assumes the current working directory (on remote or local host)
     to be a git repository. So, make sure current directory is set before using this.
     '''
+
+    cmd = 'git rev-parse HEAD'
+
+    with hide('everything'):
+        result = run(cmd) if remote else local(cmd, capture=True)
+
+        return result.strip()
+
+
+def current_branch(remote=True):
+    '''
+    Get the current branch of the git repository.
+
+    Note: This assumes the current working directory (on remote or local host)
+    to be a git repository. So, make sure current directory is set before using this.
+    '''
+
     cmd = 'git rev-parse --abbrev-ref HEAD'
 
     with hide('everything'):

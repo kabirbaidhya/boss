@@ -13,11 +13,11 @@ from datetime import datetime
 from terminaltables import AsciiTable
 from fabric.colors import green
 # from fabric.contrib import files
-from fabric.api import task, cd, local, shell_env, hide
+from fabric.api import task, cd, shell_env, hide
 
 from boss import constants, __version__ as BOSS_VERSION
 from boss.util import info, remote_info
-from boss.api import shell, notif, runner, hipchat, fs
+from boss.api import shell, notif, runner, hipchat, fs, git
 from boss.config import get_stage_config, get as get_config
 
 BUILD_NAME_FORMAT = 'build-{id}'
@@ -48,22 +48,6 @@ def setup_remote():
         save_build_history(INITIAL_BUILD_HISTORY)
 
     return (release_dir, current_path)
-
-
-def local_branch():
-    ''' Get the current branch from the local repository. '''
-    # TODO: Move this code to git module. '''
-    with hide('everything'):
-        result = local('git rev-parse --abbrev-ref HEAD', capture=True)
-        return result.strip()
-
-
-def local_commit():
-    ''' Get the recent commit from the local repository. '''
-    # TODO: Move this code to git module. '''
-    with hide('everything'):
-        result = local('git rev-parse HEAD', capture=True)
-        return result.strip()
 
 
 def get_deploy_dir():
@@ -288,8 +272,11 @@ def deploy():
     config = get_config()
     user = config['user']
     stage = shell.get_stage()
-    branch = local_branch()
-    commit = local_commit()
+
+    # Get the current branch and commit (locally).
+    branch = git.current_branch(remote=False)
+    commit = git.last_commit(remote=False)
+
     tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['web']['build_dir']
 
