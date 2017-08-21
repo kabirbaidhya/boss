@@ -153,6 +153,10 @@ def get_current_build(history, index=False):
     return get_build_info(history, history['current'], index)
 
 
+def get_build_by_id(history, id):
+    return next((x for x in history['builds'] if x['id'] == id), None)
+
+
 def get_build_info(history, id, index=False):
     ''' Get the build information by build id. '''
 
@@ -162,7 +166,7 @@ def get_build_info(history, id, index=False):
 
     # If index is not requested, return the build information instead.
     if not index:
-        return next((x for x in history['builds'] if x['id'] == id), None)
+        return get_build_by_id(history, id)
 
     # Return the build index.
     return next((i for i, x in enumerate(history['builds']) if x['id'] == id), None)
@@ -199,8 +203,7 @@ def rollback(id=None):
         prev_build = history['builds'][current_index + 1]
     else:
         # Otherwise, if the id is provided then, get the build with that id
-        prev_build = next(
-            (x for x in history['builds'] if x['id'] == id), None)
+        prev_build = get_build_by_id(history, id)
 
         if not prev_build:
             remote_info('Build with id "{}" not found.'.format(id))
