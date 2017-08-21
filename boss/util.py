@@ -21,9 +21,9 @@ def info(msg):
     print('\n' + green(msg))
 
 
-def host_print(msg, remote=True):
+def host_print(msg, remote=True, leading_chars='\n'):
     ''' Print a raw message on the host. '''
-    cmd = 'echo "{}"'.format(msg)
+    cmd = 'echo "{0}{1}"'.format(leading_chars, msg)
 
     with hide('running'):
         if remote:

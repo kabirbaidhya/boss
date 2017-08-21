@@ -310,16 +310,16 @@ def deploy():
     build_compressed = build_name + '.tar.gz'
     release_path = release_dir + '/' + build_name
 
-    info('Installing Dependencies')
+    info('Getting the build ready for deployment')
+
+    # Trigger the install script
     runner.run_script(constants.SCRIPT_INSTALL, remote=False)
 
-    info('Building')
-    # This will trigger the build script configured in the
-    # boss.yml file.
+    # Trigger the build script.
     #
-    # The stage for which the build script is run is passed
+    # The stage for which the build script is being run is passed
     # via an environment variable STAGE.
-    # Which could be useful for creating specific builds for
+    # This could be useful for creating specific builds for
     # different environments.
     with shell_env(STAGE=stage):
         runner.run_script(constants.SCRIPT_BUILD, remote=False)
@@ -340,7 +340,7 @@ def deploy():
     # local('rm {}'.format(build_compressed))
 
     # Once, the build is uploaded to the remote,
-    # Set things up in the remote server.
+    # set things up in the remote server.
     with cd(release_dir):
         remote_info('Extracting the build {}'.format(build_compressed))
         # Create a new directory for the build in the remote.
