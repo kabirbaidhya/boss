@@ -7,19 +7,17 @@ to the remote server. This assumes the files are served via a web server eg: ngi
 The source code is built locally and only the dist is uploaded and deployed to the server.
 '''
 
-import time
 import json
-from StringIO import StringIO
 from datetime import datetime
 
 from terminaltables import AsciiTable
 from fabric.colors import green
-from fabric.contrib import files
-from fabric.api import task, run, put, get, cd, local, shell_env, hide
+# from fabric.contrib import files
+from fabric.api import task, cd, local, shell_env, hide
 
 from boss import constants, __version__ as BOSS_VERSION
 from boss.util import info, remote_info
-from boss.api import shell, notif, runner, hipchat
+from boss.api import shell, notif, runner, hipchat, fs
 from boss.config import get_stage_config, get as get_config
 
 BUILD_NAME_FORMAT = 'build-{id}'
@@ -30,11 +28,6 @@ INITIAL_BUILD_HISTORY = {
 }
 
 
-def get_temp_filename(prefix=''):
-    ''' Get a unique temporary filename. '''
-    return '/tmp/' + (prefix + str(time.time()).replace('.', '-'))
-
-
 def setup_remote():
     ''' Setup remote environment before we can proceed with the deployment process. '''
     base_dir = get_deploy_dir()
@@ -43,42 +36,23 @@ def setup_remote():
     build_history_path = get_builds_file()
 
     # If the release directory does not exist, create it.
-    if not files.exists(release_dir):
+    if not fs.exists(release_dir):
         remote_info('Creating the releases directory {}'.format(release_dir))
-        run('mkdir -p {}'.format(release_dir))
+        fs.mkdir(release_dir, nested=True)
 
     # If the build history file does not exist, create it now.
-    if not files.exists(build_history_path):
-        remote_info('Creating new build history file {}'.format(
-            build_history_path))
+    if not fs.exists(build_history_path):
+        remote_info(
+            'Creating new build history file {}'.format(build_history_path)
+        )
         save_build_history(INITIAL_BUILD_HISTORY)
 
     return (release_dir, current_path)
 
 
-def save_remote_file(path, data):
-    ''' Save data to the remote file.'''
-    fd = StringIO(data)
-    put(fd, path)
-
-    return fd.getvalue()
-
-
-def read_remote_file(path):
-    ''' Read remote file contents.'''
-    fd = StringIO()
-    get(path, fd)
-
-    return fd.getvalue()
-
-
-def update_symlink(src, link_path):
-    ''' Update the current build symlink. '''
-    run('ln -sfn {} {}'.format(src, link_path))
-
-
 def local_branch():
     ''' Get the current branch from the local repository. '''
+    # TODO: Move this code to git module. '''
     with hide('everything'):
         result = local('git rev-parse --abbrev-ref HEAD', capture=True)
         return result.strip()
@@ -86,6 +60,7 @@ def local_branch():
 
 def local_commit():
     ''' Get the recent commit from the local repository. '''
+    # TODO: Move this code to git module. '''
     with hide('everything'):
         result = local('git rev-parse HEAD', capture=True)
         return result.strip()
@@ -147,7 +122,7 @@ def row_mapper_wrt(current):
             return row
 
         # Return colored row, if it's the current build row.
-        return map(lambda x: green(x), row)
+        return map(green, row)
 
     return mapper
 
@@ -155,12 +130,14 @@ def row_mapper_wrt(current):
 def load_build_history():
     ''' Load build history. '''
     with hide('everything'):
-        return json.loads(read_remote_file(get_builds_file()))
+        data = fs.read_remote_file(get_builds_file())
+
+        return json.loads(data)
 
 
 def save_build_history(data):
     ''' Save build history. '''
-    save_remote_file(get_builds_file(), json.dumps(data))
+    fs.save_remote_file(get_builds_file(), json.dumps(data))
 
 
 def record_build_history(build_info):
@@ -245,7 +222,7 @@ def rollback(id=None):
             return
 
     remote_info('Rolling back to build {}'.format(prev_build['id']))
-    update_symlink(prev_build['path'], current_path)
+    fs.update_symlink(prev_build['path'], current_path)
     history['current'] = prev_build['id']
     save_build_history(history)
 
@@ -284,18 +261,12 @@ def buildinfo(id=None):
     print(table.table)
 
 
-def glob(path):
-    ''' Glob a directory path to get the list of files. '''
-    with hide('everything'):
-        return run('ls -1 {}'.format(path)).split()
-
-
 def delete_old_builds(history):
     ''' Auto delete unnecessary build directories from the filesystem. '''
     build_path = get_release_dir()
     kept_builds = [BUILD_NAME_FORMAT.format(id=x['id'])
                    for x in history['builds']]
-    found_builds = glob(build_path)
+    found_builds = fs.glob(build_path)
     to_be_deleted_builds = [x for x in found_builds if x not in kept_builds]
     deletion_count = len(to_be_deleted_builds)
 
@@ -305,9 +276,10 @@ def delete_old_builds(history):
 
     # Remove directories to be deleted.
     with cd(build_path):
-        run('rm -rf {}'.format(' '.join(to_be_deleted_builds)))
+        fs.rm_rf(to_be_deleted_builds)
         remote_info(
-            'Deleted {} old build(s) from the remote'.format(deletion_count))
+            'Deleted {} old build(s) from the remote'.format(deletion_count)
+        )
 
 
 @task
@@ -318,7 +290,7 @@ def deploy():
     stage = shell.get_stage()
     branch = local_branch()
     commit = local_commit()
-    tmp_path = get_temp_filename()
+    tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['web']['build_dir']
 
     deploy_dir = get_deploy_dir()
@@ -342,34 +314,54 @@ def deploy():
     runner.run_script(constants.SCRIPT_INSTALL, remote=False)
 
     info('Building')
+    # This will trigger the build script configured in the
+    # boss.yml file.
+    #
+    # The stage for which the build script is run is passed
+    # via an environment variable STAGE.
+    # Which could be useful for creating specific builds for
+    # different environments.
     with shell_env(STAGE=stage):
         runner.run_script(constants.SCRIPT_BUILD, remote=False)
 
     info('Compressing the build')
-    with hide('stdout'):
-        runner.run(
-            'tar -czvf {} {}'.format(build_compressed, build_dir),
-            remote=False
-        )
+    fs.tar_archive(build_compressed, build_dir, remote=False)
+    # with hide('stdout'):
+    # runner.run(
+    #     'tar -czvf {} {}'.format(build_compressed, build_dir),
+    #     remote=False
+    # )
 
     info('Uploading the build {} to {}'.format(build_compressed, tmp_path))
-    put(build_compressed, tmp_path)
+    fs.upload(build_compressed, tmp_path)
 
-    local('rm {}'.format(build_compressed))
+    # Remove the compressed build from the local directory.
+    fs.rm(build_compressed, remote=False)
+    # local('rm {}'.format(build_compressed))
 
+    # Once, the build is uploaded to the remote,
+    # Set things up in the remote server.
     with cd(release_dir):
         remote_info('Extracting the build {}'.format(build_compressed))
-        run('mkdir {}'.format(build_name))
-        run('tar zxvf {} --strip-components=1 -C {}'.format(tmp_path, build_name))
-        run('rm -rf {}'.format(tmp_path))
+        # Create a new directory for the build in the remote.
+        fs.mkdir(build_name)
+
+        # Extract the build.
+        # run('tar zxvf {} --strip-components=1 -C {}'.format(tmp_path, build_name))
+        fs.tar_extract(tmp_path, build_name)
+
+        # Remove the uploaded archived from the temp path.
+        fs.rm_rf(tmp_path)
+        # run('rm -rf {}'.format(tmp_path))
 
         remote_info(
             'Changing ownership of {} to user {}'.format(deploy_dir, user)
         )
-        run('chown -R {0}:{0} {1}'.format(user, release_path))
+        fs.chown(release_path, user, user)
+        # run('chown -R {0}:{0} {1}'.format(user, release_path))
 
         remote_info('Pointing the current symlink to the latest build')
-        update_symlink(release_path, current_path)
+        fs.update_symlink(release_path, current_path)
 
     # Save build history
     record_build_history({
