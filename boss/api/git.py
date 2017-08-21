@@ -1,4 +1,5 @@
-from fabric.api import run, hide
+from fabric.api import run, hide, local
+from ..util import warn_deprecated
 
 
 def fetch(prune=True):
@@ -20,6 +21,12 @@ def pull(branch):
 
 def remote_branch():
     ''' Get the current branch of the remote server. '''
+    # TODO: Remove this function.
+    warn_deprecated(
+        'git.remote_branch() function is deprecated in the favor of git.current_branch ' +
+        'and will be removed in the next major release.'
+    )
+
     with hide('everything'):
         result = run('git rev-parse --abbrev-ref HEAD')
 
@@ -30,6 +37,21 @@ def sync(branch):
     ''' Sync the current HEAD with the remote(origin)'s branch '''
     run('git reset --hard origin/%s' % branch)
     # TODO: Custom origin
+
+
+def current_branch(remote=True):
+    '''
+    Get the current branch of the host.
+
+    Note: This assumes the current working directory (on remote or local host)
+    to be a git repository. So, make sure current directory is set before using this.
+    '''
+    cmd = 'git rev-parse --abbrev-ref HEAD'
+
+    with hide('everything'):
+        result = run(cmd) if remote else local(cmd, capture=True)
+
+        return result.strip()
 
 
 def show_last_commit():
