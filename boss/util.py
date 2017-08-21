@@ -7,7 +7,7 @@ to better categorize utilities.
 
 import collections
 from copy import deepcopy
-from fabric.api import run as _run, hide
+from fabric.api import run as _run, local as _local, hide
 from fabric.colors import red, green, yellow
 
 
@@ -21,15 +21,30 @@ def info(msg):
     print('\n' + green(msg))
 
 
+def host_print(msg, remote=True):
+    ''' Print a raw message on the host. '''
+    cmd = 'echo "{}"'.format(msg)
+
+    with hide('running'):
+        if remote:
+            _run(cmd)
+        else:
+            _local(cmd)
+
+
+def host_info(msg, remote=True):
+    ''' Print a message (Information) on the host. '''
+    host_print(green(msg), remote=remote)
+
+
 def remote_print(msg):
     ''' Print a raw message on the remote logs. '''
-    with hide('running'):
-        _run('echo "{}"'.format(msg))
+    host_print(msg, remote=True)
 
 
 def remote_info(msg):
     ''' Print a message (Information) on the remote logs. '''
-    remote_print(green(msg))
+    host_info(msg, remote=True)
 
 
 def warn(msg):

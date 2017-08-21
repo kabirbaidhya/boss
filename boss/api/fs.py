@@ -32,14 +32,14 @@ def rm(path, remote=True):
 def rm_rf(path, remote=True):
     ''' Remote the specified path recursively (both files and directories). '''
 
-    files = path
+    removal_path = path
 
     # If path is not a string but a list of multiple paths,
     # remove them all.
     if util.is_iterable(path) and not util.is_string(path):
-        files = ' '.join(path)
+        removal_path = ' '.join(path)
 
-    runner.run('rm -rf {}'.format(files), remote=remote)
+    runner.run('rm -rf {}'.format(removal_path), remote=remote)
 
 
 def chown(path, user, group=None, remote=True):
