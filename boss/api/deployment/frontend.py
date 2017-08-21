@@ -25,6 +25,8 @@ INITIAL_BUILD_HISTORY = {
     'current': None,
     'builds': []
 }
+BUILDS_DIRECTORY = '/builds'
+BUILDS_META_FILE = '/builds.json'
 
 
 def setup_remote():
@@ -52,17 +54,17 @@ def setup_remote():
 def get_deploy_dir():
     ''' Get the deployment base directory path. '''
     config = get_config()
-    return config['deployment']['web']['base_dir'].rstrip('/')
+    return config['deployment']['base_dir'].rstrip('/')
 
 
 def get_release_dir():
     ''' Get the builds base directory path. '''
-    return get_deploy_dir() + '/builds'
+    return get_deploy_dir() + BUILDS_DIRECTORY
 
 
 def get_builds_file():
     ''' Get the build metadata file. '''
-    return get_deploy_dir() + '/builds.json'
+    return get_deploy_dir() + BUILDS_META_FILE
 
 
 @task
@@ -126,7 +128,7 @@ def save_build_history(data):
 def record_build_history(build_info):
     ''' Record a new build in the history. '''
     config = get_config()
-    keep_builds = int(config['deployment']['web']['keep_builds'])
+    keep_builds = int(config['deployment']['keep_builds'])
     build_history = load_build_history()
 
     build_history['current'] = build_info['id']
@@ -281,7 +283,7 @@ def deploy():
     echo('  Commit: {}'.format(cyan(commit)))
 
     tmp_path = fs.get_temp_filename()
-    build_dir = config['deployment']['web']['build_dir']
+    build_dir = config['deployment']['build_dir']
 
     deploy_dir = get_deploy_dir()
     deployer_user = shell.get_user()

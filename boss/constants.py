@@ -21,7 +21,10 @@ DEFAULT_CONFIG = {
     'stages': {},
     'scripts': {},
     'deployment': {
-        'preset': None
+        'preset': None,
+        'build_dir': 'build/',
+        'base_dir': '~/boss',
+        'keep_builds': 3
     },
     'notifications': {
         'slack': {
