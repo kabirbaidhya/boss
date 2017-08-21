@@ -1,8 +1,10 @@
 ''' File System utilities API. '''
 
+import os
 import time
 from StringIO import StringIO
 from fabric.api import hide, put, get
+from fabric.contrib import files
 
 from . import runner
 from .. import util
@@ -50,7 +52,7 @@ def chown(path, user, group=None, remote=True):
     runner.run(cmd, remote=remote)
 
 
-def tar_archive(path, name, remote=True):
+def tar_archive(name, path, remote=True):
     ''' Compress the source path into a tar archive. '''
     cmd = 'tar -czvf {} {}'.format(name, path)
 
@@ -68,6 +70,23 @@ def glob(path, remote=True):
     ''' Glob a directory path to get the list of files. '''
     with hide('everything'):
         return runner.run('ls -1 {}'.format(path), remote=remote).split()
+
+
+def exists(path, remote=True):
+    '''
+    Check if the path exists in the remote or locally,
+    depending upon the `remote` paramter.
+    '''
+
+    if remote:
+        return files.exists(path)
+
+    return os.path.exists(path)
+
+
+def upload(local_path, remote_path):
+    ''' Upload one or more files to a remote host. '''
+    return put(local_path, remote_path)
 
 
 def save_remote_file(path, data):
