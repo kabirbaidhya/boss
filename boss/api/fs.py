@@ -5,6 +5,7 @@ from StringIO import StringIO
 from fabric.api import hide, put, get
 
 from . import runner
+from .. import util
 
 
 def get_temp_filename(prefix=''):
@@ -28,7 +29,15 @@ def rm(path, remote=True):
 
 def rm_rf(path, remote=True):
     ''' Remote the specified path recursively (both files and directories). '''
-    runner.run('rm -rf {}'.format(path), remote=remote)
+
+    files = path
+
+    # If path is not a string but a list of multiple paths,
+    # remove them all.
+    if util.is_iterable(path) and not util.is_string(path):
+        files = ' '.join(path)
+
+    runner.run('rm -rf {}'.format(files), remote=remote)
 
 
 def chown(path, user, group=None, remote=True):
