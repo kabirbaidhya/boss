@@ -1,7 +1,10 @@
 '''
 Remote Source deployment Preset.
 
-This is a generic deployment preset, where the remote host also contains the project source code and the git repository. The deploy task would synchronize the remote with the latest changes of the provided branch from the origin. It then builds the project and restarts the service if needed.
+This is a generic deployment preset, where the remote host contains the project
+source code and the git repository. The deploy task would synchronize the remote
+with the latest changes of the provided branch from the origin.
+It then builds the project and restarts the service if needed.
 '''
 
 
@@ -86,7 +89,7 @@ def sync(branch=None):
     ''' Sync the changes on the branch with the remote (origin). '''
     remote_info('Fetching the latest changes.')
     git.fetch()
-    branch = branch or git.remote_branch()
+    branch = branch or git.current_branch()
     remote_info('Checking out to branch {}.'.format(cyan(branch)))
     git.checkout(branch, True)
     remote_info('Synchronizing with the latest changes.')

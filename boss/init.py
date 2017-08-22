@@ -7,7 +7,7 @@ from fabric.tasks import _is_task
 from .util import warn_deprecated
 from .config import load as load_config, get as get_config, get_stage_config
 from .api.shell import get_stage
-from .api import deployer
+from .api.deployment import deployer
 
 
 def init(module_name):
@@ -17,7 +17,7 @@ def init(module_name):
     # This service config option makes it too tightly coupled with
     # systemd services, so we'll need to make deployment process
     # independent of systemctl.
-    if config['service'] != None:
+    if config['service'] is not None:
         warn_deprecated(
             'The `service` configuration option is deprecated' +
             ' and will be removed in the future releases.'
