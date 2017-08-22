@@ -70,7 +70,7 @@ def deploy():
 
     timestamp = datetime.utcnow()
     build_id = timestamp.strftime('%Y%m%d%H%M%S')
-    build_name = buildman.BUILD_NAME_FORMAT.format(id=build_id)
+    build_name = buildman.get_build_name(build_id)
     build_compressed = build_name + '.tar.gz'
     release_path = release_dir + '/' + build_name
 

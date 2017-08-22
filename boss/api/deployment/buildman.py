@@ -14,7 +14,6 @@ from boss.config import get as get_config
 from boss.util import remote_info, merge
 from boss.api import fs
 
-BUILD_NAME_FORMAT = 'build-{id}'
 INITIAL_BUILD_HISTORY = {
     'bossVersion': BOSS_VERSION,
     'preset': None,
@@ -40,6 +39,11 @@ def get_release_dir():
 def get_builds_file():
     ''' Get the build metadata file. '''
     return get_deploy_dir() + BUILDS_META_FILE
+
+
+def get_build_name(id):
+    ''' Get build name using id. '''
+    return 'build-{id}'
 
 
 def load_history():
@@ -147,8 +151,7 @@ def setup_remote():
 def delete_old_builds(history):
     ''' Auto delete unnecessary build directories from the filesystem. '''
     build_path = get_release_dir()
-    kept_builds = [BUILD_NAME_FORMAT.format(id=x['id'])
-                   for x in history['builds']]
+    kept_builds = map(lambda x: get_build_name(x['id']), history['builds'])
     found_builds = fs.glob(build_path)
     to_be_deleted_builds = [x for x in found_builds if x not in kept_builds]
     deletion_count = len(to_be_deleted_builds)
@@ -213,8 +216,8 @@ def get_build_info(history, id, index=False):
 
 
 def rollback(id=None):
-    ''' 
-    Deployment rollback to the previous build, or 
+    '''
+    Deployment rollback to the previous build, or
     the build identified by the given id.
     '''
     # TODO: Send rollback started notification
