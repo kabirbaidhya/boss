@@ -7,7 +7,7 @@ from fabric.tasks import _is_task
 from .util import warn_deprecated
 from .config import load as load_config, get as get_config, get_stage_config
 from .api.shell import get_stage
-from .api import deployer
+from .api.deployment import deployer
 
 
 def init(module_name):

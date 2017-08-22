@@ -16,7 +16,7 @@ from boss import constants
 from boss.util import info, remote_info, echo
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
-from . import buildman
+from .. import buildman
 
 
 @task

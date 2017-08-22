@@ -1,7 +1,10 @@
 '''
 Remote Source deployment Preset.
 
-This is a generic deployment preset, where the remote host also contains the project source code and the git repository. The deploy task would synchronize the remote with the latest changes of the provided branch from the origin. It then builds the project and restarts the service if needed.
+This is a generic deployment preset, where the remote host contains the project
+source code and the git repository. The deploy task would synchronize the remote
+with the latest changes of the provided branch from the origin.
+It then builds the project and restarts the service if needed.
 '''
 
 
