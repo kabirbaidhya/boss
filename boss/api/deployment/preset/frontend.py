@@ -33,7 +33,7 @@ def rollback(id=None):
     buildman.rollback(id)
 
 
-@task
+@task(alias='info')
 def buildinfo(id=None):
     ''' Print the build information. '''
     buildman.display(id)
