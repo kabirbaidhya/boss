@@ -126,7 +126,7 @@ def deploy():
         'commit': commit,
         'stage': stage,
         'createdBy': deployer_user,
-        'timestamp': timestamp.strftime('%Y-%m-%d %H:%M:%S (UTC)')
+        'timestamp': timestamp.strftime(buildman.TS_FORMAT)
     })
 
     # Send deployment finished notification.

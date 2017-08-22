@@ -4,6 +4,8 @@ Build Manager for deployment.
 '''
 
 import json
+import time
+from datetime import datetime
 
 from terminaltables import SingleTable
 from fabric.colors import green
@@ -11,7 +13,7 @@ from fabric.api import cd, hide
 
 from boss import __version__ as BOSS_VERSION
 from boss.config import get as get_config
-from boss.util import remote_info, merge
+from boss.util import remote_info, merge, localize_utc_timestamp
 from boss.api import fs
 
 INITIAL_BUILD_HISTORY = {
@@ -23,6 +25,8 @@ INITIAL_BUILD_HISTORY = {
 BUILDS_DIRECTORY = '/builds'
 BUILDS_META_FILE = '/builds.json'
 CURRENT_BUILD_LINK = '/current'
+TS_FORMAT = '%Y-%m-%d %H:%M:%S (UTC)'
+TS_FORMAT_LOCAL = '%Y-%m-%d %I:%M:%S %p'
 
 
 def get_deploy_dir():
@@ -59,11 +63,24 @@ def save_history(data):
     fs.save_remote_file(get_builds_file(), json.dumps(data))
 
 
+def local_timestamp(timestamp, tz=True):
+    '''
+    Get the corresponding local timestamp for the
+    UTC timestamp stored in the server.
+    '''
+    timestamp_utc = datetime.strptime(timestamp, TS_FORMAT)
+    timestamp_local = localize_utc_timestamp(timestamp_utc)
+
+    tz_name = time.strftime(' (%Z)') if tz else ''
+    return timestamp_local.strftime(TS_FORMAT_LOCAL) + tz_name
+
+
 def display(id):
     ''' Display build information by build id. '''
     history = load_history()
     build = get_build_info(history, id or history['current'])
     is_current = build['id'] == history['current']
+    timestamp = local_timestamp(build['timestamp'])
 
     table = SingleTable([
         [green('Build ' + build['id'])],
@@ -74,7 +91,7 @@ def display(id):
         ['Created By: ' + green(build['createdBy'])],
         ['Path: ' + green(build['path'])],
         ['Current Build: ' + green('Yes' if is_current else 'No')],
-        ['Timestamp: ' + green(build['timestamp'])]
+        ['Timestamp: ' + green(timestamp)]
     ])
     print(table.table)
 
@@ -107,10 +124,11 @@ def row_mapper_wrt(current):
         ''' Maps build information to a tabular row. '''
         is_current = data['id'] == current
         pointer = u'➜' if is_current else ' '
+        timestamp = local_timestamp(data['timestamp'])
 
         row = [
             pointer, data['id'], data['commit'],
-            data['branch'], data['createdBy'], data['timestamp']
+            data['branch'], data['createdBy'], timestamp
         ]
 
         # Regular row if not a current build row.
