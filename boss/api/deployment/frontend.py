@@ -10,7 +10,7 @@ The source code is built locally and only the dist is uploaded and deployed to t
 import json
 from datetime import datetime
 
-from terminaltables import AsciiTable
+from terminaltables import SingleTable
 from fabric.colors import green, cyan
 from fabric.api import task, cd, shell_env, hide
 
@@ -86,7 +86,7 @@ def builds():
         'Branch', 'Created By', 'Timestamp'
     ])
 
-    table = AsciiTable(data)
+    table = SingleTable(data)
     print(table.table)
 
 
@@ -235,7 +235,7 @@ def buildinfo(id=None):
     build = get_build_info(history, id or history['current'])
     is_current = build['id'] == history['current']
 
-    table = AsciiTable([
+    table = SingleTable([
         [green('Build ' + build['id'])],
         ['ID: ' + green(build['id'])],
         ['Commit: ' + green(build['commit'])],
