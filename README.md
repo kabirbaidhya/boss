@@ -126,6 +126,10 @@ This would deploy the default branch `master` in this case. In case you need to 
  ➜ fab prod deploy:branch=my-branch
 ```
 
+## Contributing
+
+Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugs and improvements.
+
 ## Change Log
 Check the [CHANGELOG](CHANGELOG.md) for full release history.
 
