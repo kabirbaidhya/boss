@@ -91,7 +91,7 @@ stages:
 notifications:
     slack:
         enabled: true
-        endpoint: SLACK_TOKEN
+        endpoint: SLACK_ENDPOINT
     hipchat:
         enabled: true
         notify: true
@@ -111,7 +111,7 @@ stages:
 notifications:
     slack:
         enabled: true
-        endpoint: ${SLACK_TOKEN}
+        endpoint: ${SLACK_ENDPOINT}
     hipchat:
         enabled: true
         notify: true
@@ -161,7 +161,7 @@ stages:
 notifications:
     slack:
         enabled: true
-        endpoint: ${SLACK_TOKEN}
+        endpoint: ${SLACK_ENDPOINT}
     hipchat:
         enabled: true
         notify: true
