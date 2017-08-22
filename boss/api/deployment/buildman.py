@@ -165,7 +165,7 @@ def delete_old_builds(history):
         )
 
 
-def record_build_history(build_info):
+def record_history(build_info):
     ''' Record a new build in the history. '''
     config = get_config()
     keep_builds = int(config['deployment']['keep_builds'])

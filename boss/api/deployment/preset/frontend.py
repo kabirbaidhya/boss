@@ -119,7 +119,7 @@ def deploy():
         fs.update_symlink(release_path, current_path)
 
     # Save build history
-    buildman.record_build_history({
+    buildman.record_history({
         'id': build_id,
         'path': release_path,
         'branch': branch,
