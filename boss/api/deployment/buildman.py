@@ -43,7 +43,7 @@ def get_builds_file():
 
 def get_build_name(id):
     ''' Get build name using id. '''
-    return 'build-{id}'
+    return 'build-{id}'.format(id=id)
 
 
 def load_history():
@@ -187,32 +187,33 @@ def record_history(build_info):
     delete_old_builds(build_history)
 
 
-def get_current_build(history, index=False):
-    ''' Get the current build information. '''
+def get_current_build_index(history):
+    ''' Get the current build index. '''
     if not history['current']:
         remote_info('No current build found.')
         return None
 
-    return get_build_info(history, history['current'], index)
+    # Return the build index for the current build.
+    current = history['current']
+    for i, build in enumerate(history['builds']):
+        if build['id'] == current:
+            return i
+
+    return None
 
 
 def get_build_by_id(history, id):
     return next((x for x in history['builds'] if x['id'] == id), None)
 
 
-def get_build_info(history, id, index=False):
+def get_build_info(history, id):
     ''' Get the build information by build id. '''
 
     if not history['builds']:
         remote_info('No build history recorded yet.')
         return None
 
-    # If index is not requested, return the build information instead.
-    if not index:
-        return get_build_by_id(history, id)
-
-    # Return the build index.
-    return next((i for i, x in enumerate(history['builds']) if x['id'] == id), None)
+    return get_build_by_id(history, id)
 
 
 def rollback(id=None):
@@ -231,10 +232,10 @@ def rollback(id=None):
         remote_info('Could not get the previous build to rollback.')
         return
 
+    # If the rollback build id is not explicitly provided,
+    # rollback to the previous build.
     if not id:
-        # If the rollback build id is not explicitly provided,
-        # get the previous build of the current build.
-        current_index = get_current_build(history, index=True)
+        current_index = get_current_build_index(history)
 
         # If current_index is None, or there are no builds before the current build
         # print the error since there are no previous builds to rollback.
@@ -257,12 +258,10 @@ def rollback(id=None):
 
     remote_info('Rolling back to build {}'.format(prev_build['id']))
     fs.update_symlink(prev_build['path'], current_path)
+
+    # Save history and display it.
     history['current'] = prev_build['id']
-
-    # Save the build history
     save_history(history)
-
-    # Display the updated builds.
     display_list(history)
 
     # TODO: Send rollback completed notification.
