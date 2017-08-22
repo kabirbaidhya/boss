@@ -29,9 +29,11 @@ project_name: PROJECT_NAME
 project_description: PROJECT_DESCRIPTION
 # The location of repo for your project
 repository_url: https://github.com/<username>/<project-name>
-# Username used to acess the server through SSH. This username will be used to access all the servers mentioned in stages below.
+# Username used to acess the server through SSH.
+# This username will be used to access all the servers mentioned in stages below.
 user: USERNAME
-# Port open for SSH on the application server
+# Port open for SSH on the application server.
+# This port will be used to access all the servers mentioned in stages below.
 port: SERVER_SSH_PORT
 ```
 
@@ -62,9 +64,9 @@ stages:
                 - /path/to/access/log/file
     production:
         host: your-app.com
-#       Mention this if the production SSH_PORT is different from the one mentioned in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configuration).
+#       Mention this if the production SSH_PORT is different from the one mentioned in basic configuration above.
         port: PRODUCTION_SERVER_SSH_PORT
-#       Mention this if the production USERNAME is different from the one mentioned in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configuration).
+#       Mention this if the production USERNAME is different from the one mentioned in basic configuration above.
         username: PRODUCTION_SERVER_USERNAME
         public_url: http://your-app.com
         app_dir: /path/to/your/app
