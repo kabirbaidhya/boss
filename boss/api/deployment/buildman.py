@@ -209,3 +209,57 @@ def get_build_info(history, id, index=False):
 
     # Return the build index.
     return next((i for i, x in enumerate(history['builds']) if x['id'] == id), None)
+
+
+def rollback(id=None):
+    ''' 
+    Deployment rollback to the previous build, or 
+    the build identified by the given id.
+    '''
+    # TODO: Send rollback started notification
+    (_, current_path) = setup_remote()
+    history = load_history()
+
+    # If the current build in the history is not set yet or
+    # there aren't any previous builds on the history
+    # rollback is not possible.
+    if not history['current'] or not history['builds']:
+        remote_info('Could not get the previous build to rollback.')
+        return
+
+    if not id:
+        # If the rollback build id is not explicitly provided,
+        # get the previous build of the current build.
+        current_index = get_current_build(history, index=True)
+
+        # If current_index is None, or there are no builds before the current build
+        # print the error since there are no previous builds to rollback.
+        build_count = len(history['builds'])
+        has_prev_build = 0 < current_index + 1 < build_count
+
+        if current_index is None or not has_prev_build:
+            remote_info('No previous builds found to rollback.')
+            return
+
+        # Get the previous build information.
+        prev_build = history['builds'][current_index + 1]
+    else:
+        # Otherwise, if the id is provided then, get the build with that id
+        prev_build = get_build_by_id(history, id)
+
+        if not prev_build:
+            remote_info('Build with id "{}" not found.'.format(id))
+            return
+
+    remote_info('Rolling back to build {}'.format(prev_build['id']))
+    fs.update_symlink(prev_build['path'], current_path)
+    history['current'] = prev_build['id']
+
+    # Save the build history
+    save_history(history)
+
+    # Display the updated builds.
+    display_list(history)
+
+    # TODO: Send rollback completed notification.
+    remote_info('Rollback successful')
