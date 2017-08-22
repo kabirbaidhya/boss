@@ -26,11 +26,11 @@ project_name: PROJECT_NAME
 project_description: PROJECT_DESCRIPTION
 repository_url: https://github.com/<username>/<project-name>
 user: USERNAME
-port: SERVER_PORT
+port: SERVER_SSH_PORT
 ```
 
 ### Stages
-This includes different instances of your application like `dev`, `qa`, `uat`, `staging`, `production`.
+Stages refer to the configured remote servers where you would like to deploy your application. E.g. `dev`, `qa`, `uat`, `staging`, `production`.
 
 ```yml
 #boss.yml
@@ -65,7 +65,7 @@ stages:
 ```
 
 ### Notifications
-This includes the settings for notifying on deployment start and completion. Currently, only hipchat and slack are supported. Further integrations are welcome through pull-requests.
+You can configure to be notified when deployment starts to succeeds. Currently, only hipchat and slack are supported. Further integrations are welcome through pull-requests.
 
 ```yml
 #boss.yml
@@ -84,6 +84,26 @@ notifications:
         auth_token: HIPCHAT_TOKEN
 ```
 
+You can also use the applications's environment variables from `.env` file.
+
+```yml
+#boss.yml
+stages:
+    ...
+
+notifications:
+    slack:
+        enabled: true
+        endpoint: ${SLACK_TOKEN}
+    hipchat:
+        enabled: true
+        notify: true
+        company_name: ${HIPCHAT_COMPANY_NAME}
+        room_id: ${HIPCHAT_ROOM_ID}
+        auth_token: ${HIPCHAT_TOKEN}
+```
+
+
 A sample of final configuration file:
 ```yml
 #boss.yml
@@ -91,7 +111,7 @@ project_name: PROJECT_NAME
 project_description: PROJECT_DESCRIPTION
 repository_url: https://github.com/<username>/<project-name>
 user: USERNAME
-port: SERVER_PORT
+port: SERVER_SSH_PORT
 
 stages:
     dev:
@@ -124,13 +144,13 @@ stages:
 notifications:
     slack:
         enabled: true
-        endpoint: SLACK_TOKEN
+        endpoint: ${SLACK_TOKEN}
     hipchat:
         enabled: true
         notify: true
-        company_name: HIPCHAT_COMPANY_NAME
-        room_id: HIPCHAT_ROOM_ID
-        auth_token: HIPCHAT_TOKEN
+        company_name: ${HIPCHAT_COMPANY_NAME}
+        room_id: ${HIPCHAT_ROOM_ID}
+        auth_token: ${HIPCHAT_TOKEN}
 ```
 
 ### Custom Scripts
