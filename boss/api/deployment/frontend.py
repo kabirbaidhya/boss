@@ -67,15 +67,12 @@ def get_builds_file():
     return get_deploy_dir() + BUILDS_META_FILE
 
 
-@task
-def builds():
-    ''' Display the build history. '''
-    # Load the build history
-    history = load_build_history()
-
+def display_builds(history):
     if not history['builds']:
         remote_info('No builds have been deployed yet.')
         return
+
+    remote_info('Showing recent builds')
 
     # Map build data into tabular format
     data = map(row_mapper_wrt(history['current']), history['builds'])
@@ -87,7 +84,16 @@ def builds():
     ])
 
     table = SingleTable(data)
+    print('')
     print(table.table)
+
+
+@task
+def builds():
+    ''' Display the build history. '''
+    # Load the build history
+    history = load_build_history()
+    display_builds(history)
 
 
 def row_mapper_wrt(current):
@@ -212,7 +218,12 @@ def rollback(id=None):
     remote_info('Rolling back to build {}'.format(prev_build['id']))
     fs.update_symlink(prev_build['path'], current_path)
     history['current'] = prev_build['id']
+
+    # Save the build history
     save_build_history(history)
+
+    # Display the updated builds.
+    display_builds(history)
 
     stage_config = get_stage_config(stage)
 
