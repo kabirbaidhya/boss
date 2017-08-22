@@ -118,12 +118,13 @@ def row_mapper_wrt(current):
     return mapper
 
 
-def setup_remote(preset=None):
+def setup_remote():
     ''' Setup remote environment before we can proceed with the deployment process. '''
     base_dir = get_deploy_dir()
     release_dir = get_release_dir()
     current_path = base_dir + '/current'
     build_history_path = get_builds_file()
+    preset = get_config()['deployment']['preset']
 
     # If the release directory does not exist, create it.
     if not fs.exists(release_dir):
