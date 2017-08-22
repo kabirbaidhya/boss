@@ -14,8 +14,8 @@ from fabric.api import task, cd, shell_env
 
 from boss import constants
 from boss.util import info, remote_info, echo
-from boss.api import shell, notif, runner, hipchat, fs, git
-from boss.config import get_stage_config, get as get_config
+from boss.api import shell, notif, runner, fs, git
+from boss.config import get as get_config
 from . import buildman
 
 
@@ -31,8 +31,6 @@ def builds():
 def rollback(id=None):
     ''' Zero-Downtime deployment rollback for the frontend. '''
     # TODO: Send rollback started notification
-    config = get_config()
-    stage = shell.get_stage()
     (_, current_path) = buildman.setup_remote()
     history = buildman.load_history()
 
@@ -77,17 +75,7 @@ def rollback(id=None):
     # Display the updated builds.
     buildman.display_list(history)
 
-    stage_config = get_stage_config(stage)
-
-    # Send rollback completed notification.
-    send_rollback_notification({
-        'project_name': config['project_name'],
-        'repository_url': config['repository_url'],
-        'server_name': stage,
-        'build': prev_build['id'],
-        'user': shell.get_user(),
-        'public_url': stage_config['public_url'],
-    })
+    # TODO: Send rollback completed notification.
     remote_info('Rollback successful')
 
 
@@ -194,34 +182,3 @@ def deploy():
     })
 
     remote_info('Deployment Completed')
-
-
-def send_rollback_notification(params):
-    ''' Send notification about the rollback process. '''
-    config = get_config()
-
-    # Notify on hipchat
-    if hipchat.is_enabled():
-        hipchat_config = config['notifications']['hipchat']
-        project_link = hipchat.create_link(
-            params['repository_url'],
-            params['project_name']
-        )
-
-        server_short_link = hipchat.create_link(
-            params['public_url'], params['server_name']
-        )
-        message = '{user} rolled back {project_link} deployment on {server_link} server to build {build}.'
-        text = message.format(
-            user=params['user'],
-            build=params['build'],
-            project_link=project_link,
-            server_link=server_short_link
-        )
-
-        hipchat.notify({
-            'color': hipchat_config['deployed_color'],
-            'message': text,
-            'notify': hipchat_config['notify'],
-            'message_format': 'html'
-        })
