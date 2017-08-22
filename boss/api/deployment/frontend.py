@@ -201,7 +201,10 @@ def rollback(id=None):
 
         # If current_index is None, or there are no builds before the current build
         # print the error since there are no previous builds to rollback.
-        if current_index is None or not history['builds'][current_index + 1]:
+        build_count = len(history['builds'])
+        has_prev_build = 0 < current_index + 1 < build_count
+
+        if current_index is None or not has_prev_build:
             remote_info('No previous builds found to rollback.')
             return
 
