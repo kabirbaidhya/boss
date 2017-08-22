@@ -5,7 +5,9 @@ TODO: Have a separate package `util` and have sub modules under it
 to better categorize utilities.
 '''
 
+import time
 import collections
+from datetime import datetime
 from copy import deepcopy
 from fabric.api import run as _run, local as _local, hide
 from fabric.colors import red, green, yellow
@@ -83,3 +85,10 @@ def merge(dict1, dict2):
             result[key] = deepcopy(dict2[key])
 
     return result
+
+
+def localize_utc_timestamp(utc_datetime):
+    ''' Convert timestamp in UTC to local timezone. '''
+    now = time.time()
+    offset = datetime.fromtimestamp(now) - datetime.utcfromtimestamp(now)
+    return utc_datetime + offset
