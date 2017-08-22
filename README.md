@@ -49,7 +49,8 @@ stages:
         public_url: http://dev.your-app.com
         # Location of project root directory on dev server
         app_dir: /path/to/your/app
-        # Path of logging for dev server. Generally, access and error logs should be listed.
+        # Path of logging for dev server.
+        # Generally, access and error logs should be listed.
         logging:
             files:
                 - /path/to/error/log/file
@@ -64,9 +65,11 @@ stages:
                 - /path/to/access/log/file
     production:
         host: your-app.com
-        # Mention this if the production SSH_PORT is different from the one mentioned in basic configuration above.
+        # Mention this if the production SSH_PORT is different
+        # from the one mentioned in basic configuration above.
         port: PRODUCTION_SERVER_SSH_PORT
-        # Mention this if the production USERNAME is different from the one mentioned in basic configuration above.
+        # Mention this if the production USERNAME is different
+        # from the one mentioned in basic configuration above.
         username: PRODUCTION_SERVER_USERNAME
         public_url: http://your-app.com
         app_dir: /path/to/your/app
