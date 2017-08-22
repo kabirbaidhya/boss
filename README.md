@@ -22,10 +22,16 @@ The basic configuration includes all the minimal configuration to deploy the app
 
 ```yml
 #boss.yml
+
+# Name of project
 project_name: PROJECT_NAME
+# A short description about your application/project
 project_description: PROJECT_DESCRIPTION
+# The location of repo for your project
 repository_url: https://github.com/<username>/<project-name>
+# Username used to acess the server through SSH. This username will be used to access all the servers mentioned in stages below.
 user: USERNAME
+# Port open for SSH on the application server
 port: SERVER_SSH_PORT
 ```
 
@@ -39,7 +45,9 @@ stages:
     dev:
         host: dev.your-app.com
         public_url: http://dev.your-app.com
+#       Location of project root directory on dev server
         app_dir: /path/to/your/app
+#       Path of logging for dev server. Generally, access and error logs should be listed.
         logging:
             files:
                 - /path/to/error/log/file
@@ -54,7 +62,9 @@ stages:
                 - /path/to/access/log/file
     production:
         host: your-app.com
+#       Mention this if the production SSH_PORT is different from the one mentioned in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configuration).
         port: PRODUCTION_SERVER_SSH_PORT
+#       Mention this if the production USERNAME is different from the one mentioned in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configuration).
         username: PRODUCTION_SERVER_USERNAME
         public_url: http://your-app.com
         app_dir: /path/to/your/app
@@ -69,6 +79,7 @@ You can configure to be notified when deployment starts to succeeds. Currently, 
 
 ```yml
 #boss.yml
+...
 stages:
     ...
 
@@ -88,6 +99,7 @@ You can also use the applications's environment variables from `.env` file.
 
 ```yml
 #boss.yml
+...
 stages:
     ...
 
@@ -110,8 +122,8 @@ A sample of final configuration file:
 project_name: PROJECT_NAME
 project_description: PROJECT_DESCRIPTION
 repository_url: https://github.com/<username>/<project-name>
-user: USERNAME
-port: SERVER_SSH_PORT
+user: ${USERNAME}
+port: ${SERVER_SSH_PORT}
 
 stages:
     dev:
@@ -132,8 +144,8 @@ stages:
                 - /path/to/access/log/file
     production:
         host: your-app.com
-        port: PRODUCTION_SERVER_SSH_PORT
-        username: PRODUCTION_SERVER_USERNAME
+        port: ${PRODUCTION_SERVER_SSH_PORT}
+        username: ${PRODUCTION_SERVER_USERNAME}
         public_url: http://your-app.com
         app_dir: /path/to/your/app
         logging:
