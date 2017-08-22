@@ -23,6 +23,7 @@ INITIAL_BUILD_HISTORY = {
 }
 BUILDS_DIRECTORY = '/builds'
 BUILDS_META_FILE = '/builds.json'
+CURRENT_BUILD_LINK = '/current'
 
 
 def get_deploy_dir():
@@ -122,7 +123,7 @@ def setup_remote():
     ''' Setup remote environment before we can proceed with the deployment process. '''
     base_dir = get_deploy_dir()
     release_dir = get_release_dir()
-    current_path = base_dir + '/current'
+    current_path = base_dir + CURRENT_BUILD_LINK
     build_history_path = get_builds_file()
     preset = get_config()['deployment']['preset']
 
