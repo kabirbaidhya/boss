@@ -51,7 +51,7 @@ The user used to access the servers through SSH.
 ```yml
 user: USERNAME
 ```
-_Note:_ This user will be used to access all the servers mentioned in stages below.
+_**NOTE:** This user will be used to access all the servers mentioned in stages below._
 
 ##### `port`
 `integer`
@@ -60,7 +60,7 @@ The port used to access the servers through SSH.
 ```yml
 port: SERVER_SSH_PORT
 ```
-_Note:_ This port will be used to access all the servers mentioned in stages below.
+_**NOTE:** This port will be used to access all the servers mentioned in stages below._
 
 ### Stages
 Stages refer to the configured remote servers where you would like to deploy your application. E.g. `dev`, `qa`, `uat`, `staging`, `production`.
@@ -155,7 +155,6 @@ notifications:
 
 Currently, only hipchat and slack are supported. Further integrations are welcome through pull-requests.
 
-
 #### Slack
 
 ##### `notifications`.`slack`.`enabled`
@@ -216,7 +215,7 @@ Auth token to access the defined room by boss-cli for notifications.
 auth_token: HIPCHAT_TOKEN
 ```
 
-You can also use the applications's environment variables from `.env` file.
+_**NOTE:** You can also use the applications's environment variables from `.env` file._
 ```yml
 room_id: ${HIPCHAT_ROOM_ID}
 auth_token: ${HIPCHAT_AUTH_TOKEN}
