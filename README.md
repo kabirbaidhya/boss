@@ -17,6 +17,8 @@ Comming soon ;)
 
 ## Configuration
 
+Check out the [configuration](https://github.com/kabirbaidhya/boss-cli/docs/configuration.md) page.
+
 ### Custom Scripts
 Custom scripts are scripts/commands that could be defined directly in the config file without having to write any line of python in the `fabfile.py`. They're similar to the [npm scripts](https://docs.npmjs.com/misc/scripts), if you're familiar with them.
 
