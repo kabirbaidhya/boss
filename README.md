@@ -168,7 +168,7 @@ notifications:
     endpoint: ${BOSS_SLACK_ENDPOINT}
 ```
 
-The above configuration would work for any kind of frontend web projects (eg: react, angular, ember, vue, vanila js etc) as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server. 
+The above configuration would work for any kind of frontend web projects (eg: react, angular, ember, vue, vanila js etc) as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server.
 
 You may define two scripts `install` and `build` in your `boss.yml`, to install project dependencies and build the source respectively. For instance: if you've created your application using [`create-react-app`](https://github.com/facebookincubator/create-react-app), you can set these to `npm install` and `npm run build` as shown in above config.
 
@@ -189,8 +189,46 @@ Available commands:
     logs       Tail the logs.
     rollback   Zero-Downtime deployment rollback for the frontend.
     run        Run a custom script.
+    setup      Setup remote host for deployment.
     prod       Configures the prod server environment.
 ```
+
+#### Remote Setup
+Now you can run `setup` task on the remote to setup the remote host for the first time for deployment.
+
+```bash
+ ➜ fab prod setup
+```
+This will create necessary files and directories on the remote under the provided `base_dir` path. In our case the base directory will be `/app/deployment`.
+
+Once, the `setup` task completes you should see message like this:
+
+```
+Remote is setup and is ready for deployment.
+
+Deployed build will point to /app/deployment/current.
+For serving the latest build, please set your web server document root to /app/deployment/current.
+```
+
+Now you'll need to configure your web server document root on the remote host to the `current` symlink created under the `base_dir` path. This symlink will point to the latest build when you deploy your app.
+
+#### Web Server Config
+If you're using a web server like nginx. You can set the document root like this:
+
+```
+# Sample nginx Configuration.
+server {
+  listen 80;
+  listen [::]:80;
+
+  # This is the symlink that points to the build that is deployed.
+  root /app/deployment/current;
+
+  index index.html;
+  ...
+}
+```
+
 #### Deploy
 You can use the deploy task to deploy the app to the remote server.
 
