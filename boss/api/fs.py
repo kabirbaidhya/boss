@@ -4,7 +4,7 @@ import os
 import time
 from StringIO import StringIO
 from fabric.api import hide, put, get
-from fabric.contrib import files
+from fabric.contrib import files, project
 
 from . import runner
 from .. import util
@@ -87,6 +87,11 @@ def exists(path, remote=True):
 def upload(local_path, remote_path):
     ''' Upload one or more files to a remote host. '''
     return put(local_path, remote_path)
+
+
+def upload_dir(local_dir, remote_dir):
+    ''' Uploads a local directory to the remote path. '''
+    project.upload_project(local_dir, remote_dir)
 
 
 def save_remote_file(path, data):

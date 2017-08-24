@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #F3F5EA;
+  font-family: Arial;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -ms-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h3 {
+  color: #666666;
+  margin: 12px;
+  font-size: 36px;
+}
+
+h1 {
+  color: #666666;
+  margin: 10px;
+}
+
+.container {
+  text-align: center;
+  margin: 100px 50px 10px;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: #E07E79;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #666666;
+}
+
+footer {
+  padding: 1rem;
+  text-align: center;
+}
+
+footer .message {
+  color: #C6C7C9;
+}

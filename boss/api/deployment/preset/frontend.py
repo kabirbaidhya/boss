@@ -40,6 +40,12 @@ def buildinfo(id=None):
 
 
 @task
+def setup():
+    ''' Setup remote host for deployment. '''
+    buildman.setup_remote(quiet=False)
+
+
+@task
 def deploy():
     ''' Zero-Downtime deployment for the frontend. '''
     config = get_config()

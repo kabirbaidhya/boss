@@ -9,3 +9,4 @@ prune build
 prune dist
 recursive-exclude *.egg-info *
 recursive-include tests *
+recursive-include boss/misc *
