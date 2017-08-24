@@ -76,4 +76,5 @@ setup(
         ],
     },
     cmdclass={'test': RunTests},
+    include_package_data=True
 )
