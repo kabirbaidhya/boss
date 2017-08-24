@@ -140,7 +140,7 @@ deployment:
 ```
 
 #### Configuration
-Your `boss.yml` file for remote source deployment would look similar to this:
+Your `boss.yml` file for frontend deployment would look similar to this:
 ```yml
 project_name: my-app
 project_description: 'My App'
