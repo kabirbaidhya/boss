@@ -70,23 +70,23 @@ For each of the stages, you can define the following configuration options:
 
 Address of the hosted server for the defined stage.
 ```yml
-host: <stage>.your-app.com
+host: dev.your-app.com
 ```
 
-##### `user` `optional`
+##### `user`    **[ optional ]**
 `string`
 
 The user to access the defined staged server. This user overrides the user defined in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configutation). If not defined, the user defined in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configutation) will be used.
 ```yml
-user: <stage>_SERVER_USERNAME
+user: DEV_SERVER_USERNAME
 ```
 
-##### `port` `optional`
+##### `port`    **[ optional ]**
 `integer`
 
 The port to access the defined staged server. This port overrides the port defined in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configutation). If not defined, the port defined in [basic configuration](https://github.com/kabirbaidhya/boss-cli#basic-configutation) will be used.
 ```yml
-port: <stage>_SERVER_SSH_PORT
+port: DEV_SERVER_SSH_PORT
 ```
 
 
@@ -104,7 +104,7 @@ public_url: http://dev.your-app.com
 The absolute path of the project root directory in the server.
 ```yml
 app_dir: /path/to/your/app
-```yml
+```
 
 ##### `logging`
 `array`
@@ -117,7 +117,7 @@ logging:
 
 The log files can be listed under logging as following:
 
-##### `logging`.`files`
+##### `logging.files`
 `array`
 
 The list of log files. It may include host server logs, database log and others.
@@ -147,7 +147,7 @@ Currently, only hipchat and slack are supported. Further integrations are welcom
 
 #### Slack
 
-##### `slack`.`enabled`
+##### `slack.enabled`
 `boolean`
 
 Enable/disable notification from slack.
@@ -155,7 +155,7 @@ Enable/disable notification from slack.
 enabled: true
 ```
 
-##### `slack`.`endpoint`
+##### `slack.endpoint`
 `string`
 
 Slack channel endpoint token to let boss-cli access the slack for sending notifications.
@@ -165,7 +165,7 @@ endpoint: SLACK_ENDPOINT
 
 #### Hipchat
 
-##### `hipchat`.`enabled`
+##### `hipchat.enabled`
 `boolean`
 
 Enable/disable notifications from hipchat.
@@ -173,7 +173,7 @@ Enable/disable notifications from hipchat.
 enabled: true
 ```
 
-##### `hipchat`.`notify`
+##### `hipchat.notify`
 `boolean`
 
 Enable/disable 'Do Not Disturb' mode for boss-cli notifications in hipchat.
@@ -181,7 +181,7 @@ Enable/disable 'Do Not Disturb' mode for boss-cli notifications in hipchat.
 notify: true
 ```
 
-##### `hipchat`.`company_name`
+##### `hipchat.company_name`
 `string`
 
 Name of the company/organization/team you are involved in Hipchat.
@@ -189,7 +189,7 @@ Name of the company/organization/team you are involved in Hipchat.
 company_name: HIPCHAT_COMPANY_NAME
 ```
 
-##### `hipchat`.`room_id`
+##### `hipchat.room_id`
 `integer`
 
 The id of the room to which the notifications should be sent to.
@@ -197,7 +197,7 @@ The id of the room to which the notifications should be sent to.
 room_id: HIPCHAT_ROOM_ID
 ```
 
-##### `hipchat`.`auth_token`
+##### `hipchat.auth_token`
 `string`
 
 Auth token to access the defined room by boss-cli for notifications.
