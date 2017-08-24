@@ -243,10 +243,10 @@ stages:
     username: ${PRODUCTION_SERVER_USERNAME}
     public_url: http://your-app.com
     app_dir: /path/to/your/app
-      logging:
-          files:
-            - /path/to/error/log/file
-            - /path/to/access/log/file
+    logging:
+      files:
+        - /path/to/error/log/file
+        - /path/to/access/log/file
 
 notifications:
   slack:
