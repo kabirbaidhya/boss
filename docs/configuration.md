@@ -54,13 +54,13 @@ Stages refer to the configured remote servers where you would like to deploy you
 You can define stages for each of the remote servers you have. For instance:
 ```yml
 stages:
-    dev:
-        host: dev.your-app.com
-        ...
-    uat:
-        host: uat.your-app.com
-        ...
+  dev:
+    host: dev.your-app.com
     ...
+  uat:
+    host: uat.your-app.com
+    ...
+  ...
 ```
 
 For each of the stages, you can define the following configuration options:
@@ -112,7 +112,7 @@ app_dir: /path/to/your/app
 The list of logs on your remote server.
 ```yml
 logging:
-    ...
+  ...
 ```
 
 The log files can be listed under logging as following:
@@ -123,9 +123,9 @@ The log files can be listed under logging as following:
 The list of log files. It may include host server logs, database log and others.
 ```yml
 files:
-    - /path/to/access/log/file
-    - /path/to/error/log/file
-    - /path/to/database/log/file
+  - /path/to/access/log/file
+  - /path/to/error/log/file
+  - /path/to/database/log/file
 ```
 
 ### Notifications
@@ -137,10 +137,10 @@ You can configure to be notified when deployment starts to succeeds.
 The list of different chat/IRC clients through which notifications can be sent.
 ```yml
 notifications:
-    slack:
-        ...
-    hipchat:
-        ...
+  slack:
+    ...
+  hipchat:
+    ...
 ```
 
 Currently, only hipchat and slack are supported. Further integrations are welcome through pull-requests.
@@ -221,41 +221,41 @@ user: ${USERNAME}
 port: ${SERVER_SSH_PORT}
 
 stages:
-    dev:
-        host: dev.your-app.com
-        public_url: http://dev.your-app.com
-        app_dir: /path/to/your/app
-        logging:
-            files:
-                - /path/to/error/log/file
-                - /path/to/access/log/file
-    uat:
-        host: uat.your-app.com
-        public_url: http://uat.your-app.com
-        app_dir: /path/to/your/app
-        logging:
-            files:
-                - /path/to/error/log/file
-                - /path/to/access/log/file
-    production:
-        host: your-app.com
-        port: ${PRODUCTION_SERVER_SSH_PORT}
-        username: ${PRODUCTION_SERVER_USERNAME}
-        public_url: http://your-app.com
-        app_dir: /path/to/your/app
-        logging:
-            files:
-                - /path/to/error/log/file
-                - /path/to/access/log/file
+  dev:
+    host: dev.your-app.com
+    public_url: http://dev.your-app.com
+    app_dir: /path/to/your/app
+    logging:
+      files:
+        - /path/to/error/log/file
+        - /path/to/access/log/file
+  uat:
+    host: uat.your-app.com
+    public_url: http://uat.your-app.com
+    app_dir: /path/to/your/app
+    logging:
+      files:
+        - /path/to/error/log/file
+        - /path/to/access/log/file
+  production:
+    host: your-app.com
+    port: ${PRODUCTION_SERVER_SSH_PORT}
+    username: ${PRODUCTION_SERVER_USERNAME}
+    public_url: http://your-app.com
+    app_dir: /path/to/your/app
+      logging:
+          files:
+            - /path/to/error/log/file
+            - /path/to/access/log/file
 
 notifications:
-    slack:
-        enabled: true
-        endpoint: ${SLACK_ENDPOINT}
-    hipchat:
-        enabled: true
-        notify: true
-        company_name: ${HIPCHAT_COMPANY_NAME}
-        room_id: ${HIPCHAT_ROOM_ID}
-        auth_token: ${HIPCHAT_TOKEN}
+  slack:
+    enabled: true
+    endpoint: ${SLACK_ENDPOINT}
+  hipchat:
+    enabled: true
+    notify: true
+    company_name: ${HIPCHAT_COMPANY_NAME}
+    room_id: ${HIPCHAT_ROOM_ID}
+    auth_token: ${HIPCHAT_TOKEN}
 ```
