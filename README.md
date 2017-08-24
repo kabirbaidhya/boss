@@ -258,5 +258,8 @@ Read our [contributing guide](CONTRIBUTING.md) to learn about our development pr
 ## Change Log
 Check the [CHANGELOG](CHANGELOG.md) for full release history.
 
+## Special Thanks
+Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
+
 ## License
 Licensed under [The MIT License](LICENSE).
