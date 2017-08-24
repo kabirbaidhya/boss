@@ -68,9 +68,7 @@ project_name: my-app
 project_description: 'My App'
 repository_url: 'https://github.com/username/repository'
 branch_url: '{repository_url}/tree/{branch}'
-# The SSH user through which the project is deployed.
 user: deploy_user
-# Application path on the remote host where the project is cloned.
 app_dir: /source/my-app
 
 deployment:
@@ -126,6 +124,88 @@ Now to deploy the the application to the `prod` server that you've configured in
 This would deploy the default branch `master` in this case. In case you need to deploy specific branch, you provide that too.
 ```bash
  ➜ fab prod deploy:branch=my-branch
+```
+
+### 2. Frontend Deployment
+
+This deployment is useful for deploying the frontend apps (react, angular, vue etc) or static files to the remote server. This preset assumes the static files are served via a web server on the remote host eg: nginx, apache etc. Here, the source code is built locally and only the `dist` or `build` is uploaded and deployed to the server.
+
+The deployment process is zero-downtime, just like [capistrano](https://github.com/capistrano/capistrano).
+
+You'll need to set the deployment preset as `frontend` in your configuration.
+
+```yml
+deployment:
+  preset: frontend
+```
+
+#### Configuration
+Your `boss.yml` file for remote source deployment would look similar to this:
+```yml
+project_name: my-app
+project_description: 'My App'
+repository_url: 'https://github.com/username/repository'
+branch_url: '{repository_url}/tree/{branch}'
+user: deploy_user
+
+deployment:
+  preset: frontend
+  build_dir: build/           # The local build directory
+  base_dir: /app/deployment   # The remote base directory for deployment.
+
+stages:
+  prod:
+    host: your-server.com
+    public_url: 'https://your-server.com'
+
+scripts:
+  install: 'npm install'
+  build: 'npm run build'
+
+notifications:
+  slack:
+    enabled: true
+    endpoint: ${BOSS_SLACK_ENDPOINT}
+```
+
+The above configuration would work for any kind of frontend web projects (eg: react, angular, ember, vue, vanila js etc) as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server. 
+
+You may define two scripts `install` and `build` in your `boss.yml`, to install project dependencies and build the source respectively. For instance: if you've created your application using [`create-react-app`](https://github.com/facebookincubator/create-react-app), you can set these to `npm install` and `npm run build` as shown in above config.
+
+And you have to set the local directory to which the build is generated when the `build` script is run, in the `deployment.build_dir`. In our case this is `build/` directory.
+
+#### Available tasks
+You can check the available tasks for this preset with `fab --list`.
+
+```bash
+ ➜ fab --list
+
+Available commands:
+
+    buildinfo  Print the build information.
+    builds     Display the build history.
+    deploy     Zero-Downtime deployment for the frontend.
+    info       Print the build information.
+    logs       Tail the logs.
+    rollback   Zero-Downtime deployment rollback for the frontend.
+    run        Run a custom script.
+    prod       Configures the prod server environment.
+```
+#### Deploy
+You can use the deploy task to deploy the app to the remote server.
+
+Here, first the `deploy` task would trigger the `install` and `build` scripts to build the project locally, after which the built directory configured in `deployment.build_dir` would be tar-zipped and uploaded to the remote host via SSH.
+
+So, to deploy current local source code to `prod` server you should do the following:
+```bash
+ ➜ fab prod deploy
+```
+
+If you're using `git` in your project, you need to make sure you did `checkout` to the branch you want to deploy and is upto date. Like this,
+```bash
+ # Checkout to the right branch and deploy
+ ➜ git checkout master
+ ➜ fab prod deploy
 ```
 
 ## Contributing
