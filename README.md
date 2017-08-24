@@ -1,5 +1,10 @@
-boss-cli
-=========
+<div align="center">
+  <a href="https://github.com/kabirbaidhya/boss-cli">
+    <img width="180" height="180" src="assets/boss.png">
+  </a>
+  <br/>
+  <h1>boss</h1>
+</div>
 
 Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
 
