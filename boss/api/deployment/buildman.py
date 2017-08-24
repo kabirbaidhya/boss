@@ -11,7 +11,7 @@ from terminaltables import SingleTable
 from fabric.colors import green, cyan
 from fabric.api import cd, hide
 
-from boss import __version__ as BOSS_VERSION
+from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config
 from boss.util import remote_info, merge, localize_utc_timestamp
 from boss.api import fs, shell
@@ -162,14 +162,18 @@ def setup_remote():
         )
         fs.mkdir(release_dir, nested=True)
 
-    # If the build history file does not exist, create it now.
-    if not fs.exists(build_history_path):
+        # Add build history file.
         remote_info(
             'Creating new build meta file {}'.format(cyan(build_history_path))
         )
         save_history(merge(INITIAL_BUILD_HISTORY, {
             'preset': preset
         }))
+
+        html_path = BASE_PATH + '/misc/default_html'
+
+        remote_info('Setting up the default web page')
+        fs.upload_dir(html_path, base_dir)
 
     if not did_setup:
         remote_info('Remote already setup for deployment')
