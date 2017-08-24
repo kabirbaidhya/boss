@@ -14,7 +14,7 @@ from fabric.api import cd, hide
 from boss import __version__ as BOSS_VERSION
 from boss.config import get as get_config
 from boss.util import remote_info, merge, localize_utc_timestamp
-from boss.api import fs
+from boss.api import fs, shell
 
 INITIAL_BUILD_HISTORY = {
     'bossVersion': BOSS_VERSION,
@@ -148,20 +148,29 @@ def setup_remote():
     current_path = base_dir + CURRENT_BUILD_LINK
     build_history_path = get_builds_file()
     preset = get_config()['deployment']['preset']
+    did_setup = False
+    stage = shell.get_stage()
 
     # If the release directory does not exist, create it.
     if not fs.exists(release_dir):
+        did_setup = True
+        remote_info(
+            'Setting up {} server for {} deployment'.format(stage, preset)
+        )
         remote_info('Creating the releases directory {}'.format(release_dir))
         fs.mkdir(release_dir, nested=True)
 
     # If the build history file does not exist, create it now.
     if not fs.exists(build_history_path):
         remote_info(
-            'Creating new build history file {}'.format(build_history_path)
+            'Creating new build meta file {}'.format(build_history_path)
         )
         save_history(merge(INITIAL_BUILD_HISTORY, {
             'preset': preset
         }))
+
+    if not did_setup:
+        remote_info('Remote already setup for deployment')
 
     return (release_dir, current_path)
 
