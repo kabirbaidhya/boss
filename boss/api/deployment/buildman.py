@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 
 from terminaltables import SingleTable
-from fabric.colors import green
+from fabric.colors import green, cyan
 from fabric.api import cd, hide
 
 from boss import __version__ as BOSS_VERSION
@@ -157,13 +157,15 @@ def setup_remote():
         remote_info(
             'Setting up {} server for {} deployment'.format(stage, preset)
         )
-        remote_info('Creating the releases directory {}'.format(release_dir))
+        remote_info(
+            'Creating the releases directory {}'.format(cyan(release_dir))
+        )
         fs.mkdir(release_dir, nested=True)
 
     # If the build history file does not exist, create it now.
     if not fs.exists(build_history_path):
         remote_info(
-            'Creating new build meta file {}'.format(build_history_path)
+            'Creating new build meta file {}'.format(cyan(build_history_path))
         )
         save_history(merge(INITIAL_BUILD_HISTORY, {
             'preset': preset
