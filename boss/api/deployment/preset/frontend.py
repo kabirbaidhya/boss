@@ -42,7 +42,7 @@ def buildinfo(id=None):
 @task
 def setup():
     ''' Setup remote host for deployment. '''
-    buildman.setup_remote()
+    buildman.setup_remote(quiet=False)
 
 
 @task

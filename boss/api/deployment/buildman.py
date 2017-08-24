@@ -142,7 +142,7 @@ def row_mapper_wrt(current):
     return mapper
 
 
-def setup_remote():
+def setup_remote(quiet=True):
     ''' Setup remote environment before we can proceed with the deployment process. '''
     base_dir = get_deploy_dir()
     release_dir = get_release_dir()
@@ -173,7 +173,7 @@ def setup_remote():
         if preset == constants.PRESET_FRONTEND:
             setup_default_html(base_dir)
 
-    if not did_setup:
+    if not did_setup and not quiet:
         remote_info('Remote already setup for deployment')
 
     return (release_dir, current_path)
