@@ -11,9 +11,9 @@ from terminaltables import SingleTable
 from fabric.colors import green, cyan
 from fabric.api import cd, hide
 
-from boss import BASE_PATH, __version__ as BOSS_VERSION
+from boss import BASE_PATH, __version__ as BOSS_VERSION, constants
 from boss.config import get as get_config
-from boss.util import remote_info, merge, localize_utc_timestamp
+from boss.util import remote_info, remote_print, merge, localize_utc_timestamp
 from boss.api import fs, shell
 
 INITIAL_BUILD_HISTORY = {
@@ -25,6 +25,7 @@ INITIAL_BUILD_HISTORY = {
 BUILDS_DIRECTORY = '/builds'
 BUILDS_META_FILE = '/builds.json'
 CURRENT_BUILD_LINK = '/current'
+DEFAULT_HTML_PATH = '/default_html'
 TS_FORMAT = '%Y-%m-%d %H:%M:%S (UTC)'
 TS_FORMAT_LOCAL = '%Y-%m-%d %I:%M:%S %p'
 
@@ -166,19 +167,36 @@ def setup_remote():
         remote_info(
             'Creating new build meta file {}'.format(cyan(build_history_path))
         )
-        save_history(merge(INITIAL_BUILD_HISTORY, {
-            'preset': preset
-        }))
+        save_history(merge(INITIAL_BUILD_HISTORY, {'preset': preset}))
 
-        html_path = BASE_PATH + '/misc/default_html'
-
-        remote_info('Setting up the default web page')
-        fs.upload_dir(html_path, base_dir)
+        # Setup a default web page for frontend deployment.
+        if preset == constants.PRESET_FRONTEND:
+            setup_default_html(base_dir)
 
     if not did_setup:
         remote_info('Remote already setup for deployment')
 
     return (release_dir, current_path)
+
+
+def setup_default_html(base_dir):
+    ''' Setup default html web page on the remote host. '''
+    current_path = base_dir + CURRENT_BUILD_LINK
+    html_path = BASE_PATH + '/misc/default_html'
+    remote_html_path = base_dir + DEFAULT_HTML_PATH
+
+    remote_info('Setting up the default web page')
+    fs.upload_dir(html_path, base_dir)
+
+    # Point the current sym link to the default web page.
+    fs.update_symlink(remote_html_path, current_path)
+
+    remote_info('Remote is setup and is ready for deployment.')
+    remote_print((
+        'Deployed build will point to {0}.\n' +
+        'For serving the latest build, ' +
+        'please set your web server document root to {0}.'
+    ).format(cyan(current_path)))
 
 
 def delete_old_builds(history):
