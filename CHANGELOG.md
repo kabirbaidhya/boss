@@ -1,5 +1,26 @@
 # Change Log
 
+## [v1.0.0-alpha.1](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.1) (2017-08-24)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.3.0...v1.0.0-alpha.1)
+
+**Closed issues:**
+
+- Add configuration documentation [\#24](https://github.com/kabirbaidhya/boss-cli/issues/24) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)]
+- Zero-downtime rollback [\#18](https://github.com/kabirbaidhya/boss-cli/issues/18)
+- Support for zero-downtime frontend deployment [\#14](https://github.com/kabirbaidhya/boss-cli/issues/14)
+- Add support for deployment presets [\#13](https://github.com/kabirbaidhya/boss-cli/issues/13)
+
+**Improvements:**
+
+- Add instructions for frontend deployment in the README [\#40](https://github.com/kabirbaidhya/boss-cli/pull/40) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add `setup` task to setup remote for deployment [\#39](https://github.com/kabirbaidhya/boss-cli/pull/39) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Fix configuration documentation typos [\#38](https://github.com/kabirbaidhya/boss-cli/pull/38) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([sanjeevkpandit](https://github.com/sanjeevkpandit))
+- Add basic, stage and notification configuration in configuration section [\#37](https://github.com/kabirbaidhya/boss-cli/pull/37) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([sanjeevkpandit](https://github.com/sanjeevkpandit))
+- Add Contributing Guidelines [\#36](https://github.com/kabirbaidhya/boss-cli/pull/36) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add support for Frontend Deployment [\#33](https://github.com/kabirbaidhya/boss-cli/pull/33) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add documentation for remote source deployment [\#32](https://github.com/kabirbaidhya/boss-cli/pull/32) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Support deployment preset and change the default deployment to remote source deployment preset [\#31](https://github.com/kabirbaidhya/boss-cli/pull/31) [[deprecation](https://github.com/kabirbaidhya/boss-cli/labels/deprecation)] [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v0.3.0](https://github.com/kabirbaidhya/boss-cli/tree/v0.3.0) (2017-08-15)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.2.2...v0.3.0)
 
