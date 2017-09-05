@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-alpha.2](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.2) (2017-09-05)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)
+
+**Improvements:**
+
+- Support stage-specific deployment configuration [\#42](https://github.com/kabirbaidhya/boss-cli/pull/42) ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.1](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.1) (2017-08-24)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v0.3.0...v1.0.0-alpha.1)
 
