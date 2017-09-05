@@ -1,8 +1,8 @@
 ''' Application wide common constants module. '''
 
 # Predefined deployment presets
-PRESET_WEB = web
-PRESET_BACKEND_NODE = 'backend-node'
+PRESET_WEB = 'web'
+PRESET_NODE = 'node'
 PRESET_REMOTE_SOURCE = 'remote-source'
 
 # Default boss configuration
