@@ -53,7 +53,7 @@ def get_base_config():
         'port': _config.get('port'),
         'branch': _config.get('branch'),
         'app_dir': _config.get('app_dir'),
-        'repository_url': _config.get('app_dir')
+        'repository_url': _config.get('repository_url')
     }
 
 
