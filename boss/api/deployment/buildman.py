@@ -12,7 +12,7 @@ from fabric.colors import green, cyan
 from fabric.api import cd, hide
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION, constants
-from boss.config import get as get_config
+from boss.config import get as get_config, get_stage_config
 from boss.util import remote_info, remote_print, merge, localize_utc_timestamp
 from boss.api import fs, shell
 
@@ -32,7 +32,8 @@ TS_FORMAT_LOCAL = '%Y-%m-%d %I:%M:%S %p'
 
 def get_deploy_dir():
     ''' Get the deployment base directory path. '''
-    config = get_config()
+    config = get_stage_config(shell.get_stage())
+
     return config['deployment']['base_dir'].rstrip('/')
 
 
