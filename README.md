@@ -1,5 +1,10 @@
-boss-cli
-=========
+<div align="center">
+  <a href="https://github.com/kabirbaidhya/boss-cli">
+    <img width="180" height="180" src="assets/boss.png">
+  </a>
+  <br/>
+  <h1>boss</h1>
+</div>
 
 Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
 
@@ -252,6 +257,9 @@ Read our [contributing guide](CONTRIBUTING.md) to learn about our development pr
 
 ## Change Log
 Check the [CHANGELOG](CHANGELOG.md) for full release history.
+
+## Special Thanks
+Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
 
 ## License
 Licensed under [The MIT License](LICENSE).
