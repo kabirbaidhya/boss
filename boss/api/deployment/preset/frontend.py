@@ -15,7 +15,7 @@ from fabric.api import task, cd, shell_env
 from boss import constants
 from boss.util import info, remote_info, echo
 from boss.api import shell, notif, runner, fs, git
-from boss.config import get as get_config
+from boss.config import get as get_config, get_stage_config
 from .. import buildman
 
 
@@ -49,8 +49,8 @@ def setup():
 def deploy():
     ''' Zero-Downtime deployment for the frontend. '''
     config = get_config()
-    user = config['user']
     stage = shell.get_stage()
+    user = get_stage_config(stage)['user']
 
     info('Deploying app to the {} server'.format(stage))
     # Get the current branch and commit (locally).
