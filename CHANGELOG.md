@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-alpha.3](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.3) (2017-09-08)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.2...v1.0.0-alpha.3)
+
+**Fixed bugs:**
+
+- Fix SSH user not being overridden for each stage for frontend deployment [\#43](https://github.com/kabirbaidhya/boss-cli/issues/43) [[bug](https://github.com/kabirbaidhya/boss-cli/labels/bug)]
+
 ## [v1.0.0-alpha.2](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.2) (2017-09-05)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)
 
