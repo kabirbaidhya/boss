@@ -47,9 +47,9 @@ def setup():
     buildman.setup_remote(quiet=False)
 
 
-def upload_included_files(remote_path):
+def upload_included_files(files, remote_path):
     ''' Upload the local files if they were to be included. '''
-    for filename in NODE_INCLUDE_FILES:
+    for filename in files:
         # Skip upload if the file doesn't exist.
         if not fs.exists(filename, remote=False):
             continue
@@ -73,6 +73,9 @@ def deploy():
 
     tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['build_dir']
+    included_files = (
+        config['deployment']['include_files'] or NODE_INCLUDE_FILES
+    )
 
     deployer_user = shell.get_user()
 
@@ -129,7 +132,7 @@ def deploy():
 
         # Upload the files to be included eg: package.json file
         # to the remote build location.
-        upload_included_files(release_path)
+        upload_included_files(included_files, release_path)
 
         remote_info('Pointing the current symlink to the latest build')
         fs.update_symlink(release_path, current_path)

@@ -24,7 +24,8 @@ DEFAULT_CONFIG = {
         'preset': None,
         'build_dir': 'build/',
         'base_dir': '~/boss',
-        'keep_builds': 3
+        'keep_builds': 3,
+        'include_files': []
     },
     'notifications': {
         'slack': {
