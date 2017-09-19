@@ -61,7 +61,6 @@ def upload_included_files(remote_path):
 def deploy():
     ''' Zero-Downtime deployment for the backend. '''
     config = get_config()
-    user = config['user']
     stage = shell.get_stage()
 
     info('Deploying app to the {} server'.format(stage))
@@ -75,7 +74,6 @@ def deploy():
     tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['build_dir']
 
-    deploy_dir = buildman.get_deploy_dir()
     deployer_user = shell.get_user()
 
     notif.send(notif.DEPLOYMENT_STARTED, {
@@ -135,6 +133,14 @@ def deploy():
 
         remote_info('Pointing the current symlink to the latest build')
         fs.update_symlink(release_path, current_path)
+
+    # Change directory to the release path.
+    remote_info('Installing dependencies on the remote')
+    with cd(release_path):
+        if runner.is_script_defined(constants.SCRIPT_INSTALL_REMOTE):
+            runner.run_script(constants.SCRIPT_INSTALL_REMOTE)
+        else:
+            runner.run_script(constants.SCRIPT_INSTALL)
 
     # Save build history
     buildman.record_history({
