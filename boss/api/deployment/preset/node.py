@@ -18,6 +18,8 @@ from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from .. import buildman
 
+NODE_INCLUDE_FILES = ['package.json', 'yarn.lock', 'package-lock.json']
+
 
 @task
 def builds():
@@ -43,6 +45,16 @@ def buildinfo(id=None):
 def setup():
     ''' Setup remote host for deployment. '''
     buildman.setup_remote(quiet=False)
+
+
+def upload_included_files(remote_path):
+    ''' Upload the local files if they were to be included. '''
+    for filename in NODE_INCLUDE_FILES:
+        # Skip upload if the file doesn't exist.
+        if not fs.exists(filename, remote=False):
+            continue
+
+        fs.upload(filename, remote_path)
 
 
 @task
@@ -79,6 +91,7 @@ def deploy():
     build_name = buildman.get_build_name(build_id)
     build_compressed = build_name + '.tar.gz'
     release_path = release_dir + '/' + build_name
+    dist_path = build_name + '/dist'
 
     info('Getting the build ready for deployment')
 
@@ -108,18 +121,17 @@ def deploy():
     with cd(release_dir):
         remote_info('Extracting the build {}'.format(build_compressed))
         # Create a new directory for the build in the remote.
-        fs.mkdir(build_name)
+        fs.mkdir(dist_path, nested=True)
 
         # Extract the build.
-        fs.tar_extract(tmp_path, build_name)
+        fs.tar_extract(tmp_path, dist_path)
 
         # Remove the uploaded archived from the temp path.
         fs.rm_rf(tmp_path)
 
-        remote_info(
-            'Changing ownership of {} to user {}'.format(deploy_dir, user)
-        )
-        fs.chown(release_path, user, user)
+        # Upload the files to be included eg: package.json file
+        # to the remote build location.
+        upload_included_files(release_path)
 
         remote_info('Pointing the current symlink to the latest build')
         fs.update_symlink(release_path, current_path)
