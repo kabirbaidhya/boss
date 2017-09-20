@@ -13,7 +13,7 @@ from fabric.colors import cyan
 from fabric.api import task, cd, shell_env
 
 from boss import constants
-from boss.util import info, remote_info, echo
+from boss.util import info, remote_info, echo, halt
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from .. import buildman
@@ -190,18 +190,39 @@ def load_app_service(is_first_time):
 def restart():
     ''' Restart the service. '''
     with cd(buildman.get_current_path()):
-        runner.run_script_safely(constants.SCRIPT_RELOAD)
+        runner.run_script(constants.SCRIPT_RELOAD)
 
 
 @task
 def stop():
     ''' Stop the systemctl service. '''
     with cd(buildman.get_current_path()):
-        runner.run_script_safely(constants.SCRIPT_STOP)
+        runner.run_script(constants.SCRIPT_STOP)
 
 
 @task
 def status():
     ''' Get the status of the service. '''
     with cd(buildman.get_current_path()):
-        runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
+        runner.run_script(constants.SCRIPT_STATUS_CHECK)
+
+
+@task
+def run(script):
+    ''' Run a custom script. '''
+    # Run a custom script defined in the config.
+    # Change the current working directory to the node application
+    # before running the script.
+
+    with cd(buildman.get_current_path()):
+        try:
+            runner.run_script(script)
+        except RuntimeError as e:
+            halt(str(e))
+
+
+@task(alias='list')
+def services():
+    ''' List the services running for the application. '''
+    with cd(buildman.get_current_path()):
+        runner.run_script(constants.SCRIPT_LIST_SERVICES)
