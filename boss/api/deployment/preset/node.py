@@ -62,6 +62,7 @@ def deploy():
     ''' Zero-Downtime deployment for the backend. '''
     config = get_config()
     stage = shell.get_stage()
+    is_first_deployment = not buildman.is_remote_setup()
 
     info('Deploying app to the {} server'.format(stage))
     # Get the current branch and commit (locally).
@@ -138,12 +139,11 @@ def deploy():
         fs.update_symlink(release_path, current_path)
 
     # Change directory to the release path.
-    remote_info('Installing dependencies on the remote')
-    with cd(release_path):
-        if runner.is_script_defined(constants.SCRIPT_INSTALL_REMOTE):
-            runner.run_script(constants.SCRIPT_INSTALL_REMOTE)
-        else:
-            runner.run_script(constants.SCRIPT_INSTALL)
+    with cd(current_path):
+        install_remote_dependencies()
+
+        # Start or restart the application service.
+        load_app_service(is_first_deployment)
 
     # Save build history
     buildman.record_history({
@@ -163,3 +163,45 @@ def deploy():
     })
 
     remote_info('Deployment Completed')
+
+
+def install_remote_dependencies():
+    ''' Install dependencies on the remote host. '''
+    remote_info('Installing dependencies on the remote')
+    if runner.is_script_defined(constants.SCRIPT_INSTALL_REMOTE):
+        runner.run_script(constants.SCRIPT_INSTALL_REMOTE)
+    else:
+        runner.run_script(constants.SCRIPT_INSTALL)
+
+
+def load_app_service(is_first_time):
+    ''' Load (start or restart) the application service. '''
+    if is_first_time:
+        if runner.is_script_defined(constants.SCRIPT_START):
+            remote_info('Starting the service.')
+            runner.run_script(constants.SCRIPT_START)
+    else:
+        if runner.is_script_defined(constants.SCRIPT_RELOAD):
+            remote_info('Reloading the service.')
+            runner.run_script_safely(constants.SCRIPT_RELOAD)
+
+
+@task
+def restart():
+    ''' Restart the service. '''
+    with cd(buildman.get_current_path()):
+        runner.run_script_safely(constants.SCRIPT_RELOAD)
+
+
+@task
+def stop():
+    ''' Stop the systemctl service. '''
+    with cd(buildman.get_current_path()):
+        runner.run_script_safely(constants.SCRIPT_STOP)
+
+
+@task
+def status():
+    ''' Get the status of the service. '''
+    with cd(buildman.get_current_path()):
+        runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
