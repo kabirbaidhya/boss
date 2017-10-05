@@ -34,6 +34,10 @@ def rollback(id=None):
     ''' Zero-Downtime deployment rollback for the frontend. '''
     buildman.rollback(id)
 
+    # Reload the service after build has been rollbacked.
+    with cd(buildman.get_current_path()):
+        runner.run_script_safely(constants.SCRIPT_RELOAD)
+
 
 @task(alias='info')
 def buildinfo(id=None):
@@ -142,6 +146,7 @@ def deploy():
     with cd(current_path):
         install_remote_dependencies()
 
+    with cd(buildman.get_deploy_dir()):
         # Start or restart the application service.
         load_app_service(is_first_deployment)
 
