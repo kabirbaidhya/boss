@@ -1,7 +1,7 @@
 ''' Application wide common constants module. '''
 
 # Predefined deployment presets
-PRESET_FRONTEND = 'frontend'
+PRESET_WEB = web
 PRESET_BACKEND_NODE = 'backend-node'
 PRESET_REMOTE_SOURCE = 'remote-source'
 

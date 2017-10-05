@@ -170,8 +170,8 @@ def setup_remote(quiet=True):
         )
         save_history(merge(INITIAL_BUILD_HISTORY, {'preset': preset}))
 
-        # Setup a default web page for frontend deployment.
-        if preset == constants.PRESET_FRONTEND:
+        # Setup a default web page for web deployment.
+        if preset == constants.PRESET_WEB:
             setup_default_html(base_dir)
 
     if not did_setup and not quiet:

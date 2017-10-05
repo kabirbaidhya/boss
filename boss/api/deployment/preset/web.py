@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 '''
-Frontend Deployment preset.
+Web Deployment preset.
 
-This would be useful for frontend projects and static files which needs to be deployed
+This would be useful for web projects and static files which needs to be deployed
 to the remote server. This assumes the files are served via a web server eg: nginx, apache etc.
 The source code is built locally and only the dist is uploaded and deployed to the server.
 '''
@@ -29,7 +29,7 @@ def builds():
 
 @task
 def rollback(id=None):
-    ''' Zero-Downtime deployment rollback for the frontend. '''
+    ''' Zero-Downtime deployment rollback for the web. '''
     buildman.rollback(id)
 
 
@@ -47,7 +47,7 @@ def setup():
 
 @task
 def deploy():
-    ''' Zero-Downtime deployment for the frontend. '''
+    ''' Zero-Downtime deployment for the web. '''
     config = get_config()
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
