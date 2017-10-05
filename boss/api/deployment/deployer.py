@@ -17,8 +17,8 @@ def import_preset(config):
         from .preset import remote_source as module
     elif preset == constants.PRESET_REMOTE_SOURCE:
         from .preset import remote_source as module
-    elif preset == constants.PRESET_FRONTEND:
-        from .preset import frontend as module
+    elif preset == constants.PRESET_WEB:
+        from .preset import web as module
     else:
         halt('Unsupported boss preset "{}".'.format(preset))
 

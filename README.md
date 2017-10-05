@@ -131,21 +131,21 @@ This would deploy the default branch `master` in this case. In case you need to 
  ➜ fab prod deploy:branch=my-branch
 ```
 
-### 2. Frontend Deployment
+### 2. Web Deployment
 
-This deployment is useful for deploying the frontend apps (react, angular, vue etc) or static files to the remote server. This preset assumes the static files are served via a web server on the remote host eg: nginx, apache etc. Here, the source code is built locally and only the `dist` or `build` is uploaded and deployed to the server.
+This deployment is useful for deploying the web apps (react, angular, vue etc) or static files to the remote server. This preset assumes the static files are served via a web server on the remote host eg: nginx, apache etc. Here, the source code is built locally and only the `dist` or `build` is uploaded and deployed to the server.
 
 The deployment process is zero-downtime, just like [capistrano](https://github.com/capistrano/capistrano).
 
-You'll need to set the deployment preset as `frontend` in your configuration.
+You'll need to set the deployment preset as `web` in your configuration.
 
 ```yml
 deployment:
-  preset: frontend
+  preset: web
 ```
 
 #### Configuration
-Your `boss.yml` file for frontend deployment would look similar to this:
+Your `boss.yml` file for web deployment would look similar to this:
 ```yml
 project_name: my-app
 project_description: 'My App'
@@ -154,7 +154,7 @@ branch_url: '{repository_url}/tree/{branch}'
 user: deploy_user
 
 deployment:
-  preset: frontend
+  preset: web
   build_dir: build/           # The local build directory
   base_dir: /app/deployment   # The remote base directory for deployment.
 
@@ -173,7 +173,7 @@ notifications:
     endpoint: ${BOSS_SLACK_ENDPOINT}
 ```
 
-The above configuration would work for any kind of frontend web projects (eg: react, angular, ember, vue, vanila js etc) as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server.
+The above configuration would work for any kind of web projects (eg: react, angular, ember, vue, vanila js etc) as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server.
 
 You may define two scripts `install` and `build` in your `boss.yml`, to install project dependencies and build the source respectively. For instance: if you've created your application using [`create-react-app`](https://github.com/facebookincubator/create-react-app), you can set these to `npm install` and `npm run build` as shown in above config.
 
@@ -189,10 +189,10 @@ Available commands:
 
     buildinfo  Print the build information.
     builds     Display the build history.
-    deploy     Zero-Downtime deployment for the frontend.
+    deploy     Zero-Downtime deployment for the web.
     info       Print the build information.
     logs       Tail the logs.
-    rollback   Zero-Downtime deployment rollback for the frontend.
+    rollback   Zero-Downtime deployment rollback for the web.
     run        Run a custom script.
     setup      Setup remote host for deployment.
     prod       Configures the prod server environment.
