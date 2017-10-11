@@ -35,8 +35,9 @@ def rollback(id=None):
     buildman.rollback(id)
 
     # Reload the service after build has been rollbacked.
-    with cd(buildman.get_current_path()):
-        runner.run_script_safely(constants.SCRIPT_RELOAD)
+    with cd(buildman.get_deploy_dir()):
+        # Start or restart the application service.
+        load_app_service(False)
 
 
 @task(alias='info')
