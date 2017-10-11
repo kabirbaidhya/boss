@@ -35,9 +35,7 @@ def rollback(id=None):
     buildman.rollback(id)
 
     # Reload the service after build has been rollbacked.
-    with cd(buildman.get_deploy_dir()):
-        # Start or restart the application service.
-        load_app_service(False)
+    reload_service()
 
 
 @task(alias='info')
@@ -147,9 +145,8 @@ def deploy():
     with cd(current_path):
         install_remote_dependencies()
 
-    with cd(buildman.get_deploy_dir()):
-        # Start or restart the application service.
-        load_app_service(is_first_deployment)
+    # Start or restart the application service.
+    start_or_reload_service(is_first_deployment)
 
     # Save build history
     buildman.record_history({
@@ -180,30 +177,46 @@ def install_remote_dependencies():
         runner.run_script(constants.SCRIPT_INSTALL)
 
 
-def load_app_service(is_first_time):
+def start_or_reload_service(has_started=False):
     ''' Load (start or restart) the application service. '''
-    if is_first_time:
-        if runner.is_script_defined(constants.SCRIPT_START):
-            remote_info('Starting the service.')
+    with cd(buildman.get_deploy_dir()):
+        if runner.is_script_defined(constants.SCRIPT_START_OR_RELOAD):
+            remote_info('Starting/Reloading the service.')
             runner.run_script(constants.SCRIPT_START)
-    else:
-        if runner.is_script_defined(constants.SCRIPT_RELOAD):
+
+        elif has_started and runner.is_script_defined(constants.SCRIPT_RELOAD):
             remote_info('Reloading the service.')
             runner.run_script_safely(constants.SCRIPT_RELOAD)
+
+        elif runner.is_script_defined(constants.SCRIPT_START):
+            remote_info('Starting the service.')
+            runner.run_script(constants.SCRIPT_START)
+
+
+def reload_service():
+    ''' Load (start or restart) the application service. '''
+    with cd(buildman.get_deploy_dir()):
+        remote_info('Reloading the service.')
+        runner.run_script_safely(constants.SCRIPT_RELOAD)
+
+
+def stop_service():
+    ''' Load (start or restart) the application service. '''
+    with cd(buildman.get_deploy_dir()):
+        remote_info('Stopping the service.')
+        runner.run_script_safely(constants.SCRIPT_RELOAD)
 
 
 @task
 def restart():
     ''' Restart the service. '''
-    with cd(buildman.get_current_path()):
-        runner.run_script(constants.SCRIPT_RELOAD)
+    reload_service()
 
 
 @task
 def stop():
     ''' Stop the systemctl service. '''
-    with cd(buildman.get_current_path()):
-        runner.run_script(constants.SCRIPT_STOP)
+    stop_service()
 
 
 @task
