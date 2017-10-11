@@ -178,7 +178,7 @@ def install_remote_dependencies():
 
 
 def start_or_reload_service(has_started=False):
-    ''' Load (start or restart) the application service. '''
+    ''' Start or reload the application service. '''
     with cd(buildman.get_deploy_dir()):
         if runner.is_script_defined(constants.SCRIPT_START_OR_RELOAD):
             remote_info('Starting/Reloading the service.')
@@ -194,14 +194,14 @@ def start_or_reload_service(has_started=False):
 
 
 def reload_service():
-    ''' Load (start or restart) the application service. '''
+    ''' Restart the application service. '''
     with cd(buildman.get_deploy_dir()):
         remote_info('Reloading the service.')
         runner.run_script_safely(constants.SCRIPT_RELOAD)
 
 
 def stop_service():
-    ''' Load (start or restart) the application service. '''
+    ''' Stop the application service. '''
     with cd(buildman.get_deploy_dir()):
         remote_info('Stopping the service.')
         runner.run_script_safely(constants.SCRIPT_RELOAD)
@@ -215,7 +215,7 @@ def restart():
 
 @task
 def stop():
-    ''' Stop the systemctl service. '''
+    ''' Stop the service. '''
     stop_service()
 
 
