@@ -251,6 +251,10 @@ If you're using `git` in your project, you need to make sure you did `checkout` 
  ➜ fab prod deploy
 ```
 
+### 3. Node Deployment
+Node Project Deployment.
+More information, examples and documentation coming soon :).
+
 ## Contributing
 
 Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugs and improvements.
