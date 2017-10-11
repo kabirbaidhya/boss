@@ -1,8 +1,8 @@
 ''' Application wide common constants module. '''
 
 # Predefined deployment presets
-PRESET_WEB = web
-PRESET_BACKEND_NODE = 'backend-node'
+PRESET_WEB = 'web'
+PRESET_NODE = 'node'
 PRESET_REMOTE_SOURCE = 'remote-source'
 
 # Default boss configuration
@@ -24,7 +24,8 @@ DEFAULT_CONFIG = {
         'preset': None,
         'build_dir': 'build/',
         'base_dir': '~/boss',
-        'keep_builds': 3
+        'keep_builds': 3,
+        'include_files': []
     },
     'notifications': {
         'slack': {
@@ -54,3 +55,6 @@ SCRIPT_BUILD = 'build'
 SCRIPT_RELOAD = 'reload'
 SCRIPT_INSTALL = 'install'
 SCRIPT_STATUS_CHECK = 'status_check'
+SCRIPT_LIST_SERVICES = 'list_services'
+SCRIPT_INSTALL_REMOTE = 'install_remote'
+SCRIPT_START_OR_RELOAD = 'start_or_reload'

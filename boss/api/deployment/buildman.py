@@ -42,6 +42,11 @@ def get_release_dir():
     return get_deploy_dir() + BUILDS_DIRECTORY
 
 
+def get_current_path():
+    ''' Get the current path. '''
+    return get_deploy_dir() + CURRENT_BUILD_LINK
+
+
 def get_builds_file():
     ''' Get the build metadata file. '''
     return get_deploy_dir() + BUILDS_META_FILE
@@ -143,11 +148,17 @@ def row_mapper_wrt(current):
     return mapper
 
 
+def is_remote_setup():
+    ''' Check if the remote is setup for deployment. '''
+    release_dir = get_release_dir()
+    return fs.exists(release_dir)
+
+
 def setup_remote(quiet=True):
     ''' Setup remote environment before we can proceed with the deployment process. '''
     base_dir = get_deploy_dir()
     release_dir = get_release_dir()
-    current_path = base_dir + CURRENT_BUILD_LINK
+    current_path = get_current_path()
     build_history_path = get_builds_file()
     preset = get_config()['deployment']['preset']
     did_setup = False
@@ -155,7 +166,6 @@ def setup_remote(quiet=True):
 
     # If the release directory does not exist, create it.
     if not fs.exists(release_dir):
-        did_setup = True
         remote_info(
             'Setting up {} server for {} deployment'.format(stage, preset)
         )
@@ -173,6 +183,8 @@ def setup_remote(quiet=True):
         # Setup a default web page for web deployment.
         if preset == constants.PRESET_WEB:
             setup_default_html(base_dir)
+
+        did_setup = True
 
     if not did_setup and not quiet:
         remote_info('Remote already setup for deployment')
