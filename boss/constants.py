@@ -12,6 +12,7 @@ DEFAULT_CONFIG = {
     'port': 22,
     'key_filename': '~/.ssh/id_rsa',
     'ssh_forward_agent': False,
+    'verbose_logging': False,
     'app_dir': '~/',
     'branch': 'dev',
     'repository_url': '',
