@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.0-alpha.4](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.4) (2017-10-12)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.3...v1.0.0-alpha.4)
+
+**Improvements:**
+
+- Rename preset wording frontend to web [\#45](https://github.com/kabirbaidhya/boss-cli/pull/45) [[breaking-change](https://github.com/kabirbaidhya/boss-cli/labels/breaking-change)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add support for nodejs project deployment [\#44](https://github.com/kabirbaidhya/boss-cli/pull/44) [[breaking-change](https://github.com/kabirbaidhya/boss-cli/labels/breaking-change)] [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add logo in the README [\#41](https://github.com/kabirbaidhya/boss-cli/pull/41) [[documentation](https://github.com/kabirbaidhya/boss-cli/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.3](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.3) (2017-09-08)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.2...v1.0.0-alpha.3)
 
