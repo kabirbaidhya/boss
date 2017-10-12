@@ -11,6 +11,7 @@ DEFAULT_CONFIG = {
     'user': 'boss',
     'port': 22,
     'key_filename': '~/.ssh/id_rsa',
+    'ssh_forward_agent': False,
     'app_dir': '~/',
     'branch': 'dev',
     'repository_url': '',
