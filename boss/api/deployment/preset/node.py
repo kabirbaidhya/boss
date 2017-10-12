@@ -182,7 +182,7 @@ def start_or_reload_service(has_started=False):
     with cd(buildman.get_deploy_dir()):
         if runner.is_script_defined(constants.SCRIPT_START_OR_RELOAD):
             remote_info('Starting/Reloading the service.')
-            runner.run_script(constants.SCRIPT_START)
+            runner.run_script(constants.SCRIPT_START_OR_RELOAD)
 
         elif has_started and runner.is_script_defined(constants.SCRIPT_RELOAD):
             remote_info('Reloading the service.')
@@ -204,13 +204,13 @@ def stop_service():
     ''' Stop the application service. '''
     with cd(buildman.get_deploy_dir()):
         remote_info('Stopping the service.')
-        runner.run_script_safely(constants.SCRIPT_RELOAD)
+        runner.run_script_safely(constants.SCRIPT_STOP)
 
 
-@task
+@task(alias='reload')
 def restart():
     ''' Restart the service. '''
-    reload_service()
+    start_or_reload_service(True)
 
 
 @task
