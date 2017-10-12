@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.0-alpha.5](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.5) (2017-10-12)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.4...v1.0.0-alpha.5)
+
+**Improvements:**
+
+- Add `verbose\_logging` option to display paramiko/ssh logs [\#47](https://github.com/kabirbaidhya/boss-cli/pull/47) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+-  Add ssh\_forward\_agent config option [\#46](https://github.com/kabirbaidhya/boss-cli/pull/46) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.4](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.4) (2017-10-12)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.3...v1.0.0-alpha.4)
 
