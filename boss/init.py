@@ -72,3 +72,19 @@ def configure_env():
         ssh_forward_agent and
         str(ssh_forward_agent).lower() == 'true'
     )
+
+    # If Verbose logging is turned on show verbose logs.
+    verbose_logging = stage_config.get('verbose_logging') or config[
+        'verbose_logging']
+
+    if str(verbose_logging).lower() == 'true':
+        set_verbose_logging()
+
+
+def set_verbose_logging():
+    ''' Turn verbose loggingon. '''
+    import logging
+    from fabric.network import ssh
+
+    logging.basicConfig(level=logging.DEBUG)
+    ssh.util.log_to_file('paramiko.log')
