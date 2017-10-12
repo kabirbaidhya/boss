@@ -65,3 +65,5 @@ def configure_env():
     env.key_filename = stage_config.get(
         'key_filename') or config['key_filename']
     env.hosts = [stage_config['host']]
+    env.forward_agent = stage_config.get(
+        'ssh_forward_agent') or config['ssh_forward_agent']
