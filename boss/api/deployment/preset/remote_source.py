@@ -83,17 +83,6 @@ def stop():
     ''' Stop the systemctl service. '''
     runner.run_script_safely(constants.SCRIPT_STOP)
 
-    # Fallback to old systemctl stop, if the stop script is not defined.
-    # TODO: Remove this (BC Break).
-    if not runner.is_script_defined(constants.SCRIPT_STOP):
-        # Deprecate everything that is tightly coupled to systemd
-        # as they are subject to change in the major future release.
-        warn_deprecated(
-            'The `stop` using systemctl service task is deprecated. ' +
-            'Define `{}` script instead.'.format(constants.SCRIPT_STOP)
-        )
-        systemctl.stop(get_service())
-
 
 @task
 def restart():
