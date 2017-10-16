@@ -23,7 +23,7 @@ DEFAULT_CONFIG = {
     'stages': {},
     'scripts': {},
     'deployment': {
-        'preset': None,
+        'preset': PRESET_REMOTE_SOURCE,
         'build_dir': 'build/',
         'base_dir': '~/boss',
         'keep_builds': 3,
