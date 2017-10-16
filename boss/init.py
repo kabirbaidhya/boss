@@ -12,9 +12,9 @@ from .api.deployment import deployer
 
 def init(module_name):
     ''' Initialize the boss configuration. '''
-    config = load_config()
-
     stage = get_stage()
+    config = load_config(stage=stage)
+
     module = sys.modules[module_name]
     define_stage_tasks(module, config)
     define_preset_tasks(module, config)
