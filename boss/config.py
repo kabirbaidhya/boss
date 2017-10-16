@@ -51,8 +51,9 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
             _config.update(merged_config)
 
             # Add base config to each of the stage config
-            for (stage, stage_config) in _config['stages'].items():
-                _config['stages'][stage].update(get_stage_config(stage))
+            for (stage_name, _) in _config['stages'].items():
+                _config['stages'][stage_name].update(
+                    get_stage_config(stage_name))
 
             return get()
 
