@@ -27,9 +27,13 @@ def resolve_dotenv_file(path, stage=None):
     '''
     filename = '.env' + ('' if not stage else '.{}'.format(stage))
     dotenv_path = os.path.join(path, filename)
+    fallback_path = os.path.join(path, '.env')
 
     if os.path.exists(dotenv_path):
         dotenv.load_dotenv(dotenv_path)
+
+    elif os.path.exists(fallback_path):
+        dotenv.load_dotenv(fallback_path)
 
 
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
