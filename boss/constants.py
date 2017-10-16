@@ -14,7 +14,7 @@ DEFAULT_CONFIG = {
     'ssh_forward_agent': False,
     'verbose_logging': False,
     'app_dir': '~/',
-    'branch': 'dev',
+    'branch': 'master',
     'repository_url': '',
     'project_name': 'untitled',
     'project_description': '',
