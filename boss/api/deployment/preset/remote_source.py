@@ -14,7 +14,7 @@ from fabric.context_managers import shell_env
 
 import boss.constants as constants
 from boss.config import fallback_branch, get_service
-from boss.util import warn_deprecated, remote_info, remote_print
+from boss.util import warn, remote_info, remote_print
 from boss.api import git, notif, shell, npm, systemctl, runner
 
 
@@ -53,19 +53,7 @@ def reload_service():
 
 def install_dependencies():
     ''' Install dependencies. '''
-    # Trigger install script.
     runner.run_script_safely(constants.SCRIPT_INSTALL)
-
-    # If install script is not defined,
-    # Fallback to old `npm install` for backwards compatilibity.
-    # TODO: Remove this in the next release (BC break).
-    if not runner.is_script_defined(constants.SCRIPT_INSTALL):
-        warn_deprecated(
-            'Define `{}` script explicitly if you need to '.format(constants.SCRIPT_INSTALL) +
-            'install dependencies on deployment. ' +
-            'In future releases `npm install` won\'t be triggered on deployment.'
-        )
-        npm.install()
 
 
 @task
