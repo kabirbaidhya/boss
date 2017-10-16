@@ -80,7 +80,7 @@ def build(stage_name=None):
 
 @task
 def stop():
-    ''' Stop the systemctl service. '''
+    ''' Stop the service. '''
     runner.run_script_safely(constants.SCRIPT_STOP)
 
 
@@ -92,7 +92,7 @@ def restart():
 
 @task
 def status():
-    ''' Get the status of the service. '''
+    ''' Check the status of the service. '''
     runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
 
 

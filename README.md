@@ -111,12 +111,12 @@ Available commands:
     build    Build the application.
     check    Check the current remote branch and the last commit.
     deploy   Deploy to remote source.
-    prod      Configures the prod server environment.
+    prod     Configures the prod server environment.
     logs     Tail the logs.
     restart  Restart the service.
     run      Run a custom script.
-    status   Get the status of the service.
-    stop     Stop the systemctl service.
+    status   Check the status of the service.
+    stop     Stop the service.
     sync     Sync the changes on the branch with the remote (origin).
 ```
 
