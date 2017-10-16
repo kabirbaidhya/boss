@@ -77,16 +77,6 @@ def build(stage_name=None):
         # Trigger the build script.
         runner.run_script_safely(constants.SCRIPT_BUILD)
 
-        # Fallback to old npm run build way, if the build script is not defined.
-        # TODO: Remove this (BC Break).
-        if not runner.is_script_defined(constants.SCRIPT_BUILD):
-            warn_deprecated(
-                'Define `{}` script explicitly if you need to '.format(constants.SCRIPT_BUILD) +
-                'build. ' +
-                'In future releases `npm run build` won\'t be triggered on deployment.'
-            )
-            npm.run('build')
-
 
 @task
 def stop():
