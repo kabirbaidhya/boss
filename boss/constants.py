@@ -19,7 +19,6 @@ DEFAULT_CONFIG = {
     'project_name': 'untitled',
     'project_description': '',
     'branch_url': '{repository_url}/branch/{branch}',
-    'service': None,
     'stages': {},
     'scripts': {},
     'deployment': {
