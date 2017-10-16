@@ -47,24 +47,8 @@ def deploy(branch=None):
 
 def reload_service():
     ''' Reload the service after deployment. '''
-    service = get_service()
-
-    if service:
-        # TODO: Remove this in future release (BC Break).
-        # Enable and Restart the service if service is provided
-        warn_deprecated(
-            'Reloading service using systemctl is deprecated and ' +
-            'will be removed in major future release. ' +
-            'Define `{}` script in your config instead.'.format(
-                constants.SCRIPT_RELOAD)
-        )
-        systemctl.enable(service)
-        systemctl.restart(service)
-        systemctl.status(service)
-    else:
-        # Trigger reload script if it's defined.
-        runner.run_script_safely(constants.SCRIPT_RELOAD)
-        runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
+    runner.run_script_safely(constants.SCRIPT_RELOAD)
+    runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
 
 
 def install_dependencies():
