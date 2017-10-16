@@ -95,15 +95,6 @@ def status():
     ''' Get the status of the service. '''
     runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
 
-    # Fallback to old systemctl way, if the script is not defined.
-    # TODO: Remove this (BC Break).
-    if not runner.is_script_defined(constants.SCRIPT_STATUS_CHECK):
-        warn_deprecated(
-            'The `status` using systemctl service task is deprecated. ' +
-            'Define `{}` script instead.'.format(constants.SCRIPT_STATUS_CHECK)
-        )
-        systemctl.status(get_service())
-
 
 @task
 def check():
