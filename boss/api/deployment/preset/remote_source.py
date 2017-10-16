@@ -170,7 +170,7 @@ def check():
     ''' Check the current remote branch and the last commit. '''
     with hide('running'):
         # Show the current branch
-        remote_branch = git.remote_branch()
+        remote_branch = git.current_branch()
         remote_print('Branch: {}'.format(remote_branch))
         # Show the last commit
         git.show_last_commit()
