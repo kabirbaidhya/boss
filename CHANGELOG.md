@@ -1,11 +1,25 @@
 # Change Log
 
+## [v1.0.0-alpha.6](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.6) (2017-10-17)
+[Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.5...v1.0.0-alpha.6)
+
+**Closed issues:**
+
+- Remove deprecated features [\#26](https://github.com/kabirbaidhya/boss-cli/issues/26) [[breaking-change](https://github.com/kabirbaidhya/boss-cli/labels/breaking-change)]
+- Independence from the tools like npm, systemctl [\#17](https://github.com/kabirbaidhya/boss-cli/issues/17)
+
+**Improvements:**
+
+- Change default branch to `master` from `dev` [\#55](https://github.com/kabirbaidhya/boss-cli/pull/55) [[breaking-change](https://github.com/kabirbaidhya/boss-cli/labels/breaking-change)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Ability to resolve stage-specific `.env` file based on the deployment/task stage [\#54](https://github.com/kabirbaidhya/boss-cli/pull/54) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Remote deprecated features [\#52](https://github.com/kabirbaidhya/boss-cli/pull/52) [[breaking-change](https://github.com/kabirbaidhya/boss-cli/labels/breaking-change)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.5](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.5) (2017-10-12)
 [Full Changelog](https://github.com/kabirbaidhya/boss-cli/compare/v1.0.0-alpha.4...v1.0.0-alpha.5)
 
 **Improvements:**
 
-- Add `verbose\_logging` option to display paramiko/ssh logs [\#47](https://github.com/kabirbaidhya/boss-cli/pull/47) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add `verbose_logging` option to display paramiko/ssh logs [\#47](https://github.com/kabirbaidhya/boss-cli/pull/47) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 -  Add ssh\_forward\_agent config option [\#46](https://github.com/kabirbaidhya/boss-cli/pull/46) [[feature](https://github.com/kabirbaidhya/boss-cli/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
 ## [v1.0.0-alpha.4](https://github.com/kabirbaidhya/boss-cli/tree/v1.0.0-alpha.4) (2017-10-12)
