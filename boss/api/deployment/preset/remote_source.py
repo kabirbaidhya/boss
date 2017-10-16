@@ -89,17 +89,6 @@ def restart():
     ''' Restart the service. '''
     runner.run_script_safely(constants.SCRIPT_RELOAD)
 
-    # Fallback to old systemctl way, if the script is not defined.
-    # TODO: Remove this (BC Break).
-    if not runner.is_script_defined(constants.SCRIPT_RELOAD):
-        # Deprecate everything that is tightly coupled to systemd
-        # as they are subject to change in the major future release.
-        warn_deprecated(
-            'The `restart` using systemctl service task is deprecated. ' +
-            'Define `{}` script instead.'.format(constants.SCRIPT_RELOAD)
-        )
-        systemctl.restart(get_service())
-
 
 @task
 def status():
