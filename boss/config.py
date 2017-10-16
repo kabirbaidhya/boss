@@ -18,15 +18,29 @@ def get():
     return deepcopy(_config)
 
 
-def load(filename=DEFAULT_CONFIG_FILE):
+def resolve_dotenv_file(path, stage=None):
+    '''
+    Resolve dotenv file and load environment vars if it exists.
+    If stage parameter is provided, then stage specific .env file is resolved,
+    for instance .env.production if stage=production etc.
+    If stage is None, just .env file is resolved.
+    '''
+    filename = '.env' + ('' if not stage else '.{}'.format(stage))
+    dotenv_path = os.path.join(path, filename)
+    fallback_path = os.path.join(path, '.env')
+
+    if os.path.exists(dotenv_path):
+        dotenv.load_dotenv(dotenv_path)
+
+    elif os.path.exists(fallback_path):
+        dotenv.load_dotenv(fallback_path)
+
+
+def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
         with open(filename) as file_contents:
-            # Load environment variables from .env file if it exists.
-            dotenv_path = os.path.join(os.path.dirname(filename), '.env')
-
-            if os.path.exists(dotenv_path):
-                dotenv.load_dotenv(dotenv_path)
+            resolve_dotenv_file(os.path.dirname(filename), stage)
 
             # Expand the environment variables used in the yaml config.
             loaded_config = os.path.expandvars(file_contents.read())
@@ -37,8 +51,9 @@ def load(filename=DEFAULT_CONFIG_FILE):
             _config.update(merged_config)
 
             # Add base config to each of the stage config
-            for (stage, stage_config) in _config['stages'].items():
-                _config['stages'][stage].update(get_stage_config(stage))
+            for (stage_name, _) in _config['stages'].items():
+                _config['stages'][stage_name].update(
+                    get_stage_config(stage_name))
 
             return get()
 
