@@ -71,11 +71,6 @@ def get_stage_config(stage):
         ))
 
 
-def get_service():
-    ''' Return the configured service name.'''
-    return _config['service']
-
-
 def fallback_branch(stage):
     ''' Get the fallback branch for the stage. '''
     return get_stage_config(stage).get('branch') or _config['branch']
