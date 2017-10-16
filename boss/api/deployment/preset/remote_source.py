@@ -13,9 +13,9 @@ from fabric.colors import cyan
 from fabric.context_managers import shell_env
 
 import boss.constants as constants
-from boss.config import fallback_branch, get_service
-from boss.util import warn, remote_info, remote_print
-from boss.api import git, notif, shell, npm, systemctl, runner
+from boss.config import fallback_branch
+from boss.util import remote_info, remote_print
+from boss.api import git, notif, shell, runner
 
 
 @task
