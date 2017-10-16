@@ -19,11 +19,10 @@ DEFAULT_CONFIG = {
     'project_name': 'untitled',
     'project_description': '',
     'branch_url': '{repository_url}/branch/{branch}',
-    'service': None,
     'stages': {},
     'scripts': {},
     'deployment': {
-        'preset': None,
+        'preset': PRESET_REMOTE_SOURCE,
         'build_dir': 'build/',
         'base_dir': '~/boss',
         'keep_builds': 3,

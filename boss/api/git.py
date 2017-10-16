@@ -1,5 +1,4 @@
 from fabric.api import run, hide, local
-from ..util import warn_deprecated
 
 
 def fetch(prune=True):
@@ -17,20 +16,6 @@ def pull(branch):
     ''' The git pull command. '''
     run('git pull origin %s' % branch)
     # TODO: Custom origin
-
-
-def remote_branch():
-    ''' Get the current branch of the remote server. '''
-    # TODO: Remove this function.
-    warn_deprecated(
-        'git.remote_branch() function is deprecated in the favor of git.current_branch ' +
-        'and will be removed in the next major release.'
-    )
-
-    with hide('everything'):
-        result = run('git rev-parse --abbrev-ref HEAD')
-
-    return result.strip()
 
 
 def sync(branch):

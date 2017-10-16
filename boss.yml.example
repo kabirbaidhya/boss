@@ -16,10 +16,6 @@ logging:
         - /path/to/log/file.log
         - /path/to/another/log/file.log
 
-# systemctl service name for your application
-# NOTE: Currently, this is tightly coupled with systemd for process management
-# we'll make it usable without systemd in the future releases.
-service: your-app.service
 stages:
     dev:
         host: dev.your-application.com
