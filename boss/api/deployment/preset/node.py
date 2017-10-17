@@ -17,7 +17,11 @@ from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from .. import buildman
 
-NODE_INCLUDE_FILES = ['package.json', 'yarn.lock', 'package-lock.json']
+# Default files deployed along with the build for the nodejs project.
+NODE_INCLUDE_FILES = [
+    'package.json',
+    'package-lock.json', 'yarn.lock', 'pm2.config.js'
+]
 
 
 @task
