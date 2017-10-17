@@ -2,7 +2,7 @@
 '''
 Build Manager for deployment.
 '''
-
+import os
 import json
 import time
 from datetime import datetime
@@ -13,9 +13,10 @@ from fabric.api import cd, hide
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION, constants
 from boss.config import get as get_config, get_stage_config
-from boss.util import remote_info, remote_print, merge, localize_utc_timestamp
+from boss.util import halt, remote_info, remote_print, merge, localize_utc_timestamp
 from boss.api import fs, shell
 
+LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']
 INITIAL_BUILD_HISTORY = {
     'bossVersion': BOSS_VERSION,
     'preset': None,
@@ -35,6 +36,31 @@ def get_deploy_dir():
     config = get_stage_config(shell.get_stage())
 
     return config['deployment']['base_dir'].rstrip('/')
+
+
+def resolve_local_build_dir():
+    '''
+    Get the local build directory and verify if it exists locally.
+    Throws and error if the build directory doesn't exist.
+    '''
+    config = get_stage_config(shell.get_stage())
+    build_dir = config['deployment']['build_dir']
+
+    print('build dir = ', build_dir)
+
+    if not build_dir:
+        # Look up for fallback local directories, if it's not provided.
+        for folder in LOCAL_BUILD_DIRECTORIES:
+            if os.path.exists(folder):
+                return folder
+
+    elif build_dir and os.path.exists(build_dir):
+        # If build_dir is provided and it exists, return it.
+        return build_dir
+
+    halt('Build directory doesn\'t exist "{}"'.format(build_dir))
+
+    return None
 
 
 def get_release_dir():

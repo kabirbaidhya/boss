@@ -23,9 +23,9 @@ DEFAULT_CONFIG = {
     'scripts': {},
     'deployment': {
         'preset': PRESET_REMOTE_SOURCE,
-        'build_dir': 'build/',
+        'build_dir': None,
         'base_dir': '~/boss',
-        'keep_builds': 3,
+        'keep_builds': 5,
         'include_files': []
     },
     'notifications': {
@@ -59,3 +59,23 @@ SCRIPT_STATUS_CHECK = 'status_check'
 SCRIPT_LIST_SERVICES = 'list_services'
 SCRIPT_INSTALL_REMOTE = 'install_remote'
 SCRIPT_START_OR_RELOAD = 'start_or_reload'
+
+
+# Preset specific defaults
+PRESET_SPECIFIC_DEFAULTS = {
+    PRESET_REMOTE_SOURCE: {},
+    PRESET_WEB: {},
+    PRESET_NODE: {
+        'deployment': {
+            'include_files': [
+                'package.json', 'package-lock.json', 'yarn.lock', 'pm2.config.js'
+            ]
+        },
+        'scripts': {
+            SCRIPT_INSTALL: 'npm install',
+            SCRIPT_INSTALL_REMOTE: 'npm install',
+            SCRIPT_BUILD: 'npm run build'
+            # TODO: Add pm2 based scripts too as a default.
+        }
+    }
+}

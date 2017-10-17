@@ -47,7 +47,6 @@ def setup():
 @task
 def deploy():
     ''' Zero-Downtime deployment for the web. '''
-    config = get_config()
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
 
@@ -61,7 +60,7 @@ def deploy():
     ))
 
     tmp_path = fs.get_temp_filename()
-    build_dir = config['deployment']['build_dir']
+    build_dir = buildman.resolve_local_build_dir()
 
     deploy_dir = buildman.get_deploy_dir()
     deployer_user = shell.get_user()

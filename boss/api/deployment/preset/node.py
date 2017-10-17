@@ -17,8 +17,6 @@ from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from .. import buildman
 
-NODE_INCLUDE_FILES = ['package.json', 'yarn.lock', 'package-lock.json']
-
 
 @task
 def builds():
@@ -75,10 +73,8 @@ def deploy():
     ))
 
     tmp_path = fs.get_temp_filename()
-    build_dir = config['deployment']['build_dir']
-    included_files = (
-        config['deployment']['include_files'] or NODE_INCLUDE_FILES
-    )
+    build_dir = buildman.resolve_local_build_dir()
+    included_files = config['deployment']['include_files']
 
     deployer_user = shell.get_user()
 
