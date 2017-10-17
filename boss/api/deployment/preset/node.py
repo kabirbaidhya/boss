@@ -9,7 +9,7 @@ is started on restarted on the remote server.
 
 from datetime import datetime
 
-from fabric.colors import cyan
+from fabric.colors import cyan, green
 from fabric.api import task, cd, shell_env
 
 from boss import constants
@@ -67,13 +67,13 @@ def deploy():
     stage = shell.get_stage()
     is_first_deployment = not buildman.is_remote_setup()
 
-    info('Deploying app to the {} server'.format(stage))
-    # Get the current branch and commit (locally).
     branch = git.current_branch(remote=False)
-    commit = git.last_commit(remote=False)
-
-    echo('  Branch: {}'.format(cyan(branch)))
-    echo('  Commit: {}'.format(cyan(commit)))
+    commit = git.last_commit(remote=False, short=True)
+    info('Deploying <{branch}:{commit}> to the {stage} server'.format(
+        branch=branch,
+        commit=commit,
+        stage=stage
+    ))
 
     tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['build_dir']
