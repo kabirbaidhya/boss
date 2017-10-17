@@ -23,7 +23,7 @@ DEFAULT_CONFIG = {
     'scripts': {},
     'deployment': {
         'preset': PRESET_REMOTE_SOURCE,
-        'build_dir': 'build/',
+        'build_dir': None,
         'base_dir': '~/boss',
         'keep_builds': 5,
         'include_files': []
