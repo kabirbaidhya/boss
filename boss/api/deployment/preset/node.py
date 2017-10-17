@@ -9,11 +9,10 @@ is started on restarted on the remote server.
 
 from datetime import datetime
 
-from fabric.colors import cyan, green
 from fabric.api import task, cd, shell_env
 
 from boss import constants
-from boss.util import info, remote_info, echo, halt
+from boss.util import info, remote_info, halt
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from .. import buildman

@@ -9,11 +9,10 @@ The source code is built locally and only the dist is uploaded and deployed to t
 
 from datetime import datetime
 
-from fabric.colors import cyan
 from fabric.api import task, cd, shell_env
 
 from boss import constants
-from boss.util import info, remote_info, echo
+from boss.util import info, remote_info
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config, get_stage_config
 from .. import buildman
