@@ -25,7 +25,7 @@ DEFAULT_CONFIG = {
         'preset': PRESET_REMOTE_SOURCE,
         'build_dir': 'build/',
         'base_dir': '~/boss',
-        'keep_builds': 3,
+        'keep_builds': 5,
         'include_files': []
     },
     'notifications': {
