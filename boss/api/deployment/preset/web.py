@@ -9,11 +9,10 @@ The source code is built locally and only the dist is uploaded and deployed to t
 
 from datetime import datetime
 
-from fabric.colors import cyan
 from fabric.api import task, cd, shell_env
 
 from boss import constants
-from boss.util import info, remote_info, echo
+from boss.util import info, remote_info
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config, get_stage_config
 from .. import buildman
@@ -52,13 +51,14 @@ def deploy():
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
 
-    info('Deploying app to the {} server'.format(stage))
     # Get the current branch and commit (locally).
     branch = git.current_branch(remote=False)
-    commit = git.last_commit(remote=False)
-
-    echo('  Branch: {}'.format(cyan(branch)))
-    echo('  Commit: {}'.format(cyan(commit)))
+    commit = git.last_commit(remote=False, short=True)
+    info('Deploying <{branch}:{commit}> to the {stage} server'.format(
+        branch=branch,
+        commit=commit,
+        stage=stage
+    ))
 
     tmp_path = fs.get_temp_filename()
     build_dir = config['deployment']['build_dir']

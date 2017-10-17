@@ -24,7 +24,7 @@ def sync(branch):
     # TODO: Custom origin
 
 
-def last_commit(remote=True):
+def last_commit(remote=True, short=False):
     '''
     Get the last commit of the git repository.
 
@@ -32,7 +32,7 @@ def last_commit(remote=True):
     to be a git repository. So, make sure current directory is set before using this.
     '''
 
-    cmd = 'git rev-parse HEAD'
+    cmd = 'git rev-parse{}HEAD'.format(' --short ' if short else ' ')
 
     with hide('everything'):
         result = run(cmd) if remote else local(cmd, capture=True)
