@@ -6,7 +6,7 @@ from copy import deepcopy
 import yaml
 import dotenv
 from .util import halt, merge
-from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE
+from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE, PRESET_SPECIFIC_DEFAULTS
 _config = deepcopy(DEFAULT_CONFIG)
 
 
@@ -47,7 +47,15 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
 
             # Parse the yaml configuration.
             loaded_config = yaml.load(loaded_config)
-            merged_config = merge(DEFAULT_CONFIG, loaded_config)
+
+            # Merge the default config along with preset specific defaults
+            # to the loaded config.
+            preset = loaded_config['deployment'].get('preset') or DEFAULT_CONFIG[
+                'deployment']['preset']
+            preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
+            all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
+            merged_config = merge(all_defaults, loaded_config)
+
             _config.update(merged_config)
 
             # Add base config to each of the stage config
