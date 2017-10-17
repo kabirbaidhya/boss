@@ -73,7 +73,7 @@ def deploy():
     ))
 
     tmp_path = fs.get_temp_filename()
-    build_dir = config['deployment']['build_dir']
+    build_dir = buildman.resolve_local_build_dir()
     included_files = config['deployment']['include_files']
 
     deployer_user = shell.get_user()
