@@ -269,7 +269,7 @@ More information, examples and documentation coming soon :).
 Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
 
 ## Contributing
-Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugs and improvements.
+All kinds of contributions are welcome. Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose PRs, report bugs and improvements.
 
 ## Change Log
 Check the [CHANGELOG](CHANGELOG.md) for full release history.
