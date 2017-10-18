@@ -261,15 +261,18 @@ If you're using `git` in your project, you need to make sure you did `checkout` 
 Node Project Deployment.
 More information, examples and documentation coming soon :).
 
-## Contributing
+## Inspiration
+ * [Capistrano](https://github.com/capistrano/capistrano)
+ * [Fabric](http://www.fabfile.org/)
 
+## Special Thanks
+Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
+
+## Contributing
 Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugs and improvements.
 
 ## Change Log
 Check the [CHANGELOG](CHANGELOG.md) for full release history.
-
-## Special Thanks
-Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
 
 ## License
 Licensed under [The MIT License](LICENSE).
