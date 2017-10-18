@@ -5,6 +5,7 @@
   <br/>
   <h1>boss</h1>
 </div>
+[![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
 
 Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
 
