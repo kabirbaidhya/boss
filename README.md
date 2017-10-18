@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/kabirbaidhya/boss-cli">
-    <img src="https://raw.githubusercontent.com/leapfrogtechnology/Leapicons/master/png/logos/boss-bot/96x96.png">
+    <img src="assets/boss-128x128.png">
   </a>
   <br/>
   <h1>boss</h1>
