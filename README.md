@@ -4,8 +4,13 @@
   </a>
   <br/>
   <h1>boss</h1>
+
+  [![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
+  ![Code Climate](https://img.shields.io/codeclimate/github/kabirbaidhya/boss-cli.svg?style=flat-square)
+  [![PyPI](https://img.shields.io/pypi/l/boss-cli.svg?style=flat-square)](https://github.com/kabirbaidhya/boss/blob/master/LICENSE)
+  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+
 </div>
-[![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
 
 Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
 
