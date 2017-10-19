@@ -58,3 +58,39 @@ class TestBoseApiSlack(unittest.TestCase):
         with patch('requests.post') as mock_post:
             notify_deploying(**notify_params)
             mock_post.assert_called_once_with(self.base_url, json=payload)
+
+    def test_notity_deployed(self):
+        notify_params = dict(
+            branch_url='http://branch-url',
+            branch='test_notify_deployed',
+            public_url='http://public-url',
+            host='test-notify-deployed-host',
+            repository_url='http://repository-url',
+            project_name='project-name',
+            server_name='server-name',
+            user='user',
+        )
+        payload = {
+            "text": "user is deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deployed> to <http://public-url|server-name> server.",
+            "attachments": [
+                {
+                    "color": "good",
+                    "fields": [
+                        {
+                            "short": True,
+                            "value": "<http://branch-url|test_notify_deployed>",
+                            "title": "Branch"
+                        },
+                        {
+                            "short": True,
+                            "value": "<http://public-url|test-notify-deployed-host>",
+                            "title": "To"
+                        }
+                    ],
+                    "title": "Deploying"
+                }
+            ]
+        }
+        with patch('requests.post') as mock_post:
+            notify_deploying(**notify_params)
+            mock_post.assert_called_once_with(self.base_url, json=payload)
