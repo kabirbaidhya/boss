@@ -68,7 +68,7 @@ setup(
         'terminaltables==3.1.0'
     ],
     extras_require={
-        'test': ['coverage', 'pytest', 'pytest-cov'],
+        'test': ['coverage', 'pytest', 'pytest-cov', 'envoy'],
     },
     entry_points={
         'console_scripts': [
