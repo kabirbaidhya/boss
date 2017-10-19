@@ -1,6 +1,12 @@
 #!/bin/bash
 # A simple script to automate tasks.
 
+setup() {
+  echo "Setting things up"
+  pip install -r requirements-dev.txt
+  python setup.py develop
+}
+
 publish() {
   echo "Publishing"
   python setup.py egg_info
