@@ -1,5 +1,8 @@
 from . import __version__
+import click
 
 
+@click.version_option(__version__, message='%(version)s')
+@click.command()
 def main():
-    print(__version__)
+    click.echo('Boss says!')
