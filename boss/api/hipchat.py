@@ -2,9 +2,7 @@
 Module for hipchat API.
 '''
 
-import json
 import requests
-from fabric.api import local, parallel
 from ..config import get as _get_config
 
 DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
@@ -28,7 +26,6 @@ def create_link(url, title):
     return markup.format(url=url, title=title)
 
 
-@parallel
 def notify(payload):
     ''' Send a notification on hipchat. '''
 
