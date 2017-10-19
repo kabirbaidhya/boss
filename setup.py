@@ -15,7 +15,7 @@ try:
         long_description = file.read()
 except IOError:
     # Handle file not found Exception.
-    long_description = 'boss-cli - Yet another pythonic deployment tool built on top of fabric.'
+    long_description = 'boss - Yet another pythonic deployment tool built on top of fabric.'
 
 
 class RunTests(Command):
