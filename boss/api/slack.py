@@ -2,9 +2,8 @@
 Module for slack API.
 '''
 
-import json
+
 import requests
-from fabric.api import local, parallel
 from ..config import get as _get_config
 
 DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
@@ -29,7 +28,6 @@ def create_link(url, title):
     )
 
 
-@parallel
 def notify(payload):
     ''' Send a notification on Slack. '''
     url = config()['base_url'] + config()['endpoint']

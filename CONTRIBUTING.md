@@ -9,6 +9,7 @@
  * [Reporting Bugs](#reporting-bugs)
  * [Feature Requests](#feature-requests)
  * [Documentation](#documentation)
+ * [Development](#development)
 
 [Style Guidelines](#style-guidelines)
   * [Git Commit Messages](#git-commit-messages)
@@ -35,6 +36,43 @@ If you have any suggestions or feature requests, create an [issue](https://githu
 ### Documentation
 
 If you think the docs for some features are missing or incomplete and you'd like to contribute, you're more than welcome to create a PR. You can also contribute for typo fixes or grammatical errors in the docs if you do find them.
+
+### Development
+
+If you want to contribute to develop a feature, fix bugs or write tests, setup your environment using following steps and make sure the code you submit follows our [style guidelines](#style-guidelines):
+
+#### Fork and clone it
+Clone the forked repository in your local system.
+
+```bash
+$ git clone https://github.com/kabirbaidhya/boss.git
+```
+
+#### Set things up
+```bash
+$ ./t setup
+```
+
+#### Run tests
+```bash
+$ ./t test
+```
+
+#### Run tests in watch mode.
+This uses [`chokidar`](https://github.com/kimmobrunfeldt/chokidar-cli) to watch for file changes to re-run tests.
+```bash
+$ ./t testw
+```
+
+#### Generate change log
+```bash
+$ ./t changelog
+```
+
+#### 5. Publish to PyPi
+```bash
+$ ./t publish
+```
 
 ## Style Guidelines
 
