@@ -2,4 +2,4 @@ from . import __version__
 
 
 def main():
-    print('Boss CLI version {}'.format(__version__))
+    print('{}'.format(__version__))
