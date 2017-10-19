@@ -25,7 +25,7 @@ $ pip install boss-cli
 ```
 
 ## Usage
-Comming soon ;)
+Coming soon ;)
 
 ## Configuration
 
@@ -64,7 +64,7 @@ $ fab prod run:logs
 
 This is a generic deployment preset, where the remote host also contains the project source code and the git repository. The deploy task would synchronize the remote with the latest changes of the provided branch from the origin. It then builds the project and restarts the service if needed.
 
-This is general and could be used for deploying any kind of projects and languages. You just need to specify the relevent `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
+This is general and could be used for deploying any kind of projects and languages. You just need to specify the relevant `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
 
 You'll need to set the deployment preset as `remote-source` in your configuration.
 
@@ -251,7 +251,7 @@ So, to deploy current local source code to `prod` server you should do the follo
  ➜ fab prod deploy
 ```
 
-If you're using `git` in your project, you need to make sure you did `checkout` to the branch you want to deploy and is upto date. Like this,
+If you're using `git` in your project, you need to make sure you did `checkout` to the branch you want to deploy and is up to date. Like this,
 ```bash
  # Checkout to the right branch and deploy
  ➜ git checkout master

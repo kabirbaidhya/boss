@@ -75,7 +75,7 @@ def glob(path, remote=True):
 def exists(path, remote=True):
     '''
     Check if the path exists in the remote or locally,
-    depending upon the `remote` paramter.
+    depending upon the `remote` parameter.
     '''
 
     if remote:
