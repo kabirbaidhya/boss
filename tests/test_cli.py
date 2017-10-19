@@ -1,7 +1,6 @@
 """Tests for our main boss CLI module."""
 
 
-from subprocess import PIPE, Popen as popen
 import envoy
 from unittest import TestCase
 
