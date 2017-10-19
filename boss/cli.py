@@ -2,4 +2,4 @@ from . import __version__
 
 
 def main():
-    print('{}'.format(__version__))
+    print(__version__)

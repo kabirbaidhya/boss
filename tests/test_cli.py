@@ -1,5 +1,4 @@
-"""Tests for our main boss CLI module."""
-
+''' Tests for our main boss CLI module. '''
 
 import envoy
 from unittest import TestCase

@@ -5,6 +5,7 @@
   <br/>
   <h1>boss</h1>
 
+  [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
   [![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
   ![Code Climate](https://img.shields.io/codeclimate/github/kabirbaidhya/boss-cli.svg?style=flat-square)
   [![PyPI](https://img.shields.io/pypi/l/boss-cli.svg?style=flat-square)](https://github.com/kabirbaidhya/boss/blob/master/LICENSE)
