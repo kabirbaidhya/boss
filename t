@@ -1,5 +1,5 @@
 #!/bin/bash
-# A simple bash script to automate tasks.
+# A simple script to automate tasks.
 
 publish() {
   echo "Publishing"
@@ -15,11 +15,17 @@ test() {
 }
 
 testw() {
+  # NOTE: This requires chokidar to be installed.
+  # Install it with `npm install -g chokidar-cli if you haven't.
+  # https://github.com/kimmobrunfeldt/chokidar-cli
   echo "Running tests (watch mode)"
   chokidar "**/*.py" --initial -c "python -m 'pytest'"
 }
 
 changelog() {
+  # NOTE: This requires github_changelog_generator to be installed.
+  # https://github.com/skywinder/github-changelog-generator
+
   if [ -z "$NEXT" ]; then
       NEXT="Next"
   fi
@@ -28,5 +34,5 @@ changelog() {
   github_changelog_generator --pr-label "**Improvements:**" --issue-line-labels=ALL --future-release="$NEXT"
 }
 
-# Execute the command received from the args.
+# Run command received from args.
 $1
