@@ -5,6 +5,7 @@ setup() {
   echo "Setting things up"
   pip install -r requirements-dev.txt
   python setup.py develop
+  npm install -g chokidar-cli
 }
 
 publish() {
