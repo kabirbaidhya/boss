@@ -8,6 +8,6 @@ from boss import __version__ as VERSION
 
 class TestVersion(TestCase):
 
-    def test_returns_version_information(self):
+    def test_version_option_returns_package_version(self):
         output = envoy.run('boss --version').std_out
         self.assertEqual(output.strip(), VERSION)
