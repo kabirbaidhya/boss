@@ -13,13 +13,13 @@ class TestBoseApiSlack(unittest.TestCase):
 
     def test_create_link(self):
         url = 'http://test-link-url'
-        title = 'test link'
+        title = 'Test link'
         expected_link = '<{url}|{title}>'.format(url=url, title=title)
         self.assertEqual(create_link(url, title), expected_link)
 
     def test_notify(self):
         with patch('requests.post') as mock_post:
-            payload = {"message": "test message"}
+            payload = {"message": "Test message"}
             notify(payload)
             mock_post.assert_called_once_with(self.base_url, json=payload)
 
