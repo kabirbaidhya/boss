@@ -3,7 +3,6 @@
     <img style="width: 128px;" src="assets/boss.svg">
   </a>
   <br/>
-
   # boss
 
   [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
@@ -12,11 +11,11 @@
   [![PyPI](https://img.shields.io/pypi/l/boss-cli.svg?style=flat-square)](https://github.com/kabirbaidhya/boss/blob/master/LICENSE)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
+  Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
+  
+  Deploy like a boss.
+
 </div>
-
-Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
-
-Deploy like a boss.
 
 ## Installation
 
