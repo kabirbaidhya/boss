@@ -1,7 +1,7 @@
-<svg width="45" height="57" viewBox="0 0 45 57" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="90" height="114" viewBox="0 0 90 114" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <title>Bot Icon</title>
 <desc>Created using Figma</desc>
-<g id="Canvas" transform="translate(290 290)">
+<g id="Canvas" transform="matrix(2 0 0 2 580 580)">
 <g id="Bot Icon">
 <g id="Vector">
 <use xlink:href="#path0_fill" transform="translate(-279.046 -277.935)" fill="#88D7F8"/>
