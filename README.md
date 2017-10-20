@@ -4,7 +4,7 @@
   </a>
   <br/>
 
-  #boss
+  # boss
 
   [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
   [![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
