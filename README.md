@@ -3,7 +3,8 @@
     <img style="width: 128px;" src="assets/boss.svg">
   </a>
   <br/>
-  <h1>boss</h1>
+
+  #boss
 
   [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
   [![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
