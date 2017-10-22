@@ -1,9 +1,10 @@
 <div align="center">
   <a href="https://github.com/kabirbaidhya/boss-cli">
-    <img src="assets/boss-128x128.png">
+    <img style="width: 128px;" src="assets/boss.svg">
   </a>
   <br/>
-  <h1>boss</h1>
+  
+  # boss
 
   [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
   [![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
@@ -11,11 +12,11 @@
   [![PyPI](https://img.shields.io/pypi/l/boss-cli.svg?style=flat-square)](https://github.com/kabirbaidhya/boss/blob/master/LICENSE)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
+  Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
+
+  Deploy like a boss.
+
 </div>
-
-Yet another pythonic deployment tool built on top of [fabric](http://www.fabfile.org/).
-
-Deploy like a boss.
 
 ## Installation
 
@@ -25,7 +26,7 @@ $ pip install boss-cli
 ```
 
 ## Usage
-Comming soon ;)
+Coming soon ;)
 
 ## Configuration
 
@@ -64,7 +65,7 @@ $ fab prod run:logs
 
 This is a generic deployment preset, where the remote host also contains the project source code and the git repository. The deploy task would synchronize the remote with the latest changes of the provided branch from the origin. It then builds the project and restarts the service if needed.
 
-This is general and could be used for deploying any kind of projects and languages. You just need to specify the relevent `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
+This is general and could be used for deploying any kind of projects and languages. You just need to specify the relevant `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
 
 You'll need to set the deployment preset as `remote-source` in your configuration.
 
@@ -251,7 +252,7 @@ So, to deploy current local source code to `prod` server you should do the follo
  ➜ fab prod deploy
 ```
 
-If you're using `git` in your project, you need to make sure you did `checkout` to the branch you want to deploy and is upto date. Like this,
+If you're using `git` in your project, you need to make sure you did `checkout` to the branch you want to deploy and is up to date. Like this,
 ```bash
  # Checkout to the right branch and deploy
  ➜ git checkout master
