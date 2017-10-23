@@ -1,6 +1,7 @@
 '''
 Boss core file system utilities.
 '''
+import os
 
 
 def read(filename):
@@ -13,3 +14,8 @@ def write(filename, data):
     ''' Write data to the file. '''
     with open(filename, 'w') as f:
         f.write(data)
+
+
+def exists(path):
+    ''' Check if file path exists. '''
+    return os.path.exists(path)
