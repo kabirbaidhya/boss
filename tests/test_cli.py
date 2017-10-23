@@ -1,18 +1,20 @@
 ''' Tests for CLI. '''
 
 import os
-import envoy
-
 from click.testing import CliRunner
-from boss import __version__ as VERSION
-from boss.constants import DEFAULT_CONFIG_FILE, FABFILE_PATH
+
+from boss import __version__
 from boss.cli import main as cli
+from boss.constants import DEFAULT_CONFIG_FILE, FABFILE_PATH
 
 
 def test_version_option():
     ''' Test version option. '''
-    output = envoy.run('boss --version').std_out
-    assert output.strip() == VERSION
+    runner = CliRunner()
+    result = runner.invoke(cli, ['--version'])
+
+    assert result.exit_code == 0
+    assert result.output.strip() == __version__
 
 
 def test_init_command():
