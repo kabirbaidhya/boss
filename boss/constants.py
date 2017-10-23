@@ -7,6 +7,7 @@ PRESET_REMOTE_SOURCE = 'remote-source'
 
 # Default boss configuration
 DEFAULT_CONFIG_FILE = 'boss.yml'
+FABFILE_PATH = 'fabfile.py'
 DEFAULT_CONFIG = {
     'user': 'boss',
     'port': 22,
