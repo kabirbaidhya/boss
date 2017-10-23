@@ -5,9 +5,12 @@ setup() {
   echo "Setting things up"
   pip install -r requirements-dev.txt
   python setup.py develop
-  if ! [ -x "$(command -v chokidar)" ]; then
-    npm install -g chokidar-cli
-  fi
+}
+
+setup_ci() {
+  echo "Setting things up for CI"
+  pip install -r requirements-dev.txt
+  pip install -U --editable .
 }
 
 publish() {
@@ -20,7 +23,7 @@ publish() {
 
 test() {
   echo "Running tests"
-  python -m "pytest"
+  python -m pytest
 }
 
 testw() {
@@ -28,7 +31,7 @@ testw() {
   # Install it with `npm install -g chokidar-cli if you haven't.
   # https://github.com/kimmobrunfeldt/chokidar-cli
   echo "Running tests (watch mode)"
-  chokidar "**/*.py" --debounce=1000 --initial -c "python -m 'pytest'"
+  chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest"
 }
 
 changelog() {
