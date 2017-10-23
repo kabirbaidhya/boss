@@ -69,7 +69,7 @@ setup(
         'click==6.7'
     ],
     extras_require={
-        'test': ['coverage', 'pytest', 'pytest-cov', 'envoy'],
+        'test': ['coverage', 'pytest', 'pytest-cov'],
     },
     entry_points={
         'console_scripts': [
