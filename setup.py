@@ -15,7 +15,7 @@ try:
         long_description = file.read()
 except IOError:
     # Handle file not found Exception.
-    long_description = 'boss-cli - Yet another pythonic deployment tool built on top of fabric.'
+    long_description = 'boss - Yet another pythonic deployment tool built on top of fabric.'
 
 
 class RunTests(Command):
@@ -65,10 +65,11 @@ setup(
         'pyyaml==3.12',
         'requests==2.17.3',
         'python-dotenv==0.6.5',
-        'terminaltables==3.1.0'
+        'terminaltables==3.1.0',
+        'click==6.7'
     ],
     extras_require={
-        'test': ['coverage', 'pytest', 'pytest-cov', 'envoy'],
+        'test': ['coverage', 'pytest', 'pytest-cov'],
     },
     entry_points={
         'console_scripts': [

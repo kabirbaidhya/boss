@@ -1,0 +1,5 @@
+project_name: {project_name}
+user: {user}
+deployment:
+    preset: {deployment_preset}
+    base_dir: {deployment_base_dir}

@@ -1,13 +1,29 @@
-''' Tests for our main boss CLI module. '''
+''' Tests for CLI. '''
 
-import envoy
-from unittest import TestCase
+import os
+from click.testing import CliRunner
 
-from boss import __version__ as VERSION
+from boss import __version__
+from boss.cli import main as cli
+from boss.constants import DEFAULT_CONFIG_FILE, FABFILE_PATH
 
 
-class TestVersion(TestCase):
+def test_version_option():
+    ''' Test version option. '''
+    runner = CliRunner()
+    result = runner.invoke(cli, ['--version'])
 
-    def test_returns_version_information(self):
-        output = envoy.run('boss --version').std_out
-        self.assertEqual(output.strip(), VERSION)
+    assert result.exit_code == 0
+    assert result.output.strip() == __version__
+
+
+def test_init_command():
+    ''' Test init command generates files. '''
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        result = runner.invoke(cli, ['init'])
+
+        assert result.exit_code == 0
+        assert os.path.exists(FABFILE_PATH)
+        assert os.path.exists(DEFAULT_CONFIG_FILE)
