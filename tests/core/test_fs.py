@@ -1,9 +1,8 @@
 
-from mock import patch, mock_open
 from unittest import TestCase
+from mock import patch, mock_open
 
 from boss.core import fs
-from boss import __version__ as VERSION
 
 
 class TestFs(TestCase):
@@ -11,13 +10,13 @@ class TestFs(TestCase):
 
     @patch('os.path.exists')
     def test_exists(self, result):
-        ''' Test fs.exists works. '''
+        ''' Test fs.exists() works. '''
         filename = 'somefile'
         fs.exists(filename)
         result.assert_called_with(filename)
 
     def test_read(self):
-        ''' Test fs.read works. '''
+        ''' Test fs.read() works. '''
         filename = 'somefile'
         data = 'somedata'
 
@@ -26,7 +25,7 @@ class TestFs(TestCase):
             mock_file.assert_called_with(filename, 'r')
 
     def test_write(self):
-        ''' Test fs.write works. '''
+        ''' Test fs.write() works. '''
         filename = 'somefile'
         data = 'somedata'
         m = mock_open()
