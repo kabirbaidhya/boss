@@ -6,7 +6,7 @@ import requests
 from ..config import get as _get_config
 
 DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE = 'Finished deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
 
 
 def config():
