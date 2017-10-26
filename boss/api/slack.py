@@ -55,23 +55,10 @@ def notify_deploying(**params):
     )
 
     payload = {
-        'text': text,
         'attachments': [
             {
-                'title': 'Deploying',
                 'color': config()['deploying_color'],
-                'fields': [
-                    {
-                        'title': 'Branch',
-                        'value': branch_link,
-                        'short': True
-                    },
-                    {
-                        'title': 'To',
-                        'value': server_link,
-                        'short': True
-                    }
-                ]
+                'text': text
             }
         ]
     }
@@ -100,23 +87,10 @@ def notify_deployed(**params):
     )
 
     payload = {
-        'text': text,
         'attachments': [
             {
-                'title': 'Finished Deploying',
                 'color': config()['deployed_color'],
-                'fields': [
-                    {
-                        'title': 'Branch',
-                        'value': branch_link,
-                        'short': True
-                    },
-                    {
-                        'title': 'To',
-                        'value': server_link,
-                        'short': True
-                    }
-                ]
+                'text': text
             }
         ]
     }
