@@ -82,6 +82,7 @@ def notify_deployed(**params):
     )
 
     text = DEPLOYED_SUCCESS_MESSAGE.format(
+        user=params['user'],
         branch_link=branch_link,
         project_link=project_link,
         server_link=server_short_link
