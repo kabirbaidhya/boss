@@ -32,26 +32,14 @@ def test_notity_deploying():
         repository_url='http://repository-url',
         project_name='project-name',
         server_name='server-name',
+        server_link='http://server-link',
         user='user',
     )
     payload = {
-        "text": "user is deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deploying> to <http://public-url|server-name> server.",
         "attachments": [
             {
                 "color": "good",
-                "fields": [
-                    {
-                        "short": True,
-                        "value": "<http://branch-url|test_notify_deploying>",
-                        "title": "Branch"
-                    },
-                    {
-                        "short": True,
-                        "value": "<http://public-url|test-notify-deploying-host>",
-                        "title": "To"
-                    }
-                ],
-                "title": "Deploying"
+                "text": "user is deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deploying> to <http://public-url|server-name> server."
             }
         ]
     }
@@ -71,31 +59,19 @@ def test_notity_deployed():
         repository_url='http://repository-url',
         project_name='project-name',
         server_name='server-name',
-        user='user',
+        server_link='http://server-link',
+        user='user'
     )
     payload = {
-        "text": "user is deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deployed> to <http://public-url|server-name> server.",
         "attachments": [
             {
-                "color": "good",
-                "fields": [
-                    {
-                        "short": True,
-                        "value": "<http://branch-url|test_notify_deployed>",
-                        "title": "Branch"
-                    },
-                    {
-                        "short": True,
-                        "value": "<http://public-url|test-notify-deployed-host>",
-                        "title": "To"
-                    }
-                ],
-                "title": "Deploying"
+                "color": "#764FA5",
+                "text": "user finished deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deployed> to <http://public-url|server-name> server."
             }
         ]
     }
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
-        slack.notify_deploying(**notify_params)
+        slack.notify_deployed(**notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)

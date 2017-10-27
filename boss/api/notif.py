@@ -2,8 +2,6 @@
 Notification API module.
 '''
 
-from fabric.colors import cyan
-
 from . import slack
 from . import hipchat
 from ..util import remote_info

@@ -6,7 +6,7 @@ import requests
 from ..config import get as _get_config
 
 DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE = 'Finished deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
 
 
 def config():
@@ -82,6 +82,7 @@ def notify_deployed(**params):
     )
 
     text = DEPLOYED_SUCCESS_MESSAGE.format(
+        user=params['user'],
         branch_link=branch_link,
         project_link=project_link,
         server_link=server_short_link
