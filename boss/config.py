@@ -2,10 +2,11 @@
 
 import os
 from copy import deepcopy
+from fabric.colors import cyan
 
 import yaml
 import dotenv
-from .util import halt, merge
+from .util import halt, merge, info
 from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE, PRESET_SPECIFIC_DEFAULTS
 _config = deepcopy(DEFAULT_CONFIG)
 
@@ -30,9 +31,11 @@ def resolve_dotenv_file(path, stage=None):
     fallback_path = os.path.join(path, '.env')
 
     if os.path.exists(dotenv_path):
+        info('Resolving env file: {}'.format(cyan(dotenv_path)))
         dotenv.load_dotenv(dotenv_path)
 
     elif os.path.exists(fallback_path):
+        info('Resolving env file: {}'.format(cyan(dotenv_path)))
         dotenv.load_dotenv(fallback_path)
 
 
