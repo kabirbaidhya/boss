@@ -23,7 +23,7 @@ publish() {
 
 test() {
   echo "Running tests"
-  python -m pytest
+  python -m pytest -s
 }
 
 testw() {
@@ -31,7 +31,7 @@ testw() {
   # Install it with `npm install -g chokidar-cli if you haven't.
   # https://github.com/kimmobrunfeldt/chokidar-cli
   echo "Running tests (watch mode)"
-  chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest"
+  chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest -s"
 }
 
 changelog() {
