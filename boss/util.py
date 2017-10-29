@@ -71,7 +71,10 @@ def is_string(obj):
 
 def is_iterable(obj):
     ''' Check if the object is iterable. '''
-    return hasattr(obj, '__iter__')
+    has_iter = hasattr(obj, '__iter__')
+    has_get_item = hasattr(obj, '__getitem__')
+
+    return has_iter or has_get_item
 
 
 def merge(dict1, dict2):
