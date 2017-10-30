@@ -10,12 +10,14 @@ from boss.util import (
     is_iterable
 )
 
+
 def test_halt():
     ''' Test for boss.util.halt() '''
     message = 'Test message'
 
     with pytest.raises(SystemExit, match=message):
         halt(message)
+
 
 def test_echo(capsys):
     ''' Test for boss.util.echo() '''
@@ -26,6 +28,7 @@ def test_echo(capsys):
 
     assert message in out
 
+
 def test_info(capsys):
     ''' Test for boss.util.info() '''
     message = 'Test message'
@@ -34,6 +37,7 @@ def test_info(capsys):
     out, _ = capsys.readouterr()
 
     assert message in out
+
 
 def test_merge_v0():
     '''
@@ -69,6 +73,7 @@ def test_merge_v0():
 
     assert merged == expectedmerge
 
+
 def test_merge_v1():
     '''
     Test for boss.util.merge()
@@ -101,6 +106,7 @@ def test_merge_v1():
     merged = merge(dict1, dict2)
 
     assert merged == expectedmerge
+
 
 def test_is_iterable_v0():
     ''' Test for boss.util.is_iterable() '''
