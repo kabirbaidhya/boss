@@ -65,7 +65,7 @@ $ fab prod run:logs
 
 This is a generic deployment preset, where the remote host also contains the project source code and the git repository. The deploy task would synchronize the remote with the latest changes of the provided branch from the origin. It then builds the project and restarts the service if needed.
 
-This is general and could be used for deploying any kind of projects and languages. You just need to specify the relevant `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
+This is general and language agnostic so it can be used for deploying any kind of project. You just need to specify the relevant `build` script to build your project in the remote and if it requires service restart then you'll need to define a `reload` script as well.
 
 You'll need to set the deployment preset as `remote-source` in your configuration.
 
@@ -106,7 +106,7 @@ notifications:
     endpoint: ${BOSS_SLACK_ENDPOINT}
 ```
 
-The above configuration is specific to nodejs project deployment. But you can deploy projects built with other languages like PHP, python, java etc too. All you need to do is change the scripts `install`, `build`, `reload`.
+The above configuration is specific to a [Node.js](https://nodejs.org/en/) project environment, but you can also deploy projects built with other languages like PHP, Python, Java etc. All you need to do is change the scripts `install`, `build`, `reload`.
 
 #### Available tasks
 You can check the available tasks for `remote-source` preset with `fab --list`.
@@ -134,14 +134,14 @@ Now to deploy the the application to the `prod` server that you've configured in
  ➜ fab prod deploy
 ```
 
-This would deploy the default branch `master` in this case. In case you need to deploy specific branch, you provide that too.
+This would deploy the default branch `master` in this case. You can also provide a specific branch to deploy, as follows:
 ```bash
  ➜ fab prod deploy:branch=my-branch
 ```
 
 ### 2. Web Deployment
 
-This deployment is useful for deploying the web apps (react, angular, vue etc) or static files to the remote server. This preset assumes the static files are served via a web server on the remote host eg: nginx, apache etc. Here, the source code is built locally and only the `dist` or `build` is uploaded and deployed to the server.
+This deployment is useful for deploying the web apps (React, Angular, Vue etc) or static files to the remote server. This preset assumes the static files are served via a web server on the remote host eg: nginx, apache etc. Here, the source code is built locally and only the `dist` or `build` is uploaded and deployed to the server.
 
 The deployment process is zero-downtime, just like [capistrano](https://github.com/capistrano/capistrano).
 
@@ -181,11 +181,11 @@ notifications:
     endpoint: ${BOSS_SLACK_ENDPOINT}
 ```
 
-The above configuration would work for any kind of web projects (eg: react, angular, ember, vue, vanila js etc) as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server.
+The above configuration would work for any kind of web projects as long as it generates the build in static files (HTML, CSS, JS, media) that could be served via a web server.
 
-You may define two scripts `install` and `build` in your `boss.yml`, to install project dependencies and build the source respectively. For instance: if you've created your application using [`create-react-app`](https://github.com/facebookincubator/create-react-app), you can set these to `npm install` and `npm run build` as shown in above config.
+You can define two scripts `install` and `build` in your `boss.yml`, to install project dependencies and build the source respectively. For instance: if you've created your application using [`create-react-app`](https://github.com/facebookincubator/create-react-app), you can set these to `npm install` and `npm run build` as shown in above config.
 
-And you have to set the local directory to which the build is generated when the `build` script is run, in the `deployment.build_dir`. In our case this is `build/` directory.
+You also have to set the location of the output directory for the `build` script as `deployment.build_dir`. In our case, this would be the `build/` directory.
 
 #### Available tasks
 You can check the available tasks for this preset with `fab --list`.
@@ -207,14 +207,14 @@ Available commands:
 ```
 
 #### Remote Setup
-Now you can run `setup` task on the remote to setup the remote host for the first time for deployment.
+For the first time, you can configure the remote host for deployment using the `setup` task.
 
 ```bash
  ➜ fab prod setup
 ```
 This will create necessary files and directories on the remote under the provided `base_dir` path. In our case the base directory will be `/app/deployment`.
 
-Once, the `setup` task completes you should see message like this:
+Once, the `setup` task completes you should see a message like this:
 
 ```
 Remote is setup and is ready for deployment.
@@ -223,10 +223,10 @@ Deployed build will point to /app/deployment/current.
 For serving the latest build, please set your web server document root to /app/deployment/current.
 ```
 
-Now you'll need to configure your web server document root on the remote host to the `current` symlink created under the `base_dir` path. This symlink will point to the latest build when you deploy your app.
+Now you'll need to set your web server document root on the remote host to the `current` symlink created under the `base_dir` path. This symlink will point to the latest build when you deploy your app.
 
 #### Web Server Config
-If you're using a web server like nginx. You can set the document root like this:
+If you're using a web server like nginx, you can set the document root like this:
 
 ```
 # Sample nginx Configuration.
@@ -243,7 +243,7 @@ server {
 ```
 
 #### Deploy
-You can use the deploy task to deploy the app to the remote server.
+You can use the `deploy` task to deploy the app to the remote server.
 
 Here, first the `deploy` task would trigger the `install` and `build` scripts to build the project locally, after which the built directory configured in `deployment.build_dir` would be tar-zipped and uploaded to the remote host via SSH.
 
@@ -259,8 +259,8 @@ If you're using `git` in your project, you need to make sure you did `checkout` 
  ➜ fab prod deploy
 ```
 
-### 3. Node Deployment
-Node Project Deployment.
+### 3. Node.js Deployment
+Node.js Project Deployment.
 More information, examples and documentation coming soon :).
 
 ## Inspiration
@@ -271,7 +271,7 @@ More information, examples and documentation coming soon :).
 Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
 
 ## Contributing
-All kinds of contributions are welcome. Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose PRs, report bugs and improvements.
+All kinds of contributions are welcome. Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose PRs, report bugs and suggest improvements.
 
 ## Change Log
 Check the [CHANGELOG](CHANGELOG.md) for full release history.
