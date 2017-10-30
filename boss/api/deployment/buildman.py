@@ -46,8 +46,6 @@ def resolve_local_build_dir():
     config = get_stage_config(shell.get_stage())
     build_dir = config['deployment']['build_dir']
 
-    print('build dir = ', build_dir)
-
     if not build_dir:
         # Look up for fallback local directories, if it's not provided.
         for folder in LOCAL_BUILD_DIRECTORIES:
