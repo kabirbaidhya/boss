@@ -21,6 +21,11 @@ publish() {
   python setup.py sdist upload -r pypi
 }
 
+pep8() {
+  echo "Running autopep8"
+  autopep8 --in-place --aggressive --aggressive *.py
+}
+
 test() {
   echo "Running tests"
   python -m pytest -s
