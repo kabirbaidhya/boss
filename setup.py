@@ -64,6 +64,7 @@ setup(
         'fabric==1.13.2',
         'pyyaml==3.12',
         'requests==2.17.3',
+        'inquirer==2.2.0',
         'python-dotenv==0.6.5',
         'terminaltables==3.1.0',
         'click==6.7'
