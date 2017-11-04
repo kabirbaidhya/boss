@@ -3,6 +3,7 @@ import click
 
 from .core import initializer
 
+INTERACTIVE_INIT_HELP = 'Start an interactive session to compose config file'
 
 @click.version_option(__version__, message='%(version)s')
 @click.group()
@@ -12,9 +13,10 @@ def main():
 
 
 @main.command('init')
-def init():
+@click.option('--interactive', '-i', is_flag=True, help=INTERACTIVE_INIT_HELP)
+def init(interactive):
     ''' Initialize a project directory for boss. '''
-    files_written = initializer.initialize()
+    files_written = initializer.initialize(interactive)
 
     if not files_written:
         click.echo('Already initialized.')

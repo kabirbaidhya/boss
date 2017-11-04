@@ -1,5 +1,6 @@
 project_name: {project_name}
 user: {user}
+port: {ssh_port}
 deployment:
     preset: {deployment_preset}
     base_dir: {deployment_base_dir}
