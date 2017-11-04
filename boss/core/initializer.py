@@ -45,7 +45,7 @@ def initialize_config(interactive):
         tmpl_params = {
             'project_name': DEFAULT_CONFIG['project_name'],
             'user': DEFAULT_CONFIG['user'],
-            'port': DEFAULT_CONFIG['port'],
+            'ssh_port': DEFAULT_CONFIG['port'],
             'deployment_preset': DEFAULT_CONFIG['deployment']['preset'],
             'deployment_base_dir': DEFAULT_CONFIG['deployment']['base_dir']
         }
