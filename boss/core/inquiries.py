@@ -16,9 +16,15 @@ def get_initial_config_params():
 
         Text(
             'user',
-            message='Enter your username',
+            message='Enter your SSH username',
             default=DEFAULT_CONFIG['user']
         ),
+
+        Text(
+            'ssh_port',
+            message='Enter SSH port',
+            default=DEFAULT_CONFIG['port']
+            ),
 
         List(
             'deployment_preset',
@@ -28,7 +34,7 @@ def get_initial_config_params():
 
         Text(
             'deployment_base_dir',
-            message="Enter your base directory for deployment",
+            message='Enter your base directory for deployment',
             default=DEFAULT_CONFIG['deployment']['base_dir']
             )
     ]
