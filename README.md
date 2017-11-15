@@ -3,7 +3,7 @@
     <img style="width: 128px;" src="assets/boss.svg">
   </a>
   <br/>
-  
+
   # boss
 
   [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
@@ -23,9 +23,6 @@
 ```bash
 $ pip install boss-cli==1.0.0-alpha.8
 ```
-
-## Usage
-Coming soon ;)
 
 ## Configuration
 
