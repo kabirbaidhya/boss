@@ -46,19 +46,18 @@ def resolve_local_build_dir():
     config = get_stage_config(shell.get_stage())
     build_dir = config['deployment']['build_dir']
 
-    if not build_dir:
-        # Look up for fallback local directories, if it's not provided.
-        for folder in LOCAL_BUILD_DIRECTORIES:
-            if os.path.exists(folder):
-                return folder
-
-    elif build_dir and os.path.exists(build_dir):
-        # If build_dir is provided and it exists, return it.
+    # If build_dir is configured, just return it.
+    if build_dir:
         return build_dir
 
-    halt('Build directory doesn\'t exist "{}"'.format(build_dir))
+    # Look up for fallback local directories, if build_dir isn't provided.
+    for folder in LOCAL_BUILD_DIRECTORIES:
+        if os.path.exists(folder):
+            return folder
 
-    return None
+    # If fallback directories don't exist either,
+    # return one of the default build directories.
+    return LOCAL_BUILD_DIRECTORIES[0]
 
 
 def get_release_dir():
