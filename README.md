@@ -21,8 +21,7 @@
 ## Installation
 
 ```bash
-$ pip install fabric
-$ pip install boss-cli
+$ pip install boss-cli==1.0.0-alpha.8
 ```
 
 ## Usage
