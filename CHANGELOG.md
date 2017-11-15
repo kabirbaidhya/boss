@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.0-alpha.8](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.8) (2017-11-16)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.7...v1.0.0-alpha.8)
+
+**Implemented enhancements:**
+
+- Support for '--interactive' option for 'boss init' [\#75](https://github.com/kabirbaidhya/boss/pull/75) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([srishanbhattarai](https://github.com/srishanbhattarai))
+
+**Fixed bugs:**
+
+- Fix the build directory not found issue on deployment [\#77](https://github.com/kabirbaidhya/boss/pull/77) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Fix the misleading resolving env file message [\#76](https://github.com/kabirbaidhya/boss/pull/76) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.7](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.7) (2017-10-30)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.6...v1.0.0-alpha.7)
 
