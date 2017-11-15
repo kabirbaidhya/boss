@@ -35,7 +35,7 @@ def resolve_dotenv_file(path, stage=None):
         dotenv.load_dotenv(dotenv_path)
 
     elif os.path.exists(fallback_path):
-        info('Resolving env file: {}'.format(cyan(dotenv_path)))
+        info('Resolving env file: {}'.format(cyan(fallback_path)))
         dotenv.load_dotenv(fallback_path)
 
 
