@@ -66,7 +66,11 @@ DEFAULT_CONFIG = {
 # Preset specific defaults
 PSD = {}
 PSD[presets.REMOTE_SOURCE] = {}
-PSD[presets.WEB] = {}
+PSD[presets.WEB] = {
+    'deployment': {
+        'cache_builds': False
+    }
+}
 PSD[presets.NODE] = {
     'deployment': {
         'include_files': [
