@@ -68,6 +68,9 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
 
             return get()
 
+    except KeyError:
+        halt('Invalid configuration file "{}"'.format(filename))
+
     except IOError:
         halt('Error loading config file "%s"' % filename)
 
