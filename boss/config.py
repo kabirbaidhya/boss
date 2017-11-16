@@ -54,6 +54,26 @@ def get_deployment_preset(raw_config):
     return DEFAULT_CONFIG['deployment']['preset']
 
 
+def merge_config(raw_config):
+    '''
+    Merge the default and preset specific default configs,
+    to the raw configuration, add stage default configuration
+    to each stage too and return the merged result.
+    '''
+    preset = get_deployment_preset(raw_config)
+    preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
+    all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
+    merged_config = merge(all_defaults, raw_config)
+
+    # Add base config to each of the stage config
+    for (stage_name, _) in merged_config['stages'].items():
+        merged_config['stages'][stage_name].update(
+            get_stage_config(stage_name)
+        )
+
+    return merged_config
+
+
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
@@ -64,21 +84,11 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
             loaded_config = os.path.expandvars(file_contents.read())
 
             # Parse the yaml configuration.
+            # And merge it with the defaults before it's used everywhere.
             loaded_config = yaml.load(loaded_config)
-
-            # Merge the default config along with preset specific defaults
-            # to the loaded config.
-            preset = get_deployment_preset(loaded_config)
-            preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
-            all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
-            merged_config = merge(all_defaults, loaded_config)
+            merged_config = merge_config(loaded_config)
 
             _config.update(merged_config)
-
-            # Add base config to each of the stage config
-            for (stage_name, _) in _config['stages'].items():
-                _config['stages'][stage_name].update(
-                    get_stage_config(stage_name))
 
             return get()
 
