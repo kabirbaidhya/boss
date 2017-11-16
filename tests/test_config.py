@@ -93,3 +93,40 @@ def test_merge_config_that_default_config_could_be_overridden():
     # Not overridden, uses default values.
     assert result['user'] == DEFAULT_CONFIG['user']
     assert result['deployment']['preset'] == DEFAULT_CONFIG['deployment']['preset']
+
+
+def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
+    '''
+    Ensure the base deployment config and basic config are merged to
+    each of the stage configurations
+    '''
+    raw_config = {
+        'port': '1234',
+        'deployment': {
+            'base_dir': '~/some/directory'
+        },
+        'stages': {
+            'stage1': {
+                'host': 'stage1.example.com'
+            },
+            'stage2': {
+                'host': 'stage2.example.com',
+                'port': '4321'
+            }
+        }
+    }
+    result = merge_config(raw_config)
+
+    # Stage1
+    stage1_config = result['stages']['stage1']
+    assert stage1_config['port'] == raw_config['port']
+    assert stage1_config['host'] == raw_config['stages']['stage1']['host']
+    assert stage1_config['deployment']['base_dir'] == raw_config['deployment']['base_dir']
+    assert stage1_config['deployment']['build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
+
+    # Stage 2
+    stage2_config = result['stages']['stage2']
+    assert stage2_config['port'] == raw_config['stages']['stage2']['port']
+    assert stage2_config['host'] == raw_config['stages']['stage2']['host']
+    assert stage2_config['deployment']['base_dir'] == raw_config['deployment']['base_dir']
+    assert stage2_config['deployment']['build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
