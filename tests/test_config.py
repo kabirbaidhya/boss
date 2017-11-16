@@ -59,3 +59,15 @@ def test_merge_config_that_by_default_cache_builds_is_false_if_preset_web():
     merged_config = merge_config(raw_config)
 
     assert merged_config['deployment']['cache_builds'] is False
+
+
+def test_merge_config_that_default_config_values_are_put():
+    '''
+    Ensure default values are put if config options are not provided.
+    '''
+    raw_config = {}
+    result = merge_config(raw_config)
+
+    assert result['user'] == DEFAULT_CONFIG['user']
+    assert result['port'] == DEFAULT_CONFIG['port']
+    assert result['deployment'] == DEFAULT_CONFIG['deployment']
