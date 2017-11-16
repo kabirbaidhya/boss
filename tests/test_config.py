@@ -1,6 +1,10 @@
 ''' Unit tests for boss.config module. '''
 
-from boss.config import get_deployment_preset, DEFAULT_CONFIG
+from boss.constants import DEFAULT_CONFIG, PRESET_WEB
+from boss.config import (
+    merge_config,
+    get_deployment_preset
+)
 
 
 def test_get_deployment_preset_returns_configured_preset():
@@ -29,3 +33,15 @@ def test_get_deployment_preset_returns_default_preset_if_not_set():
     preset = get_deployment_preset(raw_config)
 
     assert preset == DEFAULT_CONFIG['deployment']['preset']
+
+
+def test_merge_config_that_default_config_values_are_put():
+    '''
+    Ensure default values are put if config options are not provided.
+    '''
+    raw_config = {}
+    result = merge_config(raw_config)
+
+    assert result['user'] == DEFAULT_CONFIG['user']
+    assert result['port'] == DEFAULT_CONFIG['port']
+    assert result['deployment'] == DEFAULT_CONFIG['deployment']
