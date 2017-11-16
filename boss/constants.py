@@ -1,5 +1,7 @@
 ''' Application wide common constants module. '''
 
+from os.path import expanduser
+
 # Predefined deployment presets
 PRESET_WEB = 'web'
 PRESET_NODE = 'node'
@@ -8,6 +10,11 @@ PRESET_REMOTE_SOURCE = 'remote-source'
 # Default boss configuration
 DEFAULT_CONFIG_FILE = 'boss.yml'
 FABFILE_PATH = 'fabfile.py'
+
+# Boss paths
+BOSS_HOME_PATH = expanduser('~/.boss')
+BOSS_CACHE_PATH = BOSS_HOME_PATH + '/cache'
+
 DEFAULT_CONFIG = {
     'user': 'boss',
     'port': 22,
