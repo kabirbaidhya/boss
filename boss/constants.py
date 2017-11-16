@@ -26,6 +26,7 @@ DEFAULT_CONFIG = {
         'preset': PRESET_REMOTE_SOURCE,
         'build_dir': None,
         'base_dir': '~/boss',
+        'cache_builds': True,
         'keep_builds': 5,
         'include_files': []
     },
