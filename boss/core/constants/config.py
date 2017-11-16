@@ -31,6 +31,7 @@ DEFAULT_CONFIG = {
         'preset': presets.REMOTE_SOURCE,
         'build_dir': None,
         'base_dir': '~/deployment',
+        'cache_builds': True,
         'keep_builds': 5,
         'include_files': []
     },
