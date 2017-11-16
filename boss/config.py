@@ -63,16 +63,16 @@ def merge_config(raw_config):
     preset = get_deployment_preset(raw_config)
     preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
     all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
-    merged_config = merge(all_defaults, raw_config)
-    base_config = get_base_config()
+    result = merge(all_defaults, raw_config)
+    base_config = get_base_config(result)
 
     # Add base config to each of the stage config
-    for (stage_name, _) in merged_config['stages'].items():
-        stage_config = merged_config['stages'][stage_name]
+    for (stage_name, _) in result['stages'].items():
+        stage_config = result['stages'][stage_name]
         merged_stage_config = merge(base_config, stage_config)
-        merged_config['stages'][stage_name].update(merged_stage_config)
+        result['stages'][stage_name].update(merged_stage_config)
 
-    return merged_config
+    return result
 
 
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
@@ -100,15 +100,17 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
         halt('Error loading config file "%s"' % filename)
 
 
-def get_base_config():
+def get_base_config(resolved_config=None):
     ''' Get the base configuration. '''
+    config = resolved_config or _config
+
     return {
-        'user': _config.get('user'),
-        'port': _config.get('port'),
-        'branch': _config.get('branch'),
-        'app_dir': _config.get('app_dir'),
-        'repository_url': _config.get('repository_url'),
-        'deployment': _config.get('deployment')
+        'user': config.get('user'),
+        'port': config.get('port'),
+        'branch': config.get('branch'),
+        'app_dir': config.get('app_dir'),
+        'repository_url': config.get('repository_url'),
+        'deployment': config.get('deployment')
     }
 
 
