@@ -39,6 +39,21 @@ def resolve_dotenv_file(path, stage=None):
         dotenv.load_dotenv(fallback_path)
 
 
+def get_deployment_preset(raw_config):
+    ''' Get the deployment preset for a raw config. '''
+    has_preset = (
+        isinstance(raw_config.get('deployment'), dict) and
+        'preset' in raw_config.get('deployment')
+    )
+
+    # If preset is configured return it.
+    if has_preset:
+        return raw_config['deployment']['preset']
+
+    # Else return the default deployment config preset.
+    return DEFAULT_CONFIG['deployment']['preset']
+
+
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
@@ -53,8 +68,7 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
 
             # Merge the default config along with preset specific defaults
             # to the loaded config.
-            preset = loaded_config['deployment'].get('preset') or DEFAULT_CONFIG[
-                'deployment']['preset']
+            preset = get_deployment_preset(loaded_config)
             preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
             all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
             merged_config = merge(all_defaults, loaded_config)
