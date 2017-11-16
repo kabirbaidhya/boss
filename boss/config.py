@@ -64,12 +64,13 @@ def merge_config(raw_config):
     preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
     all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
     merged_config = merge(all_defaults, raw_config)
+    base_config = get_base_config()
 
     # Add base config to each of the stage config
     for (stage_name, _) in merged_config['stages'].items():
-        merged_config['stages'][stage_name].update(
-            get_stage_config(stage_name)
-        )
+        stage_config = merged_config['stages'][stage_name]
+        merged_stage_config = merge(base_config, stage_config)
+        merged_config['stages'][stage_name].update(merged_stage_config)
 
     return merged_config
 
@@ -114,10 +115,7 @@ def get_base_config():
 def get_stage_config(stage):
     ''' Retrieve the configuration for the given stage. '''
     try:
-        stage_config = _config['stages'][stage]
-        base_config = get_base_config()
-
-        return merge(base_config, stage_config)
+        return _config['stages'][stage]
     except KeyError:
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
