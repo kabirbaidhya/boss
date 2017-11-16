@@ -9,6 +9,7 @@ from boss.constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE, FABFILE_PATH
 
 from boss.core.inquiries import get_initial_config_params
 
+
 def initialize(interactive):
     ''' Initialize the local project directory for boss. '''
     files_written = []
