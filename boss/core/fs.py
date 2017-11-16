@@ -2,6 +2,7 @@
 Boss core file system utilities.
 '''
 import os
+import tarfile
 
 
 def read(filename):
@@ -19,3 +20,9 @@ def write(filename, data):
 def exists(path):
     ''' Check if file path exists. '''
     return os.path.exists(path)
+
+
+def compress(source_dir, name):
+    ''' Compress a directory and build an archive (Tar zipped). '''
+    with tarfile.open(name, 'w:gz') as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
