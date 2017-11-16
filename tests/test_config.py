@@ -1,6 +1,10 @@
 ''' Unit tests for boss.config module. '''
 
-from boss.config import get_deployment_preset, DEFAULT_CONFIG
+from boss.constants import DEFAULT_CONFIG, PRESET_WEB
+from boss.config import (
+    merge_config,
+    get_deployment_preset
+)
 
 
 def test_get_deployment_preset_returns_configured_preset():
@@ -29,3 +33,29 @@ def test_get_deployment_preset_returns_default_preset_if_not_set():
     preset = get_deployment_preset(raw_config)
 
     assert preset == DEFAULT_CONFIG['deployment']['preset']
+
+
+def test_merge_config_that_by_default_cache_builds_is_true():
+    '''
+    Ensure build caching is turned on, i.e
+    cache_build=True by default if not set.
+    '''
+    raw_config = {}
+    merged_config = merge_config(raw_config)
+
+    assert merged_config['deployment']['cache_builds'] is True
+
+
+def test_merge_config_that_by_default_cache_builds_is_false_if_preset_web():
+    '''
+    Ensure build caching is turned off for web preset, i.e
+    cache_build=False by default if not set.
+    '''
+    raw_config = {
+        'deployment': {
+            'preset': PRESET_WEB
+        }
+    }
+    merged_config = merge_config(raw_config)
+
+    assert merged_config['deployment']['cache_builds'] is False
