@@ -63,10 +63,15 @@ SCRIPT_INSTALL_REMOTE = 'install_remote'
 SCRIPT_START_OR_RELOAD = 'start_or_reload'
 
 
-# Preset specific defaults
+# Preset specific default configurations.
+# These will override the DEFAULT_CONFIG values for the configured preset.
 PRESET_SPECIFIC_DEFAULTS = {
     PRESET_REMOTE_SOURCE: {},
-    PRESET_WEB: {},
+    PRESET_WEB: {
+        'deployment': {
+            'cache_builds': False
+        }
+    },
     PRESET_NODE: {
         'deployment': {
             'include_files': [
