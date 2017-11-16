@@ -2,10 +2,17 @@
 Module to deal with the initialization of environment
 for boss i.e generating config files and fabfile.
 '''
+from os import mkdir
 
 from boss import BASE_PATH
 from boss.core import fs
-from boss.constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE, FABFILE_PATH
+from boss.constants import (
+    FABFILE_PATH,
+    BOSS_HOME_PATH,
+    BOSS_CACHE_PATH,
+    DEFAULT_CONFIG,
+    DEFAULT_CONFIG_FILE
+)
 
 from boss.core.inquiries import get_initial_config_params
 
@@ -70,3 +77,15 @@ def initialize_fabfile():
         fs.write(fabfile, fabfile_tmpl)
 
         return fabfile
+
+
+def setup_boss_home():
+    '''
+    Sets up boss home directory on the user's local machine.
+    If the directory already exists, it's skipped.
+    '''
+    if not fs.exists(BOSS_HOME_PATH):
+        mkdir(BOSS_HOME_PATH)
+
+    if not fs.exists(BOSS_CACHE_PATH):
+        mkdir(BOSS_CACHE_PATH)
