@@ -71,3 +71,25 @@ def test_merge_config_that_default_config_values_are_put():
     assert result['user'] == DEFAULT_CONFIG['user']
     assert result['port'] == DEFAULT_CONFIG['port']
     assert result['deployment'] == DEFAULT_CONFIG['deployment']
+
+
+def test_merge_config_that_default_config_could_be_overridden():
+    '''
+    Ensure default config values could be overridden for the
+    config options that are set, however the rest of the options
+    that aren't set would still take default values.
+    '''
+    raw_config = {
+        'port': '1234',
+        'deployment': {
+            'base_dir': '~/some/directory'
+        }
+    }
+    result = merge_config(raw_config)
+
+    assert result['port'] == raw_config['port']
+    assert result['deployment']['base_dir'] == raw_config['deployment']['base_dir']
+
+    # Not overridden, uses default values.
+    assert result['user'] == DEFAULT_CONFIG['user']
+    assert result['deployment']['preset'] == DEFAULT_CONFIG['deployment']['preset']
