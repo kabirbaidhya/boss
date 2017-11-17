@@ -1,6 +1,13 @@
 # Change Log
 
-## [v1.0.0-alpha.8](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.8) (2017-11-16)
+## [v1.0.0-alpha.9](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.9) (2017-11-17)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.8...v1.0.0-alpha.9)
+
+**Fixed bugs:**
+
+- Fix deployment finish notification message issue [\#79](https://github.com/kabirbaidhya/boss/pull/79) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+## [v1.0.0-alpha.8](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.8) (2017-11-15)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.7...v1.0.0-alpha.8)
 
 **Implemented enhancements:**
