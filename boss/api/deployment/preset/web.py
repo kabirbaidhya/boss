@@ -136,6 +136,7 @@ def deploy():
 
     # Send deployment finished notification.
     notif.send(notif.DEPLOYMENT_FINISHED, {
+        'user': deployer_user,
         'branch': branch,
         'stage': stage
     })

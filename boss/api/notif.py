@@ -68,6 +68,7 @@ def send_deployed_notification(params):
     # Notify on slack
     if slack.is_enabled():
         slack.notify_deployed(
+            user=params['user'],
             branch=params['branch'],
             branch_url=get_branch_url(params['branch']),
             project_name=config['project_name'],
@@ -81,6 +82,7 @@ def send_deployed_notification(params):
     # Notify on hipchat
     if hipchat.is_enabled():
         hipchat.notify_deployed(
+            user=params['user'],
             branch=params['branch'],
             branch_url=get_branch_url(params['branch']),
             project_name=config['project_name'],
