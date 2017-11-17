@@ -22,9 +22,10 @@ from boss.api import git, notif, shell, runner
 def deploy(branch=None):
     ''' Deploy to remote source. '''
     stage = shell.get_stage()
+    deployer_user = shell.get_user()
     branch = branch or fallback_branch(stage)
     notif.send(notif.DEPLOYMENT_STARTED, {
-        'user': shell.get_user(),
+        'user': deployer_user,
         'branch': branch,
         'stage': stage
     })
@@ -38,6 +39,7 @@ def deploy(branch=None):
     reload_service()
 
     notif.send(notif.DEPLOYMENT_FINISHED, {
+        'user': deployer_user,
         'branch': branch,
         'stage': stage
     })
