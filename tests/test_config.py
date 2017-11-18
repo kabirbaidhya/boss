@@ -2,6 +2,7 @@
 
 from mock import patch
 from boss.constants import DEFAULT_CONFIG
+from boss.core.util.string import strip_ansi
 from boss.config import (
     load,
     merge_config,
@@ -146,13 +147,16 @@ def test_load(read_mock):
 
 @patch('boss.config.info')
 @patch('dotenv.load_dotenv')
-def test_resolve_dotenv_file_loads_dotenv_file_if_it_exists(load_dotenv_mock, _):
+def test_resolve_dotenv_file_loads_dotenv_file_if_it_exists(load_dotenv_mock, info_m):
     ''' Test .env file is loaded if it exists. '''
     dotenv_path = '.env'
 
     with patch('boss.core.fs.exists', side_effect=lambda p: p == dotenv_path):
         resolve_dotenv_file('')
         load_dotenv_mock.assert_called_with(dotenv_path)
+        msg = strip_ansi(info_m.call_args[0][0])
+
+        assert msg == 'Resolving env file: .env'
 
 
 @patch('boss.config.info')
@@ -167,24 +171,25 @@ def test_resolve_dotenv_file_is_not_loaded_if_not_exists(load_dotenv_m, exists_m
 
 @patch('boss.config.info')
 @patch('dotenv.load_dotenv')
-def test_resolve_dotenv_file_loads_stage_specific_env_file(load_dotenv_m, _):
+def test_resolve_dotenv_file_loads_stage_specific_env_file(load_dotenv_m, info_m):
     ''' Test .env file is loaded if it exists. '''
-    dotenv_path = '.env.production'
     stage = 'production'
 
     def exists(p):
-        return p == dotenv_path
+        return p == '.env.production'
 
     with patch('boss.core.fs.exists', side_effect=exists):
         resolve_dotenv_file('', stage)
-        load_dotenv_m.assert_called_with(dotenv_path)
+        load_dotenv_m.assert_called_with('.env.production')
+        msg = strip_ansi(info_m.call_args[0][0])
+
+        assert msg == 'Resolving env file: .env.production'
 
 
 @patch('boss.config.info')
 @patch('dotenv.load_dotenv')
 def test_resolve_dotenv_file_loads_env_file_if_stage_specific_file_doesnt_exist(
-        load_dotenv_m,
-        _):
+        load_dotenv_m, info_m):
     '''
     Test .env file is loaded as a fallback option,
     if stage is provided but stage specific env file doesn't exist.
@@ -198,3 +203,7 @@ def test_resolve_dotenv_file_loads_env_file_if_stage_specific_file_doesnt_exist(
     with patch('boss.core.fs.exists', side_effect=exists):
         resolve_dotenv_file('', stage)
         load_dotenv_m.assert_called_with('.env')
+
+        msg = strip_ansi(info_m.call_args[0][0])
+
+        assert msg == 'Resolving env file: .env'
