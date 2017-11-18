@@ -6,6 +6,7 @@ from fabric.colors import cyan
 
 import yaml
 import dotenv
+from .core import fs
 from .util import halt, merge, info
 from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE, PRESET_SPECIFIC_DEFAULTS
 _config = deepcopy(DEFAULT_CONFIG)
@@ -78,20 +79,21 @@ def merge_config(raw_config):
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
-        with open(filename) as file_contents:
-            resolve_dotenv_file(os.path.dirname(filename), stage)
+        # pass
+        file_contents = fs.read(filename)
+        resolve_dotenv_file(os.path.dirname(filename), stage)
 
-            # Expand the environment variables used in the yaml config.
-            loaded_config = os.path.expandvars(file_contents.read())
+        # Expand the environment variables used in the yaml config.
+        loaded_config = os.path.expandvars(file_contents)
 
-            # Parse the yaml configuration.
-            # And merge it with the defaults before it's used everywhere.
-            loaded_config = yaml.load(loaded_config)
-            merged_config = merge_config(loaded_config)
+        # Parse the yaml configuration.
+        # And merge it with the defaults before it's used everywhere.
+        loaded_config = yaml.load(loaded_config)
+        merged_config = merge_config(loaded_config)
 
-            _config.update(merged_config)
+        _config.update(merged_config)
 
-            return get()
+        return get()
 
     except KeyError:
         halt('Invalid configuration file "{}"'.format(filename))

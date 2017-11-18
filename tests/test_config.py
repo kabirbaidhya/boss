@@ -1,10 +1,21 @@
 ''' Unit tests for boss.config module. '''
 
+from mock import patch
 from boss.constants import DEFAULT_CONFIG
 from boss.config import (
+    load,
     merge_config,
     get_deployment_preset
 )
+
+
+SAMPLE_BOSS_YAML = '''
+project_name: test-project
+user: test-user
+deployment:
+    preset: web
+    base_dir: ~/source/deployment
+'''
 
 
 def test_get_deployment_preset_returns_configured_preset():
@@ -110,3 +121,23 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
         'base_dir'] == raw_config['deployment']['base_dir']
     assert stage2_config['deployment'][
         'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
+
+
+@patch('boss.core.fs.read')
+def test_load(read_mock):
+    ''' Test load() function loads yaml file correctly. '''
+    read_mock.return_value = SAMPLE_BOSS_YAML
+    config_filename = 'test.yml'
+    boss_config = load(config_filename)
+
+    read_mock.assert_called_with(config_filename)
+
+    # Configured options
+    assert boss_config['user'] == 'test-user'
+    assert boss_config['project_name'] == 'test-project'
+    assert boss_config['deployment']['preset'] == 'web'
+    assert boss_config['deployment']['base_dir'] == '~/source/deployment'
+
+    # Default values resolved
+    assert boss_config['port'] == 22
+    assert boss_config['port'] == 22
