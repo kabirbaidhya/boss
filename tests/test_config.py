@@ -1,6 +1,6 @@
 ''' Unit tests for boss.config module. '''
 
-from boss.constants import DEFAULT_CONFIG, PRESET_WEB
+from boss.constants import DEFAULT_CONFIG
 from boss.config import (
     merge_config,
     get_deployment_preset
@@ -62,11 +62,13 @@ def test_merge_config_that_default_config_could_be_overridden():
     result = merge_config(raw_config)
 
     assert result['port'] == raw_config['port']
-    assert result['deployment']['base_dir'] == raw_config['deployment']['base_dir']
+    assert result['deployment']['base_dir'] == raw_config[
+        'deployment']['base_dir']
 
     # Not overridden, uses default values.
     assert result['user'] == DEFAULT_CONFIG['user']
-    assert result['deployment']['preset'] == DEFAULT_CONFIG['deployment']['preset']
+    assert result['deployment'][
+        'preset'] == DEFAULT_CONFIG['deployment']['preset']
 
 
 def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
@@ -95,12 +97,16 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
     stage1_config = result['stages']['stage1']
     assert stage1_config['port'] == raw_config['port']
     assert stage1_config['host'] == raw_config['stages']['stage1']['host']
-    assert stage1_config['deployment']['base_dir'] == raw_config['deployment']['base_dir']
-    assert stage1_config['deployment']['build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
+    assert stage1_config['deployment'][
+        'base_dir'] == raw_config['deployment']['base_dir']
+    assert stage1_config['deployment'][
+        'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
 
     # Stage 2
     stage2_config = result['stages']['stage2']
     assert stage2_config['port'] == raw_config['stages']['stage2']['port']
     assert stage2_config['host'] == raw_config['stages']['stage2']['host']
-    assert stage2_config['deployment']['base_dir'] == raw_config['deployment']['base_dir']
-    assert stage2_config['deployment']['build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
+    assert stage2_config['deployment'][
+        'base_dir'] == raw_config['deployment']['base_dir']
+    assert stage2_config['deployment'][
+        'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
