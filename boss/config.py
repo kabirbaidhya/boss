@@ -39,6 +39,42 @@ def resolve_dotenv_file(path, stage=None):
         dotenv.load_dotenv(fallback_path)
 
 
+def get_deployment_preset(raw_config):
+    ''' Get the deployment preset for a raw config. '''
+    has_preset = (
+        isinstance(raw_config.get('deployment'), dict) and
+        'preset' in raw_config.get('deployment')
+    )
+
+    # If preset is configured return it.
+    if has_preset:
+        return raw_config['deployment']['preset']
+
+    # Else return the default deployment config preset.
+    return DEFAULT_CONFIG['deployment']['preset']
+
+
+def merge_config(raw_config):
+    '''
+    Merge the default and preset specific default configs,
+    to the raw configuration, add stage default configuration
+    to each stage too and return the merged result.
+    '''
+    preset = get_deployment_preset(raw_config)
+    preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
+    all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
+    result = merge(all_defaults, raw_config)
+    base_config = get_base_config(result)
+
+    # Add base config to each of the stage config
+    for (stage_name, _) in result['stages'].items():
+        stage_config = result['stages'][stage_name]
+        merged_stage_config = merge(base_config, stage_config)
+        result['stages'][stage_name].update(merged_stage_config)
+
+    return result
+
+
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
@@ -49,48 +85,39 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
             loaded_config = os.path.expandvars(file_contents.read())
 
             # Parse the yaml configuration.
+            # And merge it with the defaults before it's used everywhere.
             loaded_config = yaml.load(loaded_config)
-
-            # Merge the default config along with preset specific defaults
-            # to the loaded config.
-            preset = loaded_config['deployment'].get('preset') or DEFAULT_CONFIG[
-                'deployment']['preset']
-            preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
-            all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
-            merged_config = merge(all_defaults, loaded_config)
+            merged_config = merge_config(loaded_config)
 
             _config.update(merged_config)
 
-            # Add base config to each of the stage config
-            for (stage_name, _) in _config['stages'].items():
-                _config['stages'][stage_name].update(
-                    get_stage_config(stage_name))
-
             return get()
+
+    except KeyError:
+        halt('Invalid configuration file "{}"'.format(filename))
 
     except IOError:
         halt('Error loading config file "%s"' % filename)
 
 
-def get_base_config():
+def get_base_config(resolved_config=None):
     ''' Get the base configuration. '''
+    config = resolved_config or _config
+
     return {
-        'user': _config.get('user'),
-        'port': _config.get('port'),
-        'branch': _config.get('branch'),
-        'app_dir': _config.get('app_dir'),
-        'repository_url': _config.get('repository_url'),
-        'deployment': _config.get('deployment')
+        'user': config.get('user'),
+        'port': config.get('port'),
+        'branch': config.get('branch'),
+        'app_dir': config.get('app_dir'),
+        'repository_url': config.get('repository_url'),
+        'deployment': config.get('deployment')
     }
 
 
 def get_stage_config(stage):
     ''' Retrieve the configuration for the given stage. '''
     try:
-        stage_config = _config['stages'][stage]
-        base_config = get_base_config()
-
-        return merge(base_config, stage_config)
+        return _config['stages'][stage]
     except KeyError:
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()

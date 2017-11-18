@@ -5,7 +5,11 @@ from click.testing import CliRunner
 
 from boss import __version__
 from boss.cli import main as cli
-from boss.constants import DEFAULT_CONFIG_FILE, FABFILE_PATH
+from boss.constants import (
+    DEFAULT_CONFIG_FILE, FABFILE_PATH,
+    BOSS_HOME_PATH,
+    BOSS_CACHE_PATH
+)
 
 
 def test_version_option():
@@ -18,12 +22,17 @@ def test_version_option():
 
 
 def test_init_command():
-    ''' Test init command generates files. '''
+    '''
+    Test init command generates config files and
+    doees setup boss home directory.
+    '''
     runner = CliRunner()
 
     with runner.isolated_filesystem():
         result = runner.invoke(cli, ['init'])
 
         assert result.exit_code == 0
+        assert os.path.exists(BOSS_HOME_PATH)
+        assert os.path.exists(BOSS_CACHE_PATH)
         assert os.path.exists(FABFILE_PATH)
         assert os.path.exists(DEFAULT_CONFIG_FILE)

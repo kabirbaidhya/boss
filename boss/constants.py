@@ -1,5 +1,7 @@
 ''' Application wide common constants module. '''
 
+from os.path import expanduser
+
 # Predefined deployment presets
 PRESET_WEB = 'web'
 PRESET_NODE = 'node'
@@ -8,6 +10,11 @@ PRESET_REMOTE_SOURCE = 'remote-source'
 # Default boss configuration
 DEFAULT_CONFIG_FILE = 'boss.yml'
 FABFILE_PATH = 'fabfile.py'
+
+# Boss paths
+BOSS_HOME_PATH = expanduser('~/.boss')
+BOSS_CACHE_PATH = BOSS_HOME_PATH + '/cache'
+
 DEFAULT_CONFIG = {
     'user': 'boss',
     'port': 22,
@@ -26,6 +33,7 @@ DEFAULT_CONFIG = {
         'preset': PRESET_REMOTE_SOURCE,
         'build_dir': None,
         'base_dir': '~/boss',
+        'cache_builds': True,
         'keep_builds': 5,
         'include_files': []
     },
@@ -62,10 +70,15 @@ SCRIPT_INSTALL_REMOTE = 'install_remote'
 SCRIPT_START_OR_RELOAD = 'start_or_reload'
 
 
-# Preset specific defaults
+# Preset specific default configurations.
+# These will override the DEFAULT_CONFIG values for the configured preset.
 PRESET_SPECIFIC_DEFAULTS = {
     PRESET_REMOTE_SOURCE: {},
-    PRESET_WEB: {},
+    PRESET_WEB: {
+        'deployment': {
+            'cache_builds': False
+        }
+    },
     PRESET_NODE: {
         'deployment': {
             'include_files': [
