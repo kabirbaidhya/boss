@@ -149,15 +149,46 @@ def test_resolve_dotenv_file_loads_dotenv_file_if_it_exists(load_dotenv_mock):
     ''' Test .env file is loaded if it exists. '''
     dotenv_path = '.env'
 
-    with patch('os.path.exists', side_effect=lambda p: p == dotenv_path):
+    with patch('boss.core.fs.exists', side_effect=lambda p: p == dotenv_path):
         resolve_dotenv_file('')
         load_dotenv_mock.assert_called_with(dotenv_path)
 
 
-@patch('os.path.exists')
+@patch('boss.core.fs.exists')
 @patch('dotenv.load_dotenv')
 def test_resolve_dotenv_file_is_not_loaded_if_not_exists(load_dotenv_m, exists_m):
     ''' Test .env file is not loaded if it doesn't exists. '''
     exists_m.return_value = False
     resolve_dotenv_file('')
     load_dotenv_m.assert_not_called()
+
+
+@patch('dotenv.load_dotenv')
+def test_resolve_dotenv_file_loads_stage_specific_env_file(load_dotenv_mock):
+    ''' Test .env file is loaded if it exists. '''
+    dotenv_path = '.env.production'
+    stage = 'production'
+
+    def exists(p):
+        return p == dotenv_path
+
+    with patch('boss.core.fs.exists', side_effect=exists):
+        resolve_dotenv_file('', stage)
+        load_dotenv_mock.assert_called_with(dotenv_path)
+
+
+@patch('dotenv.load_dotenv')
+def test_resolve_dotenv_file_loads_env_file_if_stage_specific_file_doesnt_exist(load_dotenv_mock):
+    '''
+    Test .env file is loaded as a fallback option,
+    if stage is provided but stage specific env file doesn't exist.
+    '''
+
+    stage = 'production'
+
+    def exists(p):
+        return p == '.env'
+
+    with patch('boss.core.fs.exists', side_effect=exists):
+        resolve_dotenv_file('', stage)
+        load_dotenv_mock.assert_called_with('.env')
