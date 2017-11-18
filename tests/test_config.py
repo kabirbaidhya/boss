@@ -5,6 +5,7 @@ from boss.constants import DEFAULT_CONFIG
 from boss.config import (
     load,
     merge_config,
+    resolve_dotenv_file,
     get_deployment_preset
 )
 
@@ -141,3 +142,22 @@ def test_load(read_mock):
     # Default values resolved
     assert boss_config['port'] == 22
     assert boss_config['port'] == 22
+
+
+@patch('dotenv.load_dotenv')
+def test_resolve_dotenv_file_loads_dotenv_file_if_it_exists(load_dotenv_mock):
+    ''' Test .env file is loaded if it exists. '''
+    dotenv_path = '.env'
+
+    with patch('os.path.exists', side_effect=lambda p: p == dotenv_path):
+        resolve_dotenv_file('')
+        load_dotenv_mock.assert_called_with(dotenv_path)
+
+
+@patch('os.path.exists')
+@patch('dotenv.load_dotenv')
+def test_resolve_dotenv_file_is_not_loaded_if_not_exists(load_dotenv_m, exists_m):
+    ''' Test .env file is not loaded if it doesn't exists. '''
+    exists_m.return_value = False
+    resolve_dotenv_file('')
+    load_dotenv_m.assert_not_called()
