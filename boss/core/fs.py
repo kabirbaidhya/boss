@@ -22,7 +22,12 @@ def exists(path):
     return os.path.exists(path)
 
 
-def compress(source_dir, name):
+def compress(source_dir, filename):
     ''' Compress a directory and build an archive (Tar zipped). '''
-    with tarfile.open(name, 'w:gz') as tar:
+    with tarfile.open(filename, 'w:gz') as tar:
         tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+
+def rm(path):
+    ''' Remove a file given by the path. '''
+    return os.remove(path)
