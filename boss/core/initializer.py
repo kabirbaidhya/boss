@@ -2,10 +2,11 @@
 Module to deal with the initialization of environment
 for boss i.e generating config files and fabfile.
 '''
-from os import mkdir
+import os
+from os import mkdir, path
 
 from boss import BASE_PATH
-from boss.core import fs
+from boss.core import fs, hashing
 from boss.constants import (
     FABFILE_PATH,
     BOSS_HOME_PATH,
@@ -88,3 +89,18 @@ def setup_boss_home():
 
     if not fs.exists(BOSS_CACHE_PATH):
         mkdir(BOSS_CACHE_PATH)
+
+    setup_project_cache_path()
+
+
+def setup_project_cache_path(project_path=None):
+    '''
+    Get the cache path for the project, boss was initialized for.
+    '''
+    project_path = project_path or os.getcwd()
+    project_cache_path = path.join(BOSS_CACHE_PATH, hashing.md5(project_path))
+
+    if not fs.exists(project_cache_path):
+        mkdir(project_cache_path)
+
+    return project_cache_path
