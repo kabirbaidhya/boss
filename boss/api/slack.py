@@ -6,11 +6,27 @@ Module for slack API.
 import requests
 from ..config import get as _get_config
 
+from boss.constants import (
+    NOTIFICATION_DEPLOYMENT_STARTED,
+    NOTIFICATION_DEPLOYMENT_FINISHED
+)
 DEPLOYING_MESSAGE = '{user} is deploying {project_link} to {server_link} server.'
 DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
 
 DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} to {server_link} server.'
 DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
+
+
+def send(notif_type, **params):
+    '''
+    Send slack notifications.
+    '''
+    handlers = {
+        NOTIFICATION_DEPLOYMENT_STARTED: notify_deploying,
+        NOTIFICATION_DEPLOYMENT_FINISHED: notify_deployed
+    }
+
+    handlers[notif_type](**params)
 
 
 def config():

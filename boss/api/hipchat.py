@@ -5,6 +5,11 @@ Module for hipchat API.
 import requests
 from ..config import get as _get_config
 
+from boss.constants import (
+    NOTIFICATION_DEPLOYMENT_STARTED,
+    NOTIFICATION_DEPLOYMENT_FINISHED
+)
+
 DEPLOYING_MESSAGE = '{user} is deploying {project_link} to {server_link} server.'
 DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
 
@@ -13,6 +18,18 @@ DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}
 
 
 HIPCHAT_API_URL = 'https://{company_name}.hipchat.com/v2/room/{room_id}/notification?auth_token={auth_token}'
+
+
+def send(notif_type, **params):
+    '''
+    Send hipchat notifications.
+    '''
+    handlers = {
+        NOTIFICATION_DEPLOYMENT_STARTED: notify_deploying,
+        NOTIFICATION_DEPLOYMENT_FINISHED: notify_deployed
+    }
+
+    handlers[notif_type](**params)
 
 
 def config():

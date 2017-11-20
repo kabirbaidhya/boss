@@ -1,16 +1,20 @@
 ''' Tests for boss.api.notif module. '''
 
-from mock import patch
+from mock import patch, call
 
 from boss.api import notif
+from boss.constants import (
+    NOTIFICATION_DEPLOYMENT_STARTED,
+    NOTIFICATION_DEPLOYMENT_FINISHED
+)
 
 
 @patch('boss.api.notif.remote_info')
 @patch('boss.api.notif.get_config')
 @patch('boss.api.notif.get_stage_config')
 @patch('boss.api.slack.is_enabled')
-@patch('boss.api.slack.notify_deploying')
-def test_notif_sends_slack_notification(slack_notify_deploying_m, slack_is_enabled_m, gsc_m, get_m, _):
+@patch('boss.api.slack.send')
+def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m, get_m, _):
     ''' Test notif.send sends slack notification if slack is enabled. '''
 
     get_m.return_value = {
@@ -24,31 +28,54 @@ def test_notif_sends_slack_notification(slack_notify_deploying_m, slack_is_enabl
     }
     slack_is_enabled_m.return_value = True
 
-    notif.send(notif.DEPLOYMENT_STARTED, {
+    # Trigger Deployment Started notification
+    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
         'branch': 'my-branch',
         'stage': 'test-server'
     })
 
-    slack_notify_deploying_m.assert_called_with(
-        branch='my-branch',
-        branch_url='/branch/my-branch',
-        host='example.com',
-        project_description='Just a test project',
-        project_name='test-project',
-        public_url='https://example.com',
-        repository_url='https://github.com/kabirbaidhya/boss',
-        server_name='test-server',
-        user='ssh-user'
-    )
+    # Trigger Deployment finished notification
+    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+        'user': 'ssh-user',
+        'branch': 'my-branch',
+        'stage': 'test-server'
+    })
+
+    slack_send_m.assert_has_calls([
+        call(
+            NOTIFICATION_DEPLOYMENT_STARTED,
+            branch='my-branch',
+            branch_url='/branch/my-branch',
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        ),
+        call(
+            NOTIFICATION_DEPLOYMENT_FINISHED,
+            branch='my-branch',
+            branch_url='/branch/my-branch',
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        )
+    ])
 
 
 @patch('boss.api.notif.remote_info')
 @patch('boss.api.notif.get_config')
 @patch('boss.api.notif.get_stage_config')
 @patch('boss.api.hipchat.is_enabled')
-@patch('boss.api.hipchat.notify_deploying')
-def test_notif_sends_hipchat_notification(hipchat_notify_deploying_m, hipchat_is_enabled_m, gsc_m, get_m, _):
+@patch('boss.api.hipchat.send')
+def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m, _):
     ''' Test notif.send sends hipchat notification if hipchat is enabled. '''
 
     get_m.return_value = {
@@ -62,20 +89,42 @@ def test_notif_sends_hipchat_notification(hipchat_notify_deploying_m, hipchat_is
     }
     hipchat_is_enabled_m.return_value = True
 
-    notif.send(notif.DEPLOYMENT_STARTED, {
+    # Trigger notifications
+    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
         'branch': 'my-branch',
         'stage': 'test-server'
     })
 
-    hipchat_notify_deploying_m.assert_called_with(
-        branch='my-branch',
-        branch_url='/branch/my-branch',
-        host='example.com',
-        project_description='Just a test project',
-        project_name='test-project',
-        public_url='https://example.com',
-        repository_url='https://github.com/kabirbaidhya/boss',
-        server_name='test-server',
-        user='ssh-user'
-    )
+    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+        'user': 'ssh-user',
+        'branch': 'my-branch',
+        'stage': 'test-server'
+    })
+
+    hipchat_send_m.assert_has_calls([
+        call(
+            NOTIFICATION_DEPLOYMENT_STARTED,
+            branch='my-branch',
+            branch_url='/branch/my-branch',
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        ),
+        call(
+            NOTIFICATION_DEPLOYMENT_FINISHED,
+            branch='my-branch',
+            branch_url='/branch/my-branch',
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        )
+    ])

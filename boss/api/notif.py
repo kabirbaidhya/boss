@@ -7,23 +7,24 @@ from . import hipchat
 from ..util import remote_info
 from ..config import get_branch_url, get_stage_config, get as get_config
 
-DEPLOYMENT_STARTED = 1
-DEPLOYMENT_FINISHED = 2
+# Notification Services
+notifiers = [slack, hipchat]
 
 
 def send(notif_type, params):
     ''' Send deployment notifications. '''
-    handlers = {
-        DEPLOYMENT_STARTED: send_deploying_notification,
-        DEPLOYMENT_FINISHED: send_deployed_notification
-    }
 
-    # If notifications are enabled then, print a message (Info).
-    if slack.is_enabled() or hipchat.is_enabled():
-        remote_info('Sending notifications')
+    enabled_services = [s for s in notifiers if s.is_enabled()]
 
-    # Trigger the corresponding handler by notif_type.
-    handlers[notif_type](params)
+    # If notifiers aren't configured just skip it.
+    if not enabled_services:
+        return
+
+    remote_info('Sending notifications')
+    notif_params = extract_notification_params(params)
+
+    for service in enabled_services:
+        service.send(notif_type, **notif_params)
 
 
 def extract_notification_params(params):
@@ -42,29 +43,3 @@ def extract_notification_params(params):
         public_url=stage_config['public_url'],
         host=stage_config['host']
     )
-
-
-def send_deploying_notification(params):
-    ''' Send deploying status notification. '''
-    notif_params = extract_notification_params(params)
-
-    # Notify on slack
-    if slack.is_enabled():
-        slack.notify_deploying(**notif_params)
-
-    # Notify on hipchat
-    if hipchat.is_enabled():
-        hipchat.notify_deploying(**notif_params)
-
-
-def send_deployed_notification(params):
-    ''' Send deployed finish status notification. '''
-    notif_params = extract_notification_params(params)
-
-    # Notify on slack
-    if slack.is_enabled():
-        slack.notify_deployed(**notif_params)
-
-    # Notify on hipchat
-    if hipchat.is_enabled():
-        hipchat.notify_deployed(**notif_params)
