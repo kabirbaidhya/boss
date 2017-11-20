@@ -17,7 +17,7 @@ def test_notify():
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
-        payload = {"message": "Test message"}
+        payload = {'message': 'Test message'}
         slack.notify(payload)
         mock_post.assert_called_once_with(base_url, json=payload)
 
@@ -26,7 +26,7 @@ def test_notity_deploying():
     ''' Test slack.notify_deploying(). '''
     notify_params = dict(
         branch_url='http://branch-url',
-        branch='test_notify_deploying',
+        branch='temp',
         public_url='http://public-url',
         host='test-notify-deploying-host',
         repository_url='http://repository-url',
@@ -36,10 +36,10 @@ def test_notity_deploying():
         user='user',
     )
     payload = {
-        "attachments": [
+        'attachments': [
             {
-                "color": "good",
-                "text": "user is deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deploying> to <http://public-url|server-name> server."
+                'color': 'good',
+                'text': 'user is deploying <http://repository-url|project-name>:<http://branch-url|temp> to <http://public-url|server-name> server.'
             }
         ]
     }
@@ -53,7 +53,7 @@ def test_notity_deployed():
     ''' Test slack.notify_deployed(). '''
     notify_params = dict(
         branch_url='http://branch-url',
-        branch='test_notify_deployed',
+        branch='temp',
         public_url='http://public-url',
         host='test-notify-deployed-host',
         repository_url='http://repository-url',
@@ -63,10 +63,10 @@ def test_notity_deployed():
         user='user'
     )
     payload = {
-        "attachments": [
+        'attachments': [
             {
-                "color": "#764FA5",
-                "text": "user finished deploying <http://repository-url|project-name>:<http://branch-url|test_notify_deployed> to <http://public-url|server-name> server."
+                'color': '#764FA5',
+                'text': 'user finished deploying <http://repository-url|project-name>:<http://branch-url|temp> to <http://public-url|server-name> server.'
             }
         ]
     }
