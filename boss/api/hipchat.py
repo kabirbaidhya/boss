@@ -9,6 +9,9 @@ DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server
 DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
 
 
+HIPCHAT_API_URL = 'https://{company_name}.hipchat.com/v2/room/{room_id}/notification?auth_token={auth_token}'
+
+
 def config():
     ''' Get hipchat configuration. '''
     return _get_config()['notifications']['hipchat']
@@ -29,7 +32,7 @@ def create_link(url, title):
 def notify(payload):
     ''' Send a notification on hipchat. '''
 
-    url = 'https://{company_name}.hipchat.com/v2/room/{room_id}/notification?auth_token={auth_token}'.format(
+    url = HIPCHAT_API_URL.format(
         company_name=config()['company_name'],
         room_id=config()['room_id'],
         auth_token=config()['auth_token']
