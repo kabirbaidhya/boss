@@ -6,8 +6,11 @@ Module for slack API.
 import requests
 from ..config import get as _get_config
 
-DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYING_MESSAGE = '{user} is deploying {project_link} to {server_link} server.'
+DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
+
+DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
 
 
 def config():
@@ -36,23 +39,30 @@ def notify(payload):
 
 def notify_deploying(**params):
     ''' Send Deploying notification on Slack. '''
-    branch_link = create_link(params['branch_url'], params['branch'])
-    server_link = create_link(params['public_url'], params['host'])
+
     project_link = create_link(
         params['repository_url'],
         params['project_name']
     )
-
     server_short_link = create_link(
         params['public_url'], params['server_name']
     )
 
-    text = DEPLOYING_MESSAGE.format(
-        user=params['user'],
-        branch_link=branch_link,
-        project_link=project_link,
-        server_link=server_short_link
-    )
+    # If the branch is provided, display branch name in the message.
+    if params.get('branch_url') and params.get('branch'):
+        branch_link = create_link(params['branch_url'], params['branch'])
+        text = DEPLOYING_MESSAGE_WITH_BRANCH.format(
+            user=params['user'],
+            branch_link=branch_link,
+            project_link=project_link,
+            server_link=server_short_link
+        )
+    else:
+        text = DEPLOYING_MESSAGE.format(
+            user=params['user'],
+            project_link=project_link,
+            server_link=server_short_link
+        )
 
     payload = {
         'attachments': [
@@ -69,8 +79,7 @@ def notify_deploying(**params):
 
 def notify_deployed(**params):
     ''' Send Deployed notification on Slack. '''
-    branch_link = create_link(params['branch_url'], params['branch'])
-    server_link = create_link(params['public_url'], params['host'])
+
     server_short_link = create_link(
         params['public_url'],
         params['server_name']
@@ -80,12 +89,20 @@ def notify_deployed(**params):
         params['project_name']
     )
 
-    text = DEPLOYED_SUCCESS_MESSAGE.format(
-        user=params['user'],
-        branch_link=branch_link,
-        project_link=project_link,
-        server_link=server_short_link
-    )
+    if params.get('branch_url') and params.get('branch'):
+        branch_link = create_link(params['branch_url'], params['branch'])
+        text = DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH.format(
+            user=params['user'],
+            branch_link=branch_link,
+            project_link=project_link,
+            server_link=server_short_link
+        )
+    else:
+        text = DEPLOYED_SUCCESS_MESSAGE.format(
+            user=params['user'],
+            project_link=project_link,
+            server_link=server_short_link
+        )
 
     payload = {
         'attachments': [
