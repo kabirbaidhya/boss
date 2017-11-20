@@ -89,6 +89,7 @@ def notify_deployed(**params):
         params['project_name']
     )
 
+    # If the branch is provided, display branch name in the message.
     if params.get('branch_url') and params.get('branch'):
         branch_link = create_link(params['branch_url'], params['branch'])
         text = DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH.format(

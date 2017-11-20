@@ -86,3 +86,66 @@ def test_notity_deployed():
     with patch('requests.post') as mock_post:
         hipchat.notify_deployed(**notify_params)
         mock_post.assert_called_once_with(url, json=payload)
+
+
+def test_notity_deploying_with_no_branch():
+    '''
+    Test hipchat.notify_deploying() doesn't show branch link,
+    if branch is not provided.
+    '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        user='user',
+    )
+    payload = {
+        'color': 'yellow',
+        'message': 'user is deploying <a href="http://repository-url">project-name</a> to <a href="http://public-url">stage</a> server.',
+        'notify': True,
+        'message_format': 'html'
+    }
+    url = hipchat.HIPCHAT_API_URL.format(
+        company_name=hipchat.config()['company_name'],
+        room_id=hipchat.config()['room_id'],
+        auth_token=hipchat.config()['auth_token']
+    )
+
+    with patch('requests.post') as mock_post:
+        hipchat.notify_deploying(**notify_params)
+        mock_post.assert_called_once_with(url, json=payload)
+
+
+def test_notity_deployed_with_no_branch():
+    '''
+    Test hipchat.notify_deployed() doesn't show branch link,
+    if branch is not provided.
+    '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        user='user',
+    )
+    payload = {
+        'color': 'green',
+        'message': 'user finished deploying <a href="http://repository-url">project-name</a> to <a href="http://public-url">stage</a> server.',
+        'notify': True,
+        'message_format': 'html'
+    }
+
+    url = hipchat.HIPCHAT_API_URL.format(
+        company_name=hipchat.config()['company_name'],
+        room_id=hipchat.config()['room_id'],
+        auth_token=hipchat.config()['auth_token']
+    )
+
+    with patch('requests.post') as mock_post:
+        hipchat.notify_deployed(**notify_params)
+        mock_post.assert_called_once_with(url, json=payload)

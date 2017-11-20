@@ -5,8 +5,11 @@ Module for hipchat API.
 import requests
 from ..config import get as _get_config
 
-DEPLOYING_MESSAGE = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYING_MESSAGE = '{user} is deploying {project_link} to {server_link} server.'
+DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
+
+DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
 
 
 HIPCHAT_API_URL = 'https://{company_name}.hipchat.com/v2/room/{room_id}/notification?auth_token={auth_token}'
@@ -42,8 +45,7 @@ def notify(payload):
 
 def notify_deploying(**params):
     ''' Send Deploying notification on Hipchat. '''
-    branch_link = create_link(params['branch_url'], params['branch'])
-    server_link = create_link(params['public_url'], params['host'])
+
     project_link = create_link(
         params['repository_url'],
         params['project_name']
@@ -53,12 +55,21 @@ def notify_deploying(**params):
         params['public_url'], params['server_name']
     )
 
-    text = DEPLOYING_MESSAGE.format(
-        user=params['user'],
-        branch_link=branch_link,
-        project_link=project_link,
-        server_link=server_short_link
-    )
+    # If the branch is provided, display branch name in the message.
+    if params.get('branch_url') and params.get('branch'):
+        branch_link = create_link(params['branch_url'], params['branch'])
+        text = DEPLOYING_MESSAGE_WITH_BRANCH.format(
+            user=params['user'],
+            branch_link=branch_link,
+            project_link=project_link,
+            server_link=server_short_link
+        )
+    else:
+        text = DEPLOYING_MESSAGE.format(
+            user=params['user'],
+            project_link=project_link,
+            server_link=server_short_link
+        )
 
     payload = {
         'color': config()['deploying_color'],
@@ -73,8 +84,6 @@ def notify_deploying(**params):
 
 def notify_deployed(**params):
     ''' Send Deployed notification on Hipchat. '''
-    branch_link = create_link(params['branch_url'], params['branch'])
-    server_link = create_link(params['public_url'], params['host'])
     server_short_link = create_link(
         params['public_url'],
         params['server_name']
@@ -84,12 +93,21 @@ def notify_deployed(**params):
         params['project_name']
     )
 
-    text = DEPLOYED_SUCCESS_MESSAGE.format(
-        user=params['user'],
-        branch_link=branch_link,
-        project_link=project_link,
-        server_link=server_short_link
-    )
+    # If the branch is provided, display branch name in the message.
+    if params.get('branch_url') and params.get('branch'):
+        branch_link = create_link(params['branch_url'], params['branch'])
+        text = DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH.format(
+            user=params['user'],
+            branch_link=branch_link,
+            project_link=project_link,
+            server_link=server_short_link
+        )
+    else:
+        text = DEPLOYED_SUCCESS_MESSAGE.format(
+            user=params['user'],
+            project_link=project_link,
+            server_link=server_short_link
+        )
 
     payload = {
         'color': config()['deployed_color'],
