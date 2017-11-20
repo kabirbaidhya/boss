@@ -28,7 +28,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
     }
     slack_is_enabled_m.return_value = True
 
-    # Trigger Deployment Started notification
+    # Trigger deployment started notification
     notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
         'branch': 'my-branch',
@@ -39,6 +39,19 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
     notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': 'ssh-user',
         'branch': 'my-branch',
+        'stage': 'test-server'
+    })
+
+    # Trigger deployment started notification with branch=HEAD
+    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
+        'user': 'ssh-user',
+        'branch': 'HEAD',
+        'stage': 'test-server'
+    })
+
+    # Trigger deployment started notification with no branch
+    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+        'user': 'ssh-user',
         'stage': 'test-server'
     })
 
@@ -59,6 +72,26 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
             NOTIFICATION_DEPLOYMENT_FINISHED,
             branch='my-branch',
             branch_url='/branch/my-branch',
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        ),
+        call(
+            NOTIFICATION_DEPLOYMENT_STARTED,
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        ),
+        call(
+            NOTIFICATION_DEPLOYMENT_FINISHED,
             host='example.com',
             project_description='Just a test project',
             project_name='test-project',
@@ -89,16 +122,30 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
     }
     hipchat_is_enabled_m.return_value = True
 
-    # Trigger notifications
+    # Trigger deployment started notification
     notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
         'branch': 'my-branch',
         'stage': 'test-server'
     })
 
+    # Trigger deployment finished notification
     notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': 'ssh-user',
         'branch': 'my-branch',
+        'stage': 'test-server'
+    })
+
+    # Trigger Deployment Started notification with branch=HEAD
+    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
+        'user': 'ssh-user',
+        'branch': 'HEAD',
+        'stage': 'test-server'
+    })
+
+    # Trigger Deployment Started notification with no branch
+    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+        'user': 'ssh-user',
         'stage': 'test-server'
     })
 
@@ -119,6 +166,26 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
             NOTIFICATION_DEPLOYMENT_FINISHED,
             branch='my-branch',
             branch_url='/branch/my-branch',
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        ),
+        call(
+            NOTIFICATION_DEPLOYMENT_STARTED,
+            host='example.com',
+            project_description='Just a test project',
+            project_name='test-project',
+            public_url='https://example.com',
+            repository_url='https://github.com/kabirbaidhya/boss',
+            server_name='test-server',
+            user='ssh-user'
+        ),
+        call(
+            NOTIFICATION_DEPLOYMENT_FINISHED,
             host='example.com',
             project_description='Just a test project',
             project_name='test-project',

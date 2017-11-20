@@ -32,10 +32,8 @@ def extract_notification_params(params):
     config = get_config()
     stage_config = get_stage_config(params['stage'])
 
-    return dict(
+    notif_params = dict(
         user=params['user'],
-        branch=params['branch'],
-        branch_url=get_branch_url(params['branch']),
         project_name=config['project_name'],
         project_description=config['project_description'],
         repository_url=config['repository_url'],
@@ -43,3 +41,14 @@ def extract_notification_params(params):
         public_url=stage_config['public_url'],
         host=stage_config['host']
     )
+
+    # If branch is provided and branch is not HEAD, then add branch & branch_url.
+    #
+    # Note: While deploying from CI eg: Travis sometimes branch is not received
+    # or is received as HEAD, which doesn't really make sense.
+    # So, just hide the branch in those cases.
+    if params.get('branch') and params.get('branch') != 'HEAD':
+        notif_params['branch'] = params['branch']
+        notif_params['branch_url'] = get_branch_url(params['branch'])
+
+    return notif_params
