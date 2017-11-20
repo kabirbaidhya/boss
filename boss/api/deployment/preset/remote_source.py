@@ -24,9 +24,11 @@ def deploy(branch=None):
     stage = shell.get_stage()
     deployer_user = shell.get_user()
     branch = branch or fallback_branch(stage)
+    commit = git.last_commit(short=True)
     notif.send(constants.NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'branch': branch,
+        'commit': commit,
         'stage': stage
     })
 
@@ -41,6 +43,7 @@ def deploy(branch=None):
     notif.send(constants.NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
+        'commit': commit,
         'stage': stage
     })
 

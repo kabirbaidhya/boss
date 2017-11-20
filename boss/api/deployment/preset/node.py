@@ -80,6 +80,7 @@ def deploy():
 
     notif.send(constants.NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': deployer_user,
+        'commit': commit,
         'branch': branch,
         'stage': stage
     })
@@ -158,6 +159,7 @@ def deploy():
     notif.send(constants.NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
+        'commit': commit,
         'stage': stage
     })
 
