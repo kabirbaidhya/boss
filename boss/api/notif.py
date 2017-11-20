@@ -26,69 +26,45 @@ def send(notif_type, params):
     handlers[notif_type](params)
 
 
-def send_deploying_notification(params):
-    ''' Send deploying status notification. '''
+def extract_notification_params(params):
+    ''' Extract parameters for notification. '''
     config = get_config()
     stage_config = get_stage_config(params['stage'])
 
+    return dict(
+        user=params['user'],
+        branch=params['branch'],
+        branch_url=get_branch_url(params['branch']),
+        project_name=config['project_name'],
+        project_description=config['project_description'],
+        repository_url=config['repository_url'],
+        server_name=params['stage'],
+        public_url=stage_config['public_url'],
+        host=stage_config['host']
+    )
+
+
+def send_deploying_notification(params):
+    ''' Send deploying status notification. '''
+    notif_params = extract_notification_params(params)
+
     # Notify on slack
     if slack.is_enabled():
-        slack.notify_deploying(
-            user=params['user'],
-            branch=params['branch'],
-            branch_url=get_branch_url(params['branch']),
-            project_name=config['project_name'],
-            project_description=config['project_description'],
-            repository_url=config['repository_url'],
-            server_name=params['stage'],
-            public_url=stage_config['public_url'],
-            host=stage_config['host']
-        )
+        slack.notify_deploying(**notif_params)
 
     # Notify on hipchat
     if hipchat.is_enabled():
-        hipchat.notify_deploying(
-            user=params['user'],
-            branch=params['branch'],
-            branch_url=get_branch_url(params['branch']),
-            project_name=config['project_name'],
-            project_description=config['project_description'],
-            repository_url=config['repository_url'],
-            server_name=params['stage'],
-            public_url=stage_config['public_url'],
-            host=stage_config['host']
-        )
+        hipchat.notify_deploying(**notif_params)
 
 
 def send_deployed_notification(params):
     ''' Send deployed finish status notification. '''
-    config = get_config()
-    stage_config = get_stage_config(params['stage'])
+    notif_params = extract_notification_params(params)
 
     # Notify on slack
     if slack.is_enabled():
-        slack.notify_deployed(
-            user=params['user'],
-            branch=params['branch'],
-            branch_url=get_branch_url(params['branch']),
-            project_name=config['project_name'],
-            project_description=config['project_description'],
-            repository_url=config['repository_url'],
-            server_name=params['stage'],
-            public_url=stage_config['public_url'],
-            host=stage_config['host']
-        )
+        slack.notify_deployed(**notif_params)
 
     # Notify on hipchat
     if hipchat.is_enabled():
-        hipchat.notify_deployed(
-            user=params['user'],
-            branch=params['branch'],
-            branch_url=get_branch_url(params['branch']),
-            project_name=config['project_name'],
-            project_description=config['project_description'],
-            repository_url=config['repository_url'],
-            server_name=params['stage'],
-            public_url=stage_config['public_url'],
-            host=stage_config['host']
-        )
+        hipchat.notify_deployed(**notif_params)
