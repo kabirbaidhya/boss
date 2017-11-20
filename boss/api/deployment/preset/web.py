@@ -65,9 +65,10 @@ def deploy():
     deploy_dir = buildman.get_deploy_dir()
     deployer_user = shell.get_user()
 
-    notif.send(notif.DEPLOYMENT_STARTED, {
+    notif.send(constants.NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'branch': branch,
+        'commit': commit,
         'stage': stage
     })
 
@@ -135,9 +136,10 @@ def deploy():
     })
 
     # Send deployment finished notification.
-    notif.send(notif.DEPLOYMENT_FINISHED, {
+    notif.send(constants.NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
+        'commit': commit,
         'stage': stage
     })
 
