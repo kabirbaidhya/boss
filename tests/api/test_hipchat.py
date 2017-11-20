@@ -32,6 +32,8 @@ def test_notity_deploying():
     notify_params = dict(
         branch_url='http://branch-url',
         branch='temp',
+        commit='tttt',
+        commit_url='http://commit-url',
         public_url='http://public-url',
         host='test-notify-deploying-host',
         repository_url='http://repository-url',
@@ -42,7 +44,7 @@ def test_notity_deploying():
     )
     payload = {
         'color': 'yellow',
-        'message': 'user is deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> to <a href="http://public-url">stage</a> server.',
+        'message': 'user is deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
     }
@@ -62,6 +64,8 @@ def test_notity_deployed():
     notify_params = dict(
         branch_url='http://branch-url',
         branch='temp',
+        commit='tttt',
+        commit_url='http://commit-url',
         public_url='http://public-url',
         host='test-notify-deploying-host',
         repository_url='http://repository-url',
@@ -72,7 +76,7 @@ def test_notity_deployed():
     )
     payload = {
         'color': 'green',
-        'message': 'user finished deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> to <a href="http://public-url">stage</a> server.',
+        'message': 'user finished deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
     }
@@ -96,6 +100,8 @@ def test_notity_deploying_with_no_branch():
     notify_params = dict(
         public_url='http://public-url',
         host='test-notify-deploying-host',
+        commit='tttt',
+        commit_url='http://commit-url',
         repository_url='http://repository-url',
         project_name='project-name',
         server_name='stage',
@@ -104,7 +110,7 @@ def test_notity_deploying_with_no_branch():
     )
     payload = {
         'color': 'yellow',
-        'message': 'user is deploying <a href="http://repository-url">project-name</a> to <a href="http://public-url">stage</a> server.',
+        'message': 'user is deploying <a href="http://repository-url">project-name</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
     }
@@ -127,6 +133,8 @@ def test_notity_deployed_with_no_branch():
     notify_params = dict(
         public_url='http://public-url',
         host='test-notify-deploying-host',
+        commit='tttt',
+        commit_url='http://commit-url',
         repository_url='http://repository-url',
         project_name='project-name',
         server_name='stage',
@@ -135,7 +143,7 @@ def test_notity_deployed_with_no_branch():
     )
     payload = {
         'color': 'green',
-        'message': 'user finished deploying <a href="http://repository-url">project-name</a> to <a href="http://public-url">stage</a> server.',
+        'message': 'user finished deploying <a href="http://repository-url">project-name</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
     }
