@@ -16,7 +16,8 @@ from boss.constants import (
 @patch('boss.api.slack.send')
 def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m, get_m, _):
     ''' Test notif.send sends slack notification if slack is enabled. '''
-
+    commit = 't12345'
+    commit_url = 'https://github.com/kabirbaidhya/boss/commit/t12345'
     get_m.return_value = {
         'project_name': 'test-project',
         'project_description': 'Just a test project',
@@ -31,27 +32,16 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
     # Trigger deployment started notification
     notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
+        'commit': commit,
         'branch': 'my-branch',
         'stage': 'test-server'
     })
 
-    # Trigger Deployment finished notification
+    # Trigger deployment finished notification with branch=HEAD
     notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': 'ssh-user',
-        'branch': 'my-branch',
-        'stage': 'test-server'
-    })
-
-    # Trigger deployment started notification with branch=HEAD
-    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
-        'user': 'ssh-user',
+        'commit': commit,
         'branch': 'HEAD',
-        'stage': 'test-server'
-    })
-
-    # Trigger deployment started notification with no branch
-    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
-        'user': 'ssh-user',
         'stage': 'test-server'
     })
 
@@ -59,6 +49,8 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
         call(
             NOTIFICATION_DEPLOYMENT_STARTED,
             branch='my-branch',
+            commit=commit,
+            commit_url=commit_url,
             branch_url='/branch/my-branch',
             host='example.com',
             project_description='Just a test project',
@@ -70,29 +62,9 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
         ),
         call(
             NOTIFICATION_DEPLOYMENT_FINISHED,
-            branch='my-branch',
-            branch_url='/branch/my-branch',
             host='example.com',
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        ),
-        call(
-            NOTIFICATION_DEPLOYMENT_STARTED,
-            host='example.com',
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        ),
-        call(
-            NOTIFICATION_DEPLOYMENT_FINISHED,
-            host='example.com',
+            commit=commit,
+            commit_url=commit_url,
             project_description='Just a test project',
             project_name='test-project',
             public_url='https://example.com',
@@ -110,7 +82,8 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
 @patch('boss.api.hipchat.send')
 def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m, _):
     ''' Test notif.send sends hipchat notification if hipchat is enabled. '''
-
+    commit = 't12345'
+    commit_url = 'https://github.com/kabirbaidhya/boss/commit/t12345'
     get_m.return_value = {
         'project_name': 'test-project',
         'project_description': 'Just a test project',
@@ -122,49 +95,27 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
     }
     hipchat_is_enabled_m.return_value = True
 
-    # Trigger deployment started notification
-    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
-        'user': 'ssh-user',
-        'branch': 'my-branch',
-        'stage': 'test-server'
-    })
-
     # Trigger deployment finished notification
     notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
         'user': 'ssh-user',
+        'commit': commit,
         'branch': 'my-branch',
-        'stage': 'test-server'
-    })
-
-    # Trigger Deployment Started notification with branch=HEAD
-    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
-        'user': 'ssh-user',
-        'branch': 'HEAD',
         'stage': 'test-server'
     })
 
     # Trigger Deployment Started notification with no branch
-    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
+        'commit': commit,
         'stage': 'test-server'
     })
 
     hipchat_send_m.assert_has_calls([
         call(
-            NOTIFICATION_DEPLOYMENT_STARTED,
-            branch='my-branch',
-            branch_url='/branch/my-branch',
-            host='example.com',
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        ),
-        call(
             NOTIFICATION_DEPLOYMENT_FINISHED,
             branch='my-branch',
+            commit=commit,
+            commit_url=commit_url,
             branch_url='/branch/my-branch',
             host='example.com',
             project_description='Just a test project',
@@ -177,16 +128,8 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
         call(
             NOTIFICATION_DEPLOYMENT_STARTED,
             host='example.com',
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        ),
-        call(
-            NOTIFICATION_DEPLOYMENT_FINISHED,
-            host='example.com',
+            commit=commit,
+            commit_url=commit_url,
             project_description='Just a test project',
             project_name='test-project',
             public_url='https://example.com',

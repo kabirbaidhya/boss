@@ -56,6 +56,15 @@ def current_branch(remote=True):
         return result.strip()
 
 
+def get_commit_url(commit, repository_url):
+    ''' Get a link for a commit for GitHub. '''
+    # TODO: Make it independent of GitHub.
+    return '{repository_url}/commit/{commit}'.format(
+        repository_url=repository_url,
+        commit=commit
+    )
+
+
 def show_last_commit():
     ''' Display the last commit. '''
     run('git log -1')

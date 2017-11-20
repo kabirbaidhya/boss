@@ -2,9 +2,8 @@
 Notification API module.
 '''
 
-from . import slack
-from . import hipchat
 from ..util import remote_info
+from . import slack, hipchat, git
 from ..config import get_branch_url, get_stage_config, get as get_config
 
 # Notification Services
@@ -31,9 +30,12 @@ def extract_notification_params(params):
     ''' Extract parameters for notification. '''
     config = get_config()
     stage_config = get_stage_config(params['stage'])
+    commit_url = git.get_commit_url(params['commit'], config['repository_url'])
 
     notif_params = dict(
         user=params['user'],
+        commit_url=commit_url,
+        commit=params['commit'],
         project_name=config['project_name'],
         project_description=config['project_description'],
         repository_url=config['repository_url'],
