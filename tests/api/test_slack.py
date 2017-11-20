@@ -27,6 +27,8 @@ def test_notity_deploying():
     notify_params = dict(
         branch_url='http://branch-url',
         branch='temp',
+        commit='tttt',
+        commit_url='http://commit-url',
         public_url='http://public-url',
         host='test-notify-deploying-host',
         repository_url='http://repository-url',
@@ -39,7 +41,7 @@ def test_notity_deploying():
         'attachments': [
             {
                 'color': 'good',
-                'text': 'user is deploying <http://repository-url|project-name>:<http://branch-url|temp> to <http://public-url|server-name> server.'
+                'text': 'user is deploying <http://repository-url|project-name>:<http://branch-url|temp> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
             }
         ]
     }
@@ -58,6 +60,8 @@ def test_notity_deploying_with_no_branch_name():
         public_url='http://public-url',
         host='test-notify-deploying-host',
         repository_url='http://repository-url',
+        commit='tttt',
+        commit_url='http://commit-url',
         project_name='project-name',
         server_name='server-name',
         server_link='http://server-link',
@@ -67,7 +71,7 @@ def test_notity_deploying_with_no_branch_name():
         'attachments': [
             {
                 'color': 'good',
-                'text': 'user is deploying <http://repository-url|project-name> to <http://public-url|server-name> server.'
+                'text': 'user is deploying <http://repository-url|project-name> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
             }
         ]
     }
@@ -82,6 +86,8 @@ def test_notity_deployed():
     notify_params = dict(
         branch_url='http://branch-url',
         branch='temp',
+        commit='tttt',
+        commit_url='http://commit-url',
         public_url='http://public-url',
         host='test-notify-deployed-host',
         repository_url='http://repository-url',
@@ -94,7 +100,7 @@ def test_notity_deployed():
         'attachments': [
             {
                 'color': '#764FA5',
-                'text': 'user finished deploying <http://repository-url|project-name>:<http://branch-url|temp> to <http://public-url|server-name> server.'
+                'text': 'user finished deploying <http://repository-url|project-name>:<http://branch-url|temp> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
             }
         ]
     }
@@ -114,6 +120,8 @@ def test_notity_deployed_with_no_branch_name():
     notify_params = dict(
         public_url='http://public-url',
         host='test-notify-deployed-host',
+        commit='tttt',
+        commit_url='http://commit-url',
         repository_url='http://repository-url',
         project_name='project-name',
         server_name='server-name',
@@ -124,7 +132,7 @@ def test_notity_deployed_with_no_branch_name():
         'attachments': [
             {
                 'color': '#764FA5',
-                'text': 'user finished deploying <http://repository-url|project-name> to <http://public-url|server-name> server.'
+                'text': 'user finished deploying <http://repository-url|project-name> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
             }
         ]
     }

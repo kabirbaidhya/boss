@@ -10,11 +10,11 @@ from boss.constants import (
     NOTIFICATION_DEPLOYMENT_STARTED,
     NOTIFICATION_DEPLOYMENT_FINISHED
 )
-DEPLOYING_MESSAGE = '{user} is deploying {project_link} to {server_link} server.'
-DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYING_MESSAGE = '{user} is deploying {project_link} ({commit_link}) to {server_link} server.'
+DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
 
-DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} ({commit_link}) to {server_link} server.'
+DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
 
 
 def send(notif_type, **params):
@@ -56,6 +56,10 @@ def notify(payload):
 def notify_deploying(**params):
     ''' Send Deploying notification on Slack. '''
 
+    commit_link = create_link(
+        params['commit_url'],
+        params['commit']
+    )
     project_link = create_link(
         params['repository_url'],
         params['project_name']
@@ -69,6 +73,7 @@ def notify_deploying(**params):
         branch_link = create_link(params['branch_url'], params['branch'])
         text = DEPLOYING_MESSAGE_WITH_BRANCH.format(
             user=params['user'],
+            commit_link=commit_link,
             branch_link=branch_link,
             project_link=project_link,
             server_link=server_short_link
@@ -76,6 +81,7 @@ def notify_deploying(**params):
     else:
         text = DEPLOYING_MESSAGE.format(
             user=params['user'],
+            commit_link=commit_link,
             project_link=project_link,
             server_link=server_short_link
         )
@@ -96,6 +102,10 @@ def notify_deploying(**params):
 def notify_deployed(**params):
     ''' Send Deployed notification on Slack. '''
 
+    commit_link = create_link(
+        params['commit_url'],
+        params['commit']
+    )
     server_short_link = create_link(
         params['public_url'],
         params['server_name']
@@ -111,12 +121,14 @@ def notify_deployed(**params):
         text = DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH.format(
             user=params['user'],
             branch_link=branch_link,
+            commit_link=commit_link,
             project_link=project_link,
             server_link=server_short_link
         )
     else:
         text = DEPLOYED_SUCCESS_MESSAGE.format(
             user=params['user'],
+            commit_link=commit_link,
             project_link=project_link,
             server_link=server_short_link
         )
