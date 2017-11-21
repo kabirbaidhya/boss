@@ -65,6 +65,14 @@ def get_commit_url(commit, repository_url):
     )
 
 
+def get_tree_url(ref, repository_url):
+    ''' Get a link for a ref (commit, branch or tag) for the repository. '''
+    return '{repository_url}/tree/{ref}'.format(
+        repository_url=repository_url,
+        ref=ref
+    )
+
+
 def show_last_commit():
     ''' Display the last commit. '''
     run('git log -1')
