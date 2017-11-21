@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-alpha.11](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.11) (2017-11-21)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.10...v1.0.0-alpha.11)
+
+**Implemented enhancements:**
+
+- Use separate colors for notification messages for CI and manual deployments [\#84](https://github.com/kabirbaidhya/boss/pull/84) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.10](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.10) (2017-11-21)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.9...v1.0.0-alpha.10)
 
