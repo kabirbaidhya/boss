@@ -5,6 +5,7 @@ Module for hipchat API.
 import requests
 from ..config import get as _get_config
 
+from boss.core.ci import is_ci
 from boss.constants import (
     NOTIFICATION_DEPLOYMENT_STARTED,
     NOTIFICATION_DEPLOYMENT_FINISHED
@@ -96,9 +97,14 @@ def notify_deploying(**params):
     else:
         text = DEPLOYING_MESSAGE.format(**notification)
 
+    if is_ci():
+        color = config()['ci_deploying_color']
+    else:
+        color = config()['deploying_color']
+
     # Notify on hipchat
     notify({
-        'color': config()['deploying_color'],
+        'color': color,
         'message': text,
         'notify': config()['notify'],
         'message_format': 'html'
@@ -115,9 +121,14 @@ def notify_deployed(**params):
     else:
         text = DEPLOYED_SUCCESS_MESSAGE.format(**notification)
 
+    if is_ci():
+        color = config()['ci_deployed_color']
+    else:
+        color = config()['deployed_color']
+
     # Notify on hipchat
     notify({
-        'color': config()['deployed_color'],
+        'color': color,
         'message': text,
         'notify': config()['notify'],
         'message_format': 'html'
