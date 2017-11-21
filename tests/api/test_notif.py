@@ -17,7 +17,7 @@ from boss.constants import (
 def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m, get_m, _):
     ''' Test notif.send sends slack notification if slack is enabled. '''
     commit = 't12345'
-    commit_url = 'https://github.com/kabirbaidhya/boss/commit/t12345'
+    commit_url = 'https://github.com/kabirbaidhya/boss/tree/t12345'
     get_m.return_value = {
         'project_name': 'test-project',
         'project_description': 'Just a test project',
@@ -28,6 +28,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
         'host': 'example.com'
     }
     slack_is_enabled_m.return_value = True
+    branch_url = 'https://github.com/kabirbaidhya/boss/tree/my-branch'
 
     # Trigger deployment started notification
     notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
@@ -51,7 +52,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
             branch='my-branch',
             commit=commit,
             commit_url=commit_url,
-            branch_url='/branch/my-branch',
+            branch_url=branch_url,
             host='example.com',
             project_description='Just a test project',
             project_name='test-project',
@@ -83,7 +84,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
 def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m, _):
     ''' Test notif.send sends hipchat notification if hipchat is enabled. '''
     commit = 't12345'
-    commit_url = 'https://github.com/kabirbaidhya/boss/commit/t12345'
+    commit_url = 'https://github.com/kabirbaidhya/boss/tree/t12345'
     get_m.return_value = {
         'project_name': 'test-project',
         'project_description': 'Just a test project',
@@ -94,6 +95,7 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
         'host': 'example.com'
     }
     hipchat_is_enabled_m.return_value = True
+    branch_url = 'https://github.com/kabirbaidhya/boss/tree/my-branch'
 
     # Trigger deployment finished notification
     notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
@@ -116,7 +118,7 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
             branch='my-branch',
             commit=commit,
             commit_url=commit_url,
-            branch_url='/branch/my-branch',
+            branch_url=branch_url,
             host='example.com',
             project_description='Just a test project',
             project_name='test-project',

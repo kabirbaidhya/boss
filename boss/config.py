@@ -131,11 +131,3 @@ def get_stage_config(stage):
 def fallback_branch(stage):
     ''' Get the fallback branch for the stage. '''
     return get_stage_config(stage).get('branch') or _config['branch']
-
-
-def get_branch_url(branch):
-    ''' Get the branch url to view it on the Web (eg: GitHub, GitLab etc.). '''
-    return _config['branch_url'].format(
-        repository_url=_config['repository_url'],
-        branch=branch
-    )
