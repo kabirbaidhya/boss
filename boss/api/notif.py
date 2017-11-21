@@ -4,7 +4,7 @@ Notification API module.
 
 from ..util import remote_info
 from . import slack, hipchat, git
-from ..config import get_branch_url, get_stage_config, get as get_config
+from ..config import get_stage_config, get as get_config
 
 # Notification Services
 notifiers = [slack, hipchat]
@@ -30,7 +30,7 @@ def extract_notification_params(params):
     ''' Extract parameters for notification. '''
     config = get_config()
     stage_config = get_stage_config(params['stage'])
-    commit_url = git.get_commit_url(params['commit'], config['repository_url'])
+    commit_url = git.get_tree_url(params['commit'], config['repository_url'])
 
     notif_params = dict(
         user=params['user'],
@@ -51,6 +51,7 @@ def extract_notification_params(params):
     # So, just hide the branch in those cases.
     if params.get('branch') and params.get('branch') != 'HEAD':
         notif_params['branch'] = params['branch']
-        notif_params['branch_url'] = get_branch_url(params['branch'])
+        notif_params['branch_url'] = git.get_tree_url(
+            params['branch'], config['repository_url'])
 
     return notif_params
