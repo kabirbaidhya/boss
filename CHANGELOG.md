@@ -5,7 +5,7 @@
 
 **Implemented enhancements:**
 
-- Use git tree url for commit and branche links in the notification message [\#83](https://github.com/kabirbaidhya/boss/pull/83) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Use git tree url for commit and branch links in the notification message [\#83](https://github.com/kabirbaidhya/boss/pull/83) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Display commit hash on slack and hipchat deployment notifications [\#82](https://github.com/kabirbaidhya/boss/pull/82) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Refactor boss.config and add tests to verify things work correctly [\#80](https://github.com/kabirbaidhya/boss/pull/80) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] [[test](https://github.com/kabirbaidhya/boss/labels/test)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
