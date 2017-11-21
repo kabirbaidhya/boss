@@ -43,7 +43,7 @@ def test_notity_deploying():
         user='user',
     )
     payload = {
-        'color': 'yellow',
+        'color': 'green',
         'message': 'user is deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
@@ -75,7 +75,7 @@ def test_notity_deployed():
         user='user',
     )
     payload = {
-        'color': 'green',
+        'color': 'purple',
         'message': 'user finished deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
@@ -109,7 +109,7 @@ def test_notity_deploying_with_no_branch():
         user='user',
     )
     payload = {
-        'color': 'yellow',
+        'color': 'green',
         'message': 'user is deploying <a href="http://repository-url">project-name</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
@@ -142,7 +142,7 @@ def test_notity_deployed_with_no_branch():
         user='user',
     )
     payload = {
-        'color': 'green',
+        'color': 'purple',
         'message': 'user finished deploying <a href="http://repository-url">project-name</a> (<a href="http://commit-url">tttt</a>) to <a href="http://public-url">stage</a> server.',
         'notify': True,
         'message_format': 'html'
