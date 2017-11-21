@@ -42,6 +42,8 @@ DEFAULT_CONFIG = {
             'endpoint': '',
             'deploying_color': 'good',
             'deployed_color': '#764FA5',
+            'ci_deploying_color': '#cccccc',
+            'ci_deployed_color': '#7CD197',
             'base_url': 'https://hooks.slack.com/services'
         },
         'hipchat': {
@@ -50,8 +52,10 @@ DEFAULT_CONFIG = {
             'company_name': '',
             'room_id': '',
             'auth_token': '',
-            'deploying_color': 'yellow',
-            'deployed_color': 'green',
+            'deploying_color': 'green',
+            'deployed_color': 'purple',
+            'ci_deploying_color': 'gray',
+            'ci_deployed_color': 'yellow',
         }
     }
 }

@@ -1,5 +1,6 @@
 ''' Initialization module. '''
 
+import os
 import sys
 from fabric.api import env, task
 from fabric.tasks import _is_task
@@ -13,6 +14,7 @@ from .api.deployment import deployer
 
 def init(module_name):
     ''' Initialize the boss configuration. '''
+    os.environ['BOSS_RUNNING'] = 'true'
     setup_boss_home()
     stage = get_stage()
     config = load_config(stage=stage)
