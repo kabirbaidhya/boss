@@ -11,22 +11,16 @@ from boss.constants import (
     NOTIFICATION_DEPLOYMENT_STARTED,
     NOTIFICATION_DEPLOYMENT_FINISHED
 )
-DEPLOYING_MESSAGE = '{user} is deploying {project_link} ({commit_link}) to {server_link} server.'
-DEPLOYING_MESSAGE_WITH_BRANCH = '{user} is deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
-
-DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} ({commit_link}) to {server_link} server.'
-DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
-
 
 message_map = {
     NOTIFICATION_DEPLOYMENT_STARTED: {
-        'message': DEPLOYING_MESSAGE,
-        'message_with_branch': DEPLOYING_MESSAGE_WITH_BRANCH
+        'message': '{user} is deploying {project_link} ({commit_link}) to {server_link} server.',
+        'message_with_branch': '{user} is deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
     },
     NOTIFICATION_DEPLOYMENT_FINISHED: {
-        'message': DEPLOYED_SUCCESS_MESSAGE,
-        'message_with_branch': DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH
-    },
+        'message': '{user} finished deploying {project_link} ({commit_link}) to {server_link} server.',
+        'message_with_branch': '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
+    }
 }
 
 
