@@ -18,6 +18,31 @@ DEPLOYED_SUCCESS_MESSAGE = '{user} finished deploying {project_link} ({commit_li
 DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH = '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
 
 
+message_map = {
+    NOTIFICATION_DEPLOYMENT_STARTED: {
+        'message': DEPLOYING_MESSAGE,
+        'message_with_branch': DEPLOYING_MESSAGE_WITH_BRANCH
+    },
+    NOTIFICATION_DEPLOYMENT_FINISHED: {
+        'message': DEPLOYED_SUCCESS_MESSAGE,
+        'message_with_branch': DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH
+    },
+}
+
+
+def get_message(notif_type, **notification):
+    # If the branch is provided, display branch name in the message.
+    # TODO: CI link
+    messages = message_map[notif_type]
+
+    if notification.has_key('branch_link'):
+        text = messages['message_with_branch'].format(**notification)
+    else:
+        text = messages['message'].format(**notification)
+
+    return text
+
+
 def send(notif_type, **params):
     '''
     Send slack notifications.
@@ -84,12 +109,7 @@ def notify_deploying(**params):
     ''' Send Deploying notification on Slack. '''
 
     notification = get_notif_params(**params)
-
-    # If the branch is provided, display branch name in the message.
-    if notification.has_key('branch_link'):
-        text = DEPLOYING_MESSAGE_WITH_BRANCH.format(**notification)
-    else:
-        text = DEPLOYING_MESSAGE.format(**notification)
+    text = get_message(NOTIFICATION_DEPLOYMENT_STARTED, **notification)
 
     if is_ci():
         color = config()['ci_deploying_color']
@@ -111,12 +131,7 @@ def notify_deployed(**params):
     ''' Send Deployed notification on Slack. '''
 
     notification = get_notif_params(**params)
-
-    # If the branch is provided, display branch name in the message.
-    if notification.has_key('branch_link'):
-        text = DEPLOYED_SUCCESS_MESSAGE_WITH_BRANCH.format(**notification)
-    else:
-        text = DEPLOYED_SUCCESS_MESSAGE.format(**notification)
+    text = get_message(NOTIFICATION_DEPLOYMENT_FINISHED, **notification)
 
     if is_ci():
         color = config()['ci_deployed_color']
