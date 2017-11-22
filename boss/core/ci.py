@@ -12,3 +12,8 @@ def is_ci():
             (env.get('CONTINUOUS_INTEGRATION') == 'true')
         )
     )
+
+
+def is_travis():
+    ''' Check if boss is running under Travis CI. '''
+    return is_ci() and env.get('TRAVIS') == 'true'

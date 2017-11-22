@@ -1,7 +1,7 @@
 ''' Tests for boss.core.ci module. '''
 
 import os
-from boss.core.ci import is_ci
+from boss.core.ci import is_ci, is_travis
 
 
 def test_is_ci_returns_true_case_1():
@@ -47,3 +47,12 @@ def test_is_ci_returns_false_if_boss_is_not_running_in_run_mode():
     os.environ['CONTINUOUS_INTEGRATION'] = 'true'
 
     assert is_ci() is False
+
+
+def test_is_travis_returns_true_for_travis_ci():
+    ''' Test is_travis() returns True for Travis CI. '''
+    os.environ['CI'] = 'true'
+    os.environ['BOSS_RUNNING'] = 'true'
+    os.environ['TRAVIS'] = 'true'
+
+    assert is_travis() is True
