@@ -1,7 +1,7 @@
 ''' Application wide common constants module. '''
 
 from os.path import expanduser
-from boss.core.constants import ci, ci_providers
+from boss.core.constants import ci
 
 # Predefined deployment presets
 PRESET_WEB = 'web'
@@ -31,7 +31,6 @@ DEFAULT_CONFIG = {
     'stages': {},
     'scripts': {},
     'ci': {
-        'provider': ci_providers.TRAVIS,
         'base_url': ci.TRAVIS_PAID_BASE_URL
     },
     'deployment': {
