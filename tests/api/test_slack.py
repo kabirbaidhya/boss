@@ -2,9 +2,9 @@
 
 from mock import patch
 from boss.api import slack
-from boss.constants import (
-    NOTIFICATION_DEPLOYMENT_STARTED,
-    NOTIFICATION_DEPLOYMENT_FINISHED
+from boss.core.constants.notification_types import (
+    DEPLOYMENT_STARTED,
+    DEPLOYMENT_FINISHED
 )
 
 
@@ -51,7 +51,7 @@ def test_send():
     }
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
     with patch('requests.post') as mock_post:
-        slack.send(NOTIFICATION_DEPLOYMENT_STARTED, **notify_params)
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
@@ -81,7 +81,7 @@ def test_send_with_no_branch_name():
     }
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
     with patch('requests.post') as mock_post:
-        slack.send(NOTIFICATION_DEPLOYMENT_STARTED, **notify_params)
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
@@ -111,7 +111,7 @@ def test_notity_deployed():
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
-        slack.send(NOTIFICATION_DEPLOYMENT_FINISHED, **notify_params)
+        slack.send(DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
@@ -143,5 +143,5 @@ def test_notity_deployed_with_no_branch_name():
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
-        slack.send(NOTIFICATION_DEPLOYMENT_FINISHED, **notify_params)
+        slack.send(DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)

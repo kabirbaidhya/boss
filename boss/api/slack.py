@@ -2,66 +2,23 @@
 Module for slack API.
 '''
 
-
 import requests
-from ..config import get as _get_config
-
-from boss.core.ci import is_ci
-from boss.constants import (
-    NOTIFICATION_DEPLOYMENT_STARTED,
-    NOTIFICATION_DEPLOYMENT_FINISHED
+from boss.config import get as _get_config
+from boss.core.notification import (
+    get_color,
+    get_message,
+    get_notification_params
 )
-
-message_map = {
-    NOTIFICATION_DEPLOYMENT_STARTED: {
-        'message': '{user} is deploying {project_link} ({commit_link}) to {server_link} server.',
-        'message_with_branch': '{user} is deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.',
-        'color': 'deploying_color',
-        'ci_color': 'ci_deploying_color'
-    },
-    NOTIFICATION_DEPLOYMENT_FINISHED: {
-        'message': '{user} finished deploying {project_link} ({commit_link}) to {server_link} server.',
-        'message_with_branch': '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.',
-        'color': 'deployed_color',
-        'ci_color': 'ci_deployed_color'
-    }
-}
-
-
-def get_message(notif_type, **notification):
-    # If the branch is provided, display branch name in the message.
-    # TODO: CI link
-    messages = message_map[notif_type]
-
-    if notification.has_key('branch_link'):
-        text = messages['message_with_branch'].format(**notification)
-    else:
-        text = messages['message'].format(**notification)
-
-    return text
-
-
-def get_color(notif_type):
-    ''' Get color for notification. '''
-    key = message_map[notif_type]['color']
-    ci_key = message_map[notif_type]['ci_color']
-
-    if is_ci():
-        color = config()[ci_key]
-    else:
-        color = config()[key]
-
-    return color
 
 
 def send(notif_type, **params):
-    '''
-    Send slack notifications.
-    '''
-
-    notification = get_notif_params(**params)
+    ''' Send slack notifications. '''
+    notification = get_notification_params(
+        create_link=create_link,
+        **params
+    )
+    color = get_color(notif_type, config())
     text = get_message(notif_type, **notification)
-    color = get_color(notif_type)
 
     # Notify on slack
     notify({
@@ -96,29 +53,3 @@ def notify(payload):
     ''' Send a notification on Slack. '''
     url = config()['base_url'] + config()['endpoint']
     requests.post(url, json=payload)
-
-
-def get_notif_params(**params):
-    ''' Get slack notification params. '''
-    result = dict(
-        user=params['user'],
-        project_link=create_link(
-            params['repository_url'],
-            params['project_name']
-        ),
-        commit_link=create_link(
-            params['commit_url'],
-            params['commit']
-        ),
-        server_link=create_link(
-            params['public_url'], params['server_name']
-        )
-    )
-
-    if params.get('branch_url') and params.get('branch'):
-        result['branch_link'] = create_link(
-            params['branch_url'],
-            params['branch']
-        )
-
-    return result

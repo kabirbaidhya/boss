@@ -3,9 +3,9 @@
 from mock import patch, call
 
 from boss.api import notif
-from boss.constants import (
-    NOTIFICATION_DEPLOYMENT_STARTED,
-    NOTIFICATION_DEPLOYMENT_FINISHED
+from boss.core.constants.notification_types import (
+    DEPLOYMENT_STARTED,
+    DEPLOYMENT_FINISHED
 )
 
 
@@ -31,7 +31,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
     branch_url = 'https://github.com/kabirbaidhya/boss/tree/my-branch'
 
     # Trigger deployment started notification
-    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
+    notif.send(DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
         'commit': commit,
         'branch': 'my-branch',
@@ -39,7 +39,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
     })
 
     # Trigger deployment finished notification with branch=HEAD
-    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+    notif.send(DEPLOYMENT_FINISHED, {
         'user': 'ssh-user',
         'commit': commit,
         'branch': 'HEAD',
@@ -48,7 +48,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
 
     slack_send_m.assert_has_calls([
         call(
-            NOTIFICATION_DEPLOYMENT_STARTED,
+            DEPLOYMENT_STARTED,
             branch='my-branch',
             commit=commit,
             commit_url=commit_url,
@@ -62,7 +62,7 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
             user='ssh-user'
         ),
         call(
-            NOTIFICATION_DEPLOYMENT_FINISHED,
+            DEPLOYMENT_FINISHED,
             host='example.com',
             commit=commit,
             commit_url=commit_url,
@@ -98,7 +98,7 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
     branch_url = 'https://github.com/kabirbaidhya/boss/tree/my-branch'
 
     # Trigger deployment finished notification
-    notif.send(NOTIFICATION_DEPLOYMENT_FINISHED, {
+    notif.send(DEPLOYMENT_FINISHED, {
         'user': 'ssh-user',
         'commit': commit,
         'branch': 'my-branch',
@@ -106,7 +106,7 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
     })
 
     # Trigger Deployment Started notification with no branch
-    notif.send(NOTIFICATION_DEPLOYMENT_STARTED, {
+    notif.send(DEPLOYMENT_STARTED, {
         'user': 'ssh-user',
         'commit': commit,
         'stage': 'test-server'
@@ -114,7 +114,7 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
 
     hipchat_send_m.assert_has_calls([
         call(
-            NOTIFICATION_DEPLOYMENT_FINISHED,
+            DEPLOYMENT_FINISHED,
             branch='my-branch',
             commit=commit,
             commit_url=commit_url,
@@ -128,7 +128,7 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
             user='ssh-user'
         ),
         call(
-            NOTIFICATION_DEPLOYMENT_STARTED,
+            DEPLOYMENT_STARTED,
             host='example.com',
             commit=commit,
             commit_url=commit_url,
