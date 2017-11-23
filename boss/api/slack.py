@@ -15,11 +15,15 @@ from boss.constants import (
 message_map = {
     NOTIFICATION_DEPLOYMENT_STARTED: {
         'message': '{user} is deploying {project_link} ({commit_link}) to {server_link} server.',
-        'message_with_branch': '{user} is deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
+        'message_with_branch': '{user} is deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.',
+        'color': 'deploying_color',
+        'ci_color': 'ci_deploying_color'
     },
     NOTIFICATION_DEPLOYMENT_FINISHED: {
         'message': '{user} finished deploying {project_link} ({commit_link}) to {server_link} server.',
-        'message_with_branch': '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.'
+        'message_with_branch': '{user} finished deploying {project_link}:{branch_link} ({commit_link}) to {server_link} server.',
+        'color': 'deployed_color',
+        'ci_color': 'ci_deployed_color'
     }
 }
 
@@ -37,16 +41,37 @@ def get_message(notif_type, **notification):
     return text
 
 
+def get_color(notif_type):
+    ''' Get color for notification. '''
+    key = message_map[notif_type]['color']
+    ci_key = message_map[notif_type]['ci_color']
+
+    if is_ci():
+        color = config()[ci_key]
+    else:
+        color = config()[key]
+
+    return color
+
+
 def send(notif_type, **params):
     '''
     Send slack notifications.
     '''
-    handlers = {
-        NOTIFICATION_DEPLOYMENT_STARTED: notify_deploying,
-        NOTIFICATION_DEPLOYMENT_FINISHED: notify_deployed
-    }
 
-    handlers[notif_type](**params)
+    notification = get_notif_params(**params)
+    text = get_message(notif_type, **notification)
+    color = get_color(notif_type)
+
+    # Notify on slack
+    notify({
+        'attachments': [
+            {
+                'color': color,
+                'text': text
+            }
+        ]
+    })
 
 
 def config():
@@ -97,47 +122,3 @@ def get_notif_params(**params):
         )
 
     return result
-
-
-def notify_deploying(**params):
-    ''' Send Deploying notification on Slack. '''
-
-    notification = get_notif_params(**params)
-    text = get_message(NOTIFICATION_DEPLOYMENT_STARTED, **notification)
-
-    if is_ci():
-        color = config()['ci_deploying_color']
-    else:
-        color = config()['deploying_color']
-
-    # Notify on slack
-    notify({
-        'attachments': [
-            {
-                'color': color,
-                'text': text
-            }
-        ]
-    })
-
-
-def notify_deployed(**params):
-    ''' Send Deployed notification on Slack. '''
-
-    notification = get_notif_params(**params)
-    text = get_message(NOTIFICATION_DEPLOYMENT_FINISHED, **notification)
-
-    if is_ci():
-        color = config()['ci_deployed_color']
-    else:
-        color = config()['deployed_color']
-
-    # Notify on slack
-    notify({
-        'attachments': [
-            {
-                'color': color,
-                'text': text
-            }
-        ]
-    })

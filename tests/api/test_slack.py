@@ -2,6 +2,10 @@
 
 from mock import patch
 from boss.api import slack
+from boss.constants import (
+    NOTIFICATION_DEPLOYMENT_STARTED,
+    NOTIFICATION_DEPLOYMENT_FINISHED
+)
 
 
 def test_create_link():
@@ -22,8 +26,8 @@ def test_notify():
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deploying():
-    ''' Test slack.notify_deploying(). '''
+def test_send():
+    ''' Test slack.send(). '''
     notify_params = dict(
         branch_url='http://branch-url',
         branch='temp',
@@ -47,13 +51,13 @@ def test_notity_deploying():
     }
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
     with patch('requests.post') as mock_post:
-        slack.notify_deploying(**notify_params)
+        slack.send(NOTIFICATION_DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deploying_with_no_branch_name():
+def test_send_with_no_branch_name():
     '''
-    Test slack.notify_deploying() doesn't show the branch link,
+    Test slack.send() doesn't show the branch link,
     if branch name is not provided.
     '''
     notify_params = dict(
@@ -77,7 +81,7 @@ def test_notity_deploying_with_no_branch_name():
     }
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
     with patch('requests.post') as mock_post:
-        slack.notify_deploying(**notify_params)
+        slack.send(NOTIFICATION_DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
@@ -107,7 +111,7 @@ def test_notity_deployed():
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
-        slack.notify_deployed(**notify_params)
+        slack.send(NOTIFICATION_DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
@@ -139,5 +143,5 @@ def test_notity_deployed_with_no_branch_name():
     base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
-        slack.notify_deployed(**notify_params)
+        slack.send(NOTIFICATION_DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
