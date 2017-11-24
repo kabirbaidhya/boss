@@ -1,6 +1,7 @@
 ''' Application wide common constants module. '''
 
 from os.path import expanduser
+from boss.core.constants import ci
 
 # Predefined deployment presets
 PRESET_WEB = 'web'
@@ -29,6 +30,9 @@ DEFAULT_CONFIG = {
     'branch_url': '{repository_url}/branch/{branch}',
     'stages': {},
     'scripts': {},
+    'ci': {
+        'base_url': ci.TRAVIS_PAID_BASE_URL
+    },
     'deployment': {
         'preset': PRESET_REMOTE_SOURCE,
         'build_dir': None,
@@ -91,7 +95,3 @@ PRESET_SPECIFIC_DEFAULTS = {
         }
     }
 }
-
-# Notification Types
-NOTIFICATION_DEPLOYMENT_STARTED = 1
-NOTIFICATION_DEPLOYMENT_FINISHED = 2

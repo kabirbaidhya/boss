@@ -16,6 +16,10 @@ import boss.constants as constants
 from boss.config import fallback_branch
 from boss.util import remote_info, remote_print
 from boss.api import git, notif, shell, runner
+from boss.core.constants.notification import (
+    DEPLOYMENT_STARTED,
+    DEPLOYMENT_FINISHED
+)
 
 
 @task
@@ -25,7 +29,7 @@ def deploy(branch=None):
     deployer_user = shell.get_user()
     branch = branch or fallback_branch(stage)
     commit = git.last_commit(short=True)
-    notif.send(constants.NOTIFICATION_DEPLOYMENT_STARTED, {
+    notif.send(DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,
@@ -40,7 +44,7 @@ def deploy(branch=None):
     build(stage)
     reload_service()
 
-    notif.send(constants.NOTIFICATION_DEPLOYMENT_FINISHED, {
+    notif.send(DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,

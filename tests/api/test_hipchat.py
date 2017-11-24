@@ -2,6 +2,10 @@
 
 from mock import patch
 from boss.api import hipchat
+from boss.core.constants.notification_types import (
+    DEPLOYMENT_STARTED,
+    DEPLOYMENT_FINISHED
+)
 
 
 def test_create_link():
@@ -11,20 +15,6 @@ def test_create_link():
     expected_link = '<a href="{url}">{title}</a>'.format(url=url, title=title)
 
     assert hipchat.create_link(url, title) == expected_link
-
-
-def test_notify():
-    ''' Test hipchat.notify(). '''
-    url = hipchat.HIPCHAT_API_URL.format(
-        company_name=hipchat.config()['company_name'],
-        room_id=hipchat.config()['room_id'],
-        auth_token=hipchat.config()['auth_token']
-    )
-
-    with patch('requests.post') as mock_post:
-        payload = {'message': 'Test message'}
-        hipchat.notify(payload)
-        mock_post.assert_called_once_with(url, json=payload)
 
 
 def test_notity_deploying():
@@ -48,14 +38,14 @@ def test_notity_deploying():
         'notify': True,
         'message_format': 'html'
     }
-    url = hipchat.HIPCHAT_API_URL.format(
+    url = hipchat.API_BASE_URL.format(
         company_name=hipchat.config()['company_name'],
         room_id=hipchat.config()['room_id'],
         auth_token=hipchat.config()['auth_token']
     )
 
     with patch('requests.post') as mock_post:
-        hipchat.notify_deploying(**notify_params)
+        hipchat.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(url, json=payload)
 
 
@@ -81,14 +71,14 @@ def test_notity_deployed():
         'message_format': 'html'
     }
 
-    url = hipchat.HIPCHAT_API_URL.format(
+    url = hipchat.API_BASE_URL.format(
         company_name=hipchat.config()['company_name'],
         room_id=hipchat.config()['room_id'],
         auth_token=hipchat.config()['auth_token']
     )
 
     with patch('requests.post') as mock_post:
-        hipchat.notify_deployed(**notify_params)
+        hipchat.send(DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(url, json=payload)
 
 
@@ -114,14 +104,14 @@ def test_notity_deploying_with_no_branch():
         'notify': True,
         'message_format': 'html'
     }
-    url = hipchat.HIPCHAT_API_URL.format(
+    url = hipchat.API_BASE_URL.format(
         company_name=hipchat.config()['company_name'],
         room_id=hipchat.config()['room_id'],
         auth_token=hipchat.config()['auth_token']
     )
 
     with patch('requests.post') as mock_post:
-        hipchat.notify_deploying(**notify_params)
+        hipchat.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(url, json=payload)
 
 
@@ -148,12 +138,12 @@ def test_notity_deployed_with_no_branch():
         'message_format': 'html'
     }
 
-    url = hipchat.HIPCHAT_API_URL.format(
+    url = hipchat.API_BASE_URL.format(
         company_name=hipchat.config()['company_name'],
         room_id=hipchat.config()['room_id'],
         auth_token=hipchat.config()['auth_token']
     )
 
     with patch('requests.post') as mock_post:
-        hipchat.notify_deployed(**notify_params)
+        hipchat.send(DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(url, json=payload)
