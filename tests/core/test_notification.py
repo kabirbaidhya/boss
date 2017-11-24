@@ -2,6 +2,7 @@
 ''' Test boss.core.notification. '''
 
 from os import environ as env
+from boss.constants import DEFAULT_CONFIG
 from boss.core.constants.notification_types import (
     DEPLOYMENT_STARTED,
     DEPLOYMENT_FINISHED
@@ -122,13 +123,37 @@ def test_get_ci_prefix_plain_text_for_unknown_ci_provider():
     if it's an unknown CI provider.
     '''
     env['CI'] = 'true'
-    env['CONTINUOUS_INTEGRATION'] = 'true'
     env['BOSS_RUNNING'] = 'true'
     env['TRAVIS'] = ''  # Set travis as false, as it's unknown service.
 
-    create_link = lambda (x, y): ''
+    def create_link(a, b):
+        return '<{}|{}>'.format(a, b)
+
     result = get_ci_prefix(
         config={}, create_link=create_link
     )
 
     assert result == 'CI · '
+
+
+def test_get_ci_prefix_retuns_link_for_travis():
+    '''
+    Test get_ci_prefix() returns plain text CI indentifier as a prefix,
+    if it's an unknown CI provider.
+    '''
+    env['CI'] = 'true'
+    env['BOSS_RUNNING'] = 'true'
+    env['TRAVIS'] = 'true'
+    env['TRAVIS_BUILD_ID'] = '59945015'
+    env['TRAVIS_REPO_SLUG'] = 'test/test'
+
+    def create_link(a, b):
+        return '<{}|{}>'.format(a, b)
+
+    result = get_ci_prefix(
+        config=DEFAULT_CONFIG,
+        create_link=create_link
+    )
+    expected = '<https://travis-ci.com/test/test/builds/59945015|CI> · '
+
+    assert result == expected
