@@ -90,3 +90,16 @@ def test_get_color_on_non_ci_env():
     })
 
     assert result == 'green'
+
+
+def test_get_color_on_ci_env():
+    ''' Test get_color() on CI environment. '''
+
+    env['CI'] = 'true'
+
+    result = get_color(DEPLOYMENT_STARTED, {
+        'ci_deploying_color': 'blue',
+        'deploying_color': 'green'
+    })
+
+    assert result == 'blue'
