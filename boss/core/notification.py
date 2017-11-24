@@ -22,12 +22,7 @@ def get_color(notif_type, config):
     key = MESSAGE_MAP[notif_type]['color']
     ci_key = MESSAGE_MAP[notif_type]['ci_color']
 
-    if is_ci():
-        color = config[ci_key]
-    else:
-        color = config[key]
-
-    return color
+    return config[ci_key] if is_ci() else config[key]
 
 
 def get_notification_params(**params):

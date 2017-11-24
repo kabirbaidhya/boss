@@ -1,9 +1,11 @@
 ''' Test boss.core.notification. '''
+from os import environ as env
 from boss.core.constants.notification_types import (
     DEPLOYMENT_STARTED,
     DEPLOYMENT_FINISHED
 )
 from boss.core.notification import (
+    get_color,
     get_message
 )
 
@@ -74,3 +76,17 @@ def test_get_message_deployed_with_branch():
     expected_message = 'kabir finished deploying project:branch (commit) to server server.'
 
     assert result == expected_message
+
+
+def test_get_color_on_non_ci_env():
+    ''' Test get_color() on non-CI environment. '''
+
+    env['CI'] = ''
+    env['CONTINUOUS_INTEGRATION'] = ''
+
+    result = get_color(DEPLOYMENT_STARTED, {
+        'ci_deploying_color': 'blue',
+        'deploying_color': 'green'
+    })
+
+    assert result == 'green'
