@@ -1,7 +1,19 @@
+# -*- coding: utf-8 -*-
 ''' Notification module. '''
 
-from boss.core.ci import is_ci
+from boss.core.ci import is_ci, get_ci_link
 from boss.core.constants.notification import MESSAGE_MAP
+
+CI_PREFIX = '{ci_link} · '
+
+
+def get(notif_type, **params):
+    ''' Get notification. '''
+    notification = get_notification_params(**params)
+    color = get_color(notif_type, params['config'])
+    text = get_message(notif_type, **notification)
+
+    return (text, color)
 
 
 def get_message(notif_type, **notification):
@@ -13,6 +25,10 @@ def get_message(notif_type, **notification):
         text = messages['message_with_branch'].format(**notification)
     else:
         text = messages['message'].format(**notification)
+
+    # if is_ci()
+    #     link =
+    #     message = CI_PREFIX.format(ci_link=)
 
     return text
 
