@@ -15,6 +15,10 @@ from boss import constants
 from boss.util import info, remote_info, halt
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
+from boss.core.constants.notification import (
+    DEPLOYMENT_STARTED,
+    DEPLOYMENT_FINISHED
+)
 from .. import buildman
 
 
@@ -78,7 +82,7 @@ def deploy():
 
     deployer_user = shell.get_user()
 
-    notif.send(constants.NOTIFICATION_DEPLOYMENT_STARTED, {
+    notif.send(DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'commit': commit,
         'branch': branch,
@@ -156,7 +160,7 @@ def deploy():
     })
 
     # Send deployment finished notification.
-    notif.send(constants.NOTIFICATION_DEPLOYMENT_FINISHED, {
+    notif.send(DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,
