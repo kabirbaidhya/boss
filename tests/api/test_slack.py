@@ -16,16 +16,6 @@ def test_create_link():
     assert slack.create_link(url, title) == expected_link
 
 
-def test_notify():
-    ''' Test slack.notify(). '''
-    base_url = slack.config()['base_url'] + slack.config()['endpoint']
-
-    with patch('requests.post') as mock_post:
-        payload = {'message': 'Test message'}
-        slack.notify(payload)
-        mock_post.assert_called_once_with(base_url, json=payload)
-
-
 def test_send():
     ''' Test slack.send(). '''
     notify_params = dict(

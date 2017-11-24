@@ -17,20 +17,6 @@ def test_create_link():
     assert hipchat.create_link(url, title) == expected_link
 
 
-def test_notify():
-    ''' Test hipchat.notify(). '''
-    url = hipchat.API_BASE_URL.format(
-        company_name=hipchat.config()['company_name'],
-        room_id=hipchat.config()['room_id'],
-        auth_token=hipchat.config()['auth_token']
-    )
-
-    with patch('requests.post') as mock_post:
-        payload = {'message': 'Test message'}
-        hipchat.notify(payload)
-        mock_post.assert_called_once_with(url, json=payload)
-
-
 def test_notity_deploying():
     ''' Test hipchat.notify_deploying(). '''
     notify_params = dict(
