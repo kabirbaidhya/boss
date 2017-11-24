@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Test boss.core.notification. '''
 
+from mock import patch
 from os import environ as env
 from boss.constants import DEFAULT_CONFIG
 from boss.core.constants.notification_types import (
@@ -8,6 +9,7 @@ from boss.core.constants.notification_types import (
     DEPLOYMENT_FINISHED
 )
 from boss.core.notification import (
+    get,
     get_color,
     get_message,
     get_ci_prefix,
@@ -157,3 +159,43 @@ def test_get_ci_prefix_retuns_link_for_travis():
     expected = '<https://travis-ci.com/test/test/builds/59945015|CI> · '
 
     assert result == expected
+
+
+@patch('boss.core.notification.get_color')
+@patch('boss.core.notification.get_ci_prefix')
+@patch('boss.core.notification.get_notification_params')
+def test_get_returns_message_with_ci_prefix(gnp_m, gcp_m, gc_m):
+    ''' Test get() returns message with ci prefix. '''
+    gnp_m.return_value = dict(
+        user='kabir',
+        project_link='project',
+        commit_link='commit',
+        server_link='server'
+    )
+    gc_m.return_value = 'blue'
+    gcp_m.return_value = 'CI · '
+
+    expected = 'CI · kabir is deploying project (commit) to server server.'
+    (text, _) = get(DEPLOYMENT_STARTED, notif_config={})
+
+    assert text == expected
+
+
+@patch('boss.core.notification.get_color')
+@patch('boss.core.notification.get_ci_prefix')
+@patch('boss.core.notification.get_notification_params')
+def test_get_returns_message_without_ci_prefix(gnp_m, gcp_m, gc_m):
+    ''' Test get() returns message without ci prefix. '''
+    gnp_m.return_value = dict(
+        user='kabir',
+        project_link='project',
+        commit_link='commit',
+        server_link='server'
+    )
+    gc_m.return_value = 'blue'
+    gcp_m.return_value = ''
+
+    expected = 'kabir is deploying project (commit) to server server.'
+    (text, _) = get(DEPLOYMENT_STARTED, notif_config={})
+
+    assert text == expected
