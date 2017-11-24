@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0-alpha.12](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.12) (2017-11-25)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.11...v1.0.0-alpha.12)
+
+**Implemented enhancements:**
+
+- Display CI link on notification messages if running on CI [\#86](https://github.com/kabirbaidhya/boss/pull/86) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Closed issues:**
+
+- Display CI build link on notification messages if running on CI [\#85](https://github.com/kabirbaidhya/boss/issues/85) [[feature](https://github.com/kabirbaidhya/boss/labels/feature)]
+
 ## [v1.0.0-alpha.11](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.11) (2017-11-21)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.10...v1.0.0-alpha.11)
 
