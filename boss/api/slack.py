@@ -4,31 +4,30 @@ Module for slack API.
 
 import requests
 from boss.config import get as _get_config
-from boss.core.notification import (
-    get_color,
-    get_message,
-    get_notification_params
-)
+from boss.core import notification
 
 
 def send(notif_type, **params):
     ''' Send slack notifications. '''
-    notification = get_notification_params(
+    url = config()['base_url'] + config()['endpoint']
+
+    (text, color) = notification.get(
+        notif_type,
+        config=config(),
         create_link=create_link,
         **params
     )
-    color = get_color(notif_type, config())
-    text = get_message(notif_type, **notification)
 
-    # Notify on slack
-    notify({
+    payload = {
         'attachments': [
             {
                 'color': color,
                 'text': text
             }
         ]
-    })
+    }
+
+    requests.post(url, json=payload)
 
 
 def config():
@@ -47,9 +46,3 @@ def create_link(url, title):
         url=url,
         title=title
     )
-
-
-def notify(payload):
-    ''' Send a notification on Slack. '''
-    url = config()['base_url'] + config()['endpoint']
-    requests.post(url, json=payload)
