@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 ''' Test boss.core.notification. '''
+
 from os import environ as env
 from boss.core.constants.notification_types import (
     DEPLOYMENT_STARTED,
@@ -6,7 +8,8 @@ from boss.core.constants.notification_types import (
 )
 from boss.core.notification import (
     get_color,
-    get_message
+    get_message,
+    get_ci_prefix,
 )
 
 
@@ -103,3 +106,11 @@ def test_get_color_on_ci_env():
     })
 
     assert result == 'blue'
+
+
+def test_get_ci_prefix_non_ci():
+    ''' Test get_ci_prefix() returns empty string on non-CI env. '''
+    env['CI'] = 'false'
+    env['CONTINUOUS_INTEGRATION'] = 'false'
+
+    assert get_ci_prefix() == ''
