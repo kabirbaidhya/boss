@@ -3,7 +3,7 @@ Module for hipchat API.
 '''
 
 import requests
-from ..config import get as _get_config
+from ..config import get as get_config
 from boss.core import notification
 
 
@@ -21,7 +21,8 @@ def send(notif_type, **params):
 
     (text, color) = notification.get(
         notif_type,
-        config=config(),
+        config=get_config(),
+        notif_config=config(),
         create_link=create_link,
         **params
     )
@@ -38,7 +39,7 @@ def send(notif_type, **params):
 
 def config():
     ''' Get hipchat configuration. '''
-    return _get_config()['notifications']['hipchat']
+    return get_config()['notifications']['hipchat']
 
 
 def is_enabled():

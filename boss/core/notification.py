@@ -5,13 +5,26 @@ from boss.core.ci import is_ci, get_ci_link
 from boss.core.constants.notification import MESSAGE_MAP
 
 CI_PREFIX = '{ci_link} · '
+CI_TEXT = 'CI'
+CI_SEPARATOR = ' · '
 
 
 def get(notif_type, **params):
     ''' Get notification. '''
     notification = get_notification_params(**params)
-    color = get_color(notif_type, params['config'])
-    text = get_message(notif_type, **notification)
+    color = get_color(notif_type, params['notif_config'])
+    message = get_message(notif_type, **notification)
+
+    # Display a CI prefix if running under CI environment.
+    ci_url = get_ci_link(params['config'])
+    create_link = params['create_link']
+
+    if not is_ci():
+        text = message
+    elif ci_url:
+        text = create_link(ci_url, CI_TEXT) + CI_SEPARATOR + message
+    else:
+        text = CI_TEXT + CI_SEPARATOR + message
 
     return (text, color)
 
@@ -25,10 +38,6 @@ def get_message(notif_type, **notification):
         text = messages['message_with_branch'].format(**notification)
     else:
         text = messages['message'].format(**notification)
-
-    # if is_ci()
-    #     link =
-    #     message = CI_PREFIX.format(ci_link=)
 
     return text
 
