@@ -36,8 +36,11 @@ def get_ci_prefix(**params):
 
 
 def get_message(notif_type, **notification):
-    # If the branch is provided, display branch name in the message.
-    # TODO: CI link
+    '''
+    Get the notification message.
+    If the branch is provided, display branch name in the message.
+    '''
+
     messages = MESSAGE_MAP[notif_type]
 
     if notification.has_key('branch_link'):
