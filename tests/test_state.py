@@ -24,3 +24,12 @@ def test_get_returns_fabric_state_too():
                 assert result['foo'] == 'bar'
                 assert result['env']['a'] == 'test'
                 assert result['connections']['b'] == 'bar'
+
+
+def test_get_by_key():
+    ''' Test get(key) returns a value if found. '''
+
+    with patch.dict('boss.state._state', {'foo': 'something'}):
+        result = get('foo')
+
+        assert result == 'something'
