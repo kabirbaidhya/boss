@@ -4,11 +4,20 @@ from boss.util import merge
 _state = {}
 
 
-def get():
-    ''' Return the current boss state. '''
-    fabric_state = get_fabric_state()
+def get(key=None):
+    '''
+    Return the current boss state.
 
-    return merge(fabric_state, _state)
+    If `key` is provided, returns a value in the state
+    identified by `key`.'''
+
+    fabric_state = get_fabric_state()
+    merged_state = merge(fabric_state, _state)
+
+    if not key:
+        return merged_state
+
+    return merged_state[key]
 
 
 def get_fabric_state():
