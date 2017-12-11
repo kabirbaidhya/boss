@@ -6,9 +6,21 @@ from boss.state import get
 
 def test_get():
     ''' Test get() returns a copy of boss current state. '''
-    state_m = {'foo': 'bar'}
 
-    with patch.dict('boss.state._state', state_m):
+    with patch.dict('boss.state._state', {'foo': 'bar'}):
         result = get()
 
-        assert result['foo'] == state_m['foo']
+        assert result['foo'] == 'bar'
+
+
+def test_get_returns_fabric_state_too():
+    ''' Test get() returns state along with fabric's state. '''
+
+    with patch.dict('boss.state._state', {'foo': 'bar'}):
+        with patch.dict('fabric.state.env', {'a': 'test'}):
+            with patch.dict('fabric.state.connections', {'b': 'bar'}):
+                result = get()
+
+                assert result['foo'] == 'bar'
+                assert result['env']['a'] == 'test'
+                assert result['connections']['b'] == 'bar'
