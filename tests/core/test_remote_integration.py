@@ -13,7 +13,7 @@ def test_put(server):
         source_file = os.path.join(target_dir, 'foo_src')
         target_file = os.path.join(target_dir, 'foo_dest')
 
-        fs.write(source_file, 'Test')
+        fs.write(source_file, 'Test put operation')
         assert not fs.exists(target_file)
 
         with server.client(uid) as client:
@@ -24,4 +24,24 @@ def test_put(server):
                 remote_path=target_file,
                 confirm=True
             )
-            assert fs.read(target_file) == 'Test'
+            assert fs.read(target_file) == 'Test put operation'
+
+
+def test_get(server):
+    ''' Test get() transfers remote file to the local. '''
+    for uid in server.users:
+        target_dir = tempfile.mkdtemp()
+        source_file = os.path.join(target_dir, 'foo_src')
+        target_file = os.path.join(target_dir, 'foo_dest')
+
+        fs.write(source_file, 'Test get operation')
+        assert not fs.exists(target_file)
+
+        with server.client(uid) as client:
+            sftp = client.open_sftp()
+            remote.get(
+                sftp,
+                remote_path=source_file,
+                local_path=target_file
+            )
+            assert fs.read(target_file) == 'Test get operation'
