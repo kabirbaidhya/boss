@@ -1,12 +1,13 @@
 ''' Utility for parsing env declarations. '''
 
 import codecs
+from .util.string import is_quoted
 
 __escape_decoder = codecs.getdecoder('unicode_escape')
 
 
 def parse(env_def):
-    ''' Parse env variable definations. '''
+    ''' Parse env variable definitions. '''
     result = {}
 
     for line in env_def.splitlines():
@@ -15,18 +16,15 @@ def parse(env_def):
         if not line or line.startswith('#') or '=' not in line:
             continue
 
-        k, v = line.split('=', 1)
+        key, value = line.split('=', 1)
 
         # Remove any leading and trailing spaces in key, value
-        k, v = k.strip(), v.strip().encode('unicode-escape').decode('ascii')
+        key, value = key.strip(), value.strip().encode('unicode-escape').decode('ascii')
 
-        if len(v) > 0:
-            quoted = v[0] == v[len(v) - 1] in ['"', "'"]
+        if is_quoted(value):
+            value = decode_escaped(value[1:-1])
 
-            if quoted:
-                v = decode_escaped(v[1:-1])
-
-        result[k] = v
+        result[key] = value
 
     return result
 
