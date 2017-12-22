@@ -9,12 +9,12 @@ from datetime import datetime
 
 from terminaltables import SingleTable
 from fabric.colors import green, cyan
-from fabric.api import cd, hide
+from fabric.api import cd, hide, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION, constants
 from boss.config import get as get_config, get_stage_config
-from boss.util import halt, remote_info, remote_print, merge, localize_utc_timestamp
-from boss.api import fs, shell
+from boss.util import info, remote_info, remote_print, merge, localize_utc_timestamp
+from boss.api import fs, shell, runner
 
 LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']
 INITIAL_BUILD_HISTORY = {
@@ -353,3 +353,22 @@ def rollback(id=None):
 
     # TODO: Send rollback completed notification.
     remote_info('Rollback successful')
+
+
+def build(stage):
+    '''
+    Trigger build script to prepare a build for the given stage.
+    '''
+    info('Getting the build ready for deployment')
+
+    # Trigger the install script
+    runner.run_script(constants.SCRIPT_INSTALL, remote=False)
+
+    # Trigger the build script.
+    #
+    # The stage for which the build script is being run is passed
+    # via an environment variable STAGE.
+    # This could be useful for creating specific builds for
+    # different environments.
+    with shell_env(STAGE=stage):
+        runner.run_script(constants.SCRIPT_BUILD, remote=False)

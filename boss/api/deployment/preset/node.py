@@ -9,7 +9,7 @@ is started on restarted on the remote server.
 
 from datetime import datetime
 
-from fabric.api import task, cd, shell_env
+from fabric.api import task, cd
 
 from boss import constants
 from boss.util import info, remote_info, halt
@@ -98,19 +98,7 @@ def deploy():
     release_path = release_dir + '/' + build_name
     dist_path = build_name + '/dist'
 
-    info('Getting the build ready for deployment')
-
-    # Trigger the install script
-    runner.run_script(constants.SCRIPT_INSTALL, remote=False)
-
-    # Trigger the build script.
-    #
-    # The stage for which the build script is being run is passed
-    # via an environment variable STAGE.
-    # This could be useful for creating specific builds for
-    # different environments.
-    with shell_env(STAGE=stage):
-        runner.run_script(constants.SCRIPT_BUILD, remote=False)
+    buildman.build(stage)
 
     info('Compressing the build')
     fs.tar_archive(build_compressed, build_dir, remote=False)
