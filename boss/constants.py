@@ -28,6 +28,7 @@ DEFAULT_CONFIG = {
     'project_name': 'untitled',
     'project_description': '',
     'branch_url': '{repository_url}/branch/{branch}',
+    'remote_env_injection': False,
     'stages': {},
     'scripts': {},
     'ci': {
