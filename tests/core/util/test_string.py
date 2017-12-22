@@ -1,7 +1,7 @@
 ''' Unit tests for boss.core.util.string module. '''
 
 
-from boss.core.util.string import strip_ansi
+from boss.core.util.string import strip_ansi, is_quoted
 from fabric.colors import red
 
 
@@ -10,3 +10,17 @@ def test_strip_ansi():
     plain_text = 'This is just a test.'
 
     assert plain_text == strip_ansi(text)
+
+
+def test_is_quoted():
+    '''
+    Test is_quoted returns True only
+    for the quoted string values.
+    '''
+    assert is_quoted('"Hello World"') is True
+    assert is_quoted('\'Hello World\'') is True
+    assert is_quoted('Hello World') is False
+    assert is_quoted('\'Hello World') is False
+    assert is_quoted('"Hello World') is False
+    assert is_quoted('Hello World"') is False
+    assert is_quoted('Hello World\'') is False
