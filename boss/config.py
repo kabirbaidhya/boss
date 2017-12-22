@@ -115,7 +115,7 @@ def get_base_config(resolved_config=None):
         'app_dir': config.get('app_dir'),
         'deployment': config.get('deployment'),
         'repository_url': config.get('repository_url'),
-        'remove_env_path': config.get('remove_env_path')
+        'remote_env_path': config.get('remote_env_path')
     }
 
 
