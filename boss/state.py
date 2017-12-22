@@ -1,5 +1,6 @@
 ''' Boss State. '''
-from boss.util import merge
+from copy import deepcopy
+
 
 _state = {}
 
@@ -11,8 +12,11 @@ def get(key=None):
     If `key` is provided, returns a value in the state
     identified by `key`.'''
 
-    fabric_state = get_fabric_state()
-    merged_state = merge(fabric_state, _state)
+    from fabric import state as fabric_state
+
+    merged_state = deepcopy(_state)
+    merged_state['env'] = fabric_state.env
+    merged_state['connections'] = fabric_state.connections
 
     if not key:
         return merged_state
@@ -20,18 +24,12 @@ def get(key=None):
     return merged_state[key]
 
 
-def get_fabric_state():
-    '''
-    Returns fabric state variables.
+# def get_fabric_state():
+#     '''
+#     Returns fabric state variables.
 
-    Note: Don't rely on this function, this will be removed in the future.
-    The purpose of this function is just to abstract over fabric's state,
-    instead of using fabric.state.* directly, so that it would be easier
-    to get rid of fabric in the future major releases.
-    '''
-    from fabric.state import env, connections
-
-    return dict(
-        env=env,
-        connections=connections
-    )
+#     Note: Don't rely on this function, this will be removed in the future.
+#     The purpose of this function is just to abstract over fabric's state,
+#     instead of using fabric.state.* directly, so that it would be easier
+#     to get rid of fabric in the future major releases.
+#     '''

@@ -1,12 +1,17 @@
 ''' SSH module based on paramiko. '''
-from fabric.state import connections, env
 
 
-def put(local_path, remote_path, callback=None):
+def put(client, **params):
     '''
-    Copies a local file to the remote path via SFTP (Paramiko).
+    Transfers a local file to the remote path via SFTP (Paramiko).
     '''
+
+    local_path = params['local_path']
+    remote_path = params['remote_path']
+    callback = params.get('remote_path')
+
     # Open a SFTP connection.
-    ftp = connections[env.host_string].open_sftp()
+    sftp = client.open_sftp()
 
-    return ftp.put(local_path, remote_path, callback)
+    # Do the put operation.
+    return sftp.put(local_path, remote_path, callback)

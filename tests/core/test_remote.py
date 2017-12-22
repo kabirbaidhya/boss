@@ -22,7 +22,7 @@ def sftp():
 def test_put(sftp, callback):
     ''' Test put() works. '''
     local_path = 'test.yml'
-    remote_path = '~/test.yml'
+    remote_path = '/path/to/test.yml'
 
     remote.put(
         sftp,
@@ -37,7 +37,7 @@ def test_put(sftp, callback):
 def test_get(sftp, callback):
     ''' Test get() works. '''
     local_path = 'test.yml'
-    remote_path = '~/test.yml'
+    remote_path = '/path/to/test.yml'
 
     remote.get(
         sftp,
