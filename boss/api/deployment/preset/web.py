@@ -13,7 +13,7 @@ from fabric.api import task, cd
 
 from boss.util import info, remote_info
 from boss.api import shell, notif, fs, git
-from boss.config import get_stage_config
+from boss.config import get_stage_config, get as get_config
 from boss.core.constants.notification import (
     DEPLOYMENT_STARTED,
     DEPLOYMENT_FINISHED
@@ -50,6 +50,7 @@ def setup():
 @task
 def deploy():
     ''' Zero-Downtime deployment for the web. '''
+    config = get_config()
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
 
@@ -83,7 +84,7 @@ def deploy():
     build_compressed = build_name + '.tar.gz'
     release_path = release_dir + '/' + build_name
 
-    buildman.build(stage)
+    buildman.build(stage, config)
 
     info('Compressing the build')
     fs.tar_archive(build_compressed, build_dir, remote=False)

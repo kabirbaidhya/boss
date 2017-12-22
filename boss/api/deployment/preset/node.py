@@ -98,7 +98,7 @@ def deploy():
     release_path = release_dir + '/' + build_name
     dist_path = build_name + '/dist'
 
-    buildman.build(stage)
+    buildman.build(stage, config)
 
     info('Compressing the build')
     fs.tar_archive(build_compressed, build_dir, remote=False)
