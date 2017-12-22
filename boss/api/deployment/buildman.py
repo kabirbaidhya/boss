@@ -9,12 +9,13 @@ from datetime import datetime
 
 from terminaltables import SingleTable
 from fabric.colors import green, cyan
-from fabric.api import cd, hide
+from fabric.api import cd, hide, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION, constants
 from boss.config import get as get_config, get_stage_config
-from boss.util import halt, remote_info, remote_print, merge, localize_utc_timestamp
-from boss.api import fs, shell
+from boss.util import info, remote_info, remote_print, merge, localize_utc_timestamp
+from boss.api import fs, shell, runner
+from boss.core import env
 
 LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']
 INITIAL_BUILD_HISTORY = {
@@ -353,3 +354,51 @@ def rollback(id=None):
 
     # TODO: Send rollback completed notification.
     remote_info('Rollback successful')
+
+
+def load_remote_env_vars(remote_env_path):
+    '''
+    Load remote env variables and return them as
+    key-value pairs (dict) of environment variables.
+    '''
+    env_def = fs.read_remote_file(remote_env_path)
+    env_vars = env.parse(env_def)
+
+    return env_vars
+
+
+def get_build_env_vars(stage, config):
+    ''' Get env vars to be injected to the build script. '''
+    # The stage for which the build script is being run is passed
+    # via an environment variable STAGE.
+    # This could be useful for creating specific builds for
+    # different environments.
+    env_vars = {
+        'STAGE': stage
+    }
+
+    # If remote env injection is not enabled skip it.
+    if not config['remote_env_injection']:
+        return env_vars
+
+    # Remote environment variables are sent to the build script too
+    # if remote_env_injection is enabled.
+    remote_env_path = config['stages'][stage]['remote_env_path']
+    remote_vars = load_remote_env_vars(remote_env_path)
+
+    return merge(remote_vars, env_vars)
+
+
+def build(stage, config):
+    '''
+    Trigger build script to prepare a build for the given stage.
+    '''
+    info('Getting the build ready for deployment')
+
+    # Trigger the install script
+    runner.run_script(constants.SCRIPT_INSTALL, remote=False)
+
+    env_vars = get_build_env_vars(stage, config)
+
+    with shell_env(**env_vars):
+        runner.run_script(constants.SCRIPT_BUILD, remote=False)

@@ -91,12 +91,14 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
     '''
     raw_config = {
         'port': '1234',
+        'remote_env_path': 'test',
         'deployment': {
             'base_dir': '~/some/directory'
         },
         'stages': {
             'stage1': {
-                'host': 'stage1.example.com'
+                'host': 'stage1.example.com',
+                'remote_env_path': 'best'
             },
             'stage2': {
                 'host': 'stage2.example.com',
@@ -110,6 +112,7 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
     stage1_config = result['stages']['stage1']
     assert stage1_config['port'] == raw_config['port']
     assert stage1_config['host'] == raw_config['stages']['stage1']['host']
+    assert stage1_config['remote_env_path'] == raw_config['stages']['stage1']['remote_env_path']
     assert stage1_config['deployment'][
         'base_dir'] == raw_config['deployment']['base_dir']
     assert stage1_config['deployment'][
@@ -119,6 +122,7 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
     stage2_config = result['stages']['stage2']
     assert stage2_config['port'] == raw_config['stages']['stage2']['port']
     assert stage2_config['host'] == raw_config['stages']['stage2']['host']
+    assert stage2_config['remote_env_path'] == raw_config['remote_env_path']
     assert stage2_config['deployment'][
         'base_dir'] == raw_config['deployment']['base_dir']
     assert stage2_config['deployment'][

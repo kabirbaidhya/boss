@@ -9,12 +9,11 @@ The source code is built locally and only the dist is uploaded and deployed to t
 
 from datetime import datetime
 
-from fabric.api import task, cd, shell_env
+from fabric.api import task, cd
 
-from boss import constants
 from boss.util import info, remote_info
-from boss.api import shell, notif, runner, fs, git
-from boss.config import get_stage_config
+from boss.api import shell, notif, fs, git
+from boss.config import get_stage_config, get as get_config
 from boss.core.constants.notification import (
     DEPLOYMENT_STARTED,
     DEPLOYMENT_FINISHED
@@ -51,6 +50,7 @@ def setup():
 @task
 def deploy():
     ''' Zero-Downtime deployment for the web. '''
+    config = get_config()
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
 
@@ -84,19 +84,7 @@ def deploy():
     build_compressed = build_name + '.tar.gz'
     release_path = release_dir + '/' + build_name
 
-    info('Getting the build ready for deployment')
-
-    # Trigger the install script
-    runner.run_script(constants.SCRIPT_INSTALL, remote=False)
-
-    # Trigger the build script.
-    #
-    # The stage for which the build script is being run is passed
-    # via an environment variable STAGE.
-    # This could be useful for creating specific builds for
-    # different environments.
-    with shell_env(STAGE=stage):
-        runner.run_script(constants.SCRIPT_BUILD, remote=False)
+    buildman.build(stage, config)
 
     info('Compressing the build')
     fs.tar_archive(build_compressed, build_dir, remote=False)
