@@ -1,6 +1,21 @@
 # Change Log
 
-## [v1.0.0-alpha.12](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.12) (2017-11-25)
+## [v1.0.0-alpha.13](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.13) (2017-12-23)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.12...v1.0.0-alpha.13)
+
+**Implemented enhancements:**
+
+- Add core utils for compression and hashing [\#93](https://github.com/kabirbaidhya/boss/pull/93) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Closed issues:**
+
+- Remote environment variables injection [\#89](https://github.com/kabirbaidhya/boss/issues/89) [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[interesting](https://github.com/kabirbaidhya/boss/labels/interesting)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)]
+
+**Improvements:**
+
+- Remote env injection [\#92](https://github.com/kabirbaidhya/boss/pull/92) [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+## [v1.0.0-alpha.12](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.12) (2017-11-24)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.11...v1.0.0-alpha.12)
 
 **Implemented enhancements:**
