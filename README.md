@@ -21,7 +21,7 @@
 ## Installation
 
 ```bash
-$ pip install boss-cli==1.0.0-alpha.11
+$ pip install boss-cli==1.0.0-alpha.13
 ```
 
 ## Configuration
