@@ -1,6 +1,7 @@
 '''
 Constants for Known scripts - predefined script constants.
 '''
+
 STOP = 'stop'
 LOGS = 'logs'
 START = 'start'
