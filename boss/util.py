@@ -6,9 +6,7 @@ to better categorize utilities.
 '''
 
 import time
-import collections
 from datetime import datetime
-from copy import deepcopy
 from fabric.api import run as _run, local as _local, hide
 from fabric.colors import red, green, yellow
 
@@ -75,19 +73,6 @@ def is_iterable(obj):
     has_get_item = hasattr(obj, '__getitem__')
 
     return has_iter or has_get_item
-
-
-def merge(dict1, dict2):
-    ''' Merge Two dictionaries recursively. '''
-    result = deepcopy(dict1)
-
-    for key, value in dict2.iteritems():
-        if isinstance(value, collections.Mapping):
-            result[key] = merge(result.get(key, {}), value)
-        else:
-            result[key] = deepcopy(dict2[key])
-
-    return result
 
 
 def localize_utc_timestamp(utc_datetime):
