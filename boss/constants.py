@@ -17,7 +17,7 @@ BOSS_HOME_PATH = expanduser('~/.boss')
 BOSS_CACHE_PATH = BOSS_HOME_PATH + '/cache'
 
 DEFAULT_CONFIG = {
-    'user': 'boss',
+    'user': 'app',
     'port': 22,
     'key_filename': '~/.ssh/id_rsa',
     'ssh_forward_agent': False,
@@ -38,7 +38,7 @@ DEFAULT_CONFIG = {
     'deployment': {
         'preset': PRESET_REMOTE_SOURCE,
         'build_dir': None,
-        'base_dir': '~/boss',
+        'base_dir': '~/deployment',
         'keep_builds': 5,
         'include_files': []
     },
