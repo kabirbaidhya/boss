@@ -5,8 +5,6 @@ TODO: Have a separate package `util` and have sub modules under it
 to better categorize utilities.
 '''
 
-import time
-from datetime import datetime
 from fabric.api import run as _run, local as _local, hide
 from fabric.colors import red, green, yellow
 
@@ -73,10 +71,3 @@ def is_iterable(obj):
     has_get_item = hasattr(obj, '__getitem__')
 
     return has_iter or has_get_item
-
-
-def localize_utc_timestamp(utc_datetime):
-    ''' Convert timestamp in UTC to local timezone. '''
-    now = time.time()
-    offset = datetime.fromtimestamp(now) - datetime.utcfromtimestamp(now)
-    return utc_datetime + offset

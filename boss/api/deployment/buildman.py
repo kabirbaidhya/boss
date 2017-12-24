@@ -13,9 +13,10 @@ from fabric.api import cd, hide, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config, get_stage_config
-from boss.util import info, remote_info, remote_print, localize_utc_timestamp
+from boss.util import info, remote_info, remote_print
 from boss.api import fs, shell, runner
 from boss.core import env
+from boss.core.util import ts
 from boss.core.util.object import merge
 from boss.core.constants import presets, known_scripts
 
@@ -102,7 +103,7 @@ def local_timestamp(timestamp, tz=True):
     UTC timestamp stored in the server.
     '''
     timestamp_utc = datetime.strptime(timestamp, TS_FORMAT)
-    timestamp_local = localize_utc_timestamp(timestamp_utc)
+    timestamp_local = ts.localize_utc_timestamp(timestamp_utc)
 
     tz_name = time.strftime(' (%Z)') if tz else ''
     return timestamp_local.strftime(TS_FORMAT_LOCAL) + tz_name
