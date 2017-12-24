@@ -3,7 +3,7 @@
 
 from mock import patch
 from os import environ as env
-from boss.constants import DEFAULT_CONFIG
+from boss.core.constants.config import DEFAULT_CONFIG
 from boss.core.constants.notification_types import (
     DEPLOYMENT_STARTED,
     DEPLOYMENT_FINISHED

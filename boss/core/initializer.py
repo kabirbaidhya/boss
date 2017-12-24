@@ -10,10 +10,9 @@ from boss.constants import (
     FABFILE_PATH,
     BOSS_HOME_PATH,
     BOSS_CACHE_PATH,
-    DEFAULT_CONFIG,
     DEFAULT_CONFIG_FILE
 )
-
+from boss.core.constants.config import DEFAULT_CONFIG
 from boss.core.inquiries import get_initial_config_params
 
 

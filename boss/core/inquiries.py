@@ -3,8 +3,8 @@ A module to handle interaction of the CLI with the user.
 '''
 from inquirer import Text, List, prompt
 
-from boss.constants import DEFAULT_CONFIG
 from boss.core.constants import presets
+from boss.core.constants.config import DEFAULT_CONFIG
 
 
 def get_initial_config_params():
