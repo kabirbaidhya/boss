@@ -2,7 +2,7 @@
 
 
 from boss.core.util.string import strip_ansi, is_quoted
-from fabric.colors import red
+from boss.core.util.colors import red
 
 
 def test_strip_ansi():

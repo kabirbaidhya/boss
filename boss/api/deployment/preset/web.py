@@ -11,9 +11,10 @@ from datetime import datetime
 
 from fabric.api import task, cd
 
-from boss.util import info, remote_info
+from boss.util import remote_info
 from boss.api import shell, notif, fs, git
 from boss.config import get_stage_config, get as get_config
+from boss.core.output import info
 from boss.core.constants import notification_types
 from .. import buildman
 

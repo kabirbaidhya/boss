@@ -9,12 +9,12 @@ It then builds the project and restarts the service if needed.
 
 
 from fabric.api import task, hide
-from fabric.colors import cyan
 from fabric.context_managers import shell_env
 
 from boss.config import get_stage_config
 from boss.util import remote_info, remote_print
 from boss.api import git, notif, shell, runner
+from boss.core.util.colors import cyan
 from boss.core.constants import known_scripts, notification_types
 
 

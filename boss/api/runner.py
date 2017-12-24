@@ -1,5 +1,5 @@
 
-from fabric.colors import cyan
+from boss.core.util.colors import cyan
 from fabric.api import run as _run, local as _local, hide
 from ..config import get as _get_config
 from ..util import host_info

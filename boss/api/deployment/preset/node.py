@@ -8,12 +8,12 @@ is started on restarted on the remote server.
 '''
 
 from datetime import datetime
-
 from fabric.api import task, cd
 
-from boss.util import info, remote_info, halt
+from boss.util import remote_info
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
+from boss.core.output import halt, info
 from boss.core.constants import known_scripts, notification_types
 from .. import buildman
 
