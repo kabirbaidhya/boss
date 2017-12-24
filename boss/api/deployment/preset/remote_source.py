@@ -12,7 +12,7 @@ from fabric.api import task, hide
 from fabric.colors import cyan
 from fabric.context_managers import shell_env
 
-from boss.config import fallback_branch
+from boss.config import get_stage_config
 from boss.util import remote_info, remote_print
 from boss.api import git, notif, shell, runner
 from boss.core.constants import known_scripts, notification_types
@@ -23,7 +23,7 @@ def deploy(branch=None):
     ''' Deploy to remote source. '''
     stage = shell.get_stage()
     deployer_user = shell.get_user()
-    branch = branch or fallback_branch(stage)
+    branch = get_stage_config(stage)['branch']
     commit = git.last_commit(short=True)
     notif.send(notification_types.DEPLOYMENT_STARTED, {
         'user': deployer_user,

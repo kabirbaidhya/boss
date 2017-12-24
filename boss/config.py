@@ -128,8 +128,3 @@ def get_stage_config(stage):
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
         ))
-
-
-def fallback_branch(stage):
-    ''' Get the fallback branch for the stage. '''
-    return get_stage_config(stage).get('branch') or _config['branch']
