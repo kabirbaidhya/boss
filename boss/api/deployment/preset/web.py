@@ -14,10 +14,7 @@ from fabric.api import task, cd
 from boss.util import info, remote_info
 from boss.api import shell, notif, fs, git
 from boss.config import get_stage_config, get as get_config
-from boss.core.constants.notification import (
-    DEPLOYMENT_STARTED,
-    DEPLOYMENT_FINISHED
-)
+from boss.core.constants import notification_types
 from .. import buildman
 
 
@@ -69,7 +66,7 @@ def deploy():
     deploy_dir = buildman.get_deploy_dir()
     deployer_user = shell.get_user()
 
-    notif.send(DEPLOYMENT_STARTED, {
+    notif.send(notification_types.DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,
@@ -128,7 +125,7 @@ def deploy():
     })
 
     # Send deployment finished notification.
-    notif.send(DEPLOYMENT_FINISHED, {
+    notif.send(notification_types.DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,

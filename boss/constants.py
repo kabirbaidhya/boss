@@ -7,6 +7,11 @@ from boss.core.constants.presets import (
     NODE,
     REMOTE_SOURCE
 )
+from boss.core.constants.known_scripts import (
+    INSTALL,
+    INSTALL_REMOTE,
+    BUILD
+)
 
 # Predefined deployment presets
 
@@ -68,18 +73,6 @@ DEFAULT_CONFIG = {
     }
 }
 
-# Predefined custom scripts/hooks
-SCRIPT_STOP = 'stop'
-SCRIPT_LOGS = 'logs'
-SCRIPT_START = 'start'
-SCRIPT_BUILD = 'build'
-SCRIPT_RELOAD = 'reload'
-SCRIPT_INSTALL = 'install'
-SCRIPT_STATUS_CHECK = 'status_check'
-SCRIPT_LIST_SERVICES = 'list_services'
-SCRIPT_INSTALL_REMOTE = 'install_remote'
-SCRIPT_START_OR_RELOAD = 'start_or_reload'
-
 
 # Preset specific defaults
 PRESET_SPECIFIC_DEFAULTS = {
@@ -92,10 +85,9 @@ PRESET_SPECIFIC_DEFAULTS = {
             ]
         },
         'scripts': {
-            SCRIPT_INSTALL: 'npm install',
-            SCRIPT_INSTALL_REMOTE: 'npm install',
-            SCRIPT_BUILD: 'npm run build'
-            # TODO: Add pm2 based scripts too as a default.
+            INSTALL: 'npm install',
+            INSTALL_REMOTE: 'npm install',
+            BUILD: 'npm run build'
         }
     }
 }

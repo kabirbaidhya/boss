@@ -12,14 +12,10 @@ from fabric.api import task, hide
 from fabric.colors import cyan
 from fabric.context_managers import shell_env
 
-import boss.constants as constants
 from boss.config import fallback_branch
 from boss.util import remote_info, remote_print
 from boss.api import git, notif, shell, runner
-from boss.core.constants.notification import (
-    DEPLOYMENT_STARTED,
-    DEPLOYMENT_FINISHED
-)
+from boss.core.constants import known_scripts, notification_types
 
 
 @task
@@ -29,7 +25,7 @@ def deploy(branch=None):
     deployer_user = shell.get_user()
     branch = branch or fallback_branch(stage)
     commit = git.last_commit(short=True)
-    notif.send(DEPLOYMENT_STARTED, {
+    notif.send(notification_types.DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,
@@ -44,7 +40,7 @@ def deploy(branch=None):
     build(stage)
     reload_service()
 
-    notif.send(DEPLOYMENT_FINISHED, {
+    notif.send(notification_types.DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,
@@ -56,13 +52,13 @@ def deploy(branch=None):
 
 def reload_service():
     ''' Reload the service after deployment. '''
-    runner.run_script_safely(constants.SCRIPT_RELOAD)
-    runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
+    runner.run_script_safely(known_scripts.RELOAD)
+    runner.run_script_safely(known_scripts.STATUS_CHECK)
 
 
 def install_dependencies():
     ''' Install dependencies. '''
-    runner.run_script_safely(constants.SCRIPT_INSTALL)
+    runner.run_script_safely(known_scripts.INSTALL)
 
 
 @task
@@ -84,25 +80,25 @@ def build(stage_name=None):
 
     with shell_env(STAGE=(stage_name or stage)):
         # Trigger the build script.
-        runner.run_script_safely(constants.SCRIPT_BUILD)
+        runner.run_script_safely(known_scripts.BUILD)
 
 
 @task
 def stop():
     ''' Stop the service. '''
-    runner.run_script_safely(constants.SCRIPT_STOP)
+    runner.run_script_safely(known_scripts.STOP)
 
 
 @task
 def restart():
     ''' Restart the service. '''
-    runner.run_script_safely(constants.SCRIPT_RELOAD)
+    runner.run_script_safely(known_scripts.RELOAD)
 
 
 @task
 def status():
     ''' Check the status of the service. '''
-    runner.run_script_safely(constants.SCRIPT_STATUS_CHECK)
+    runner.run_script_safely(known_scripts.STATUS_CHECK)
 
 
 @task

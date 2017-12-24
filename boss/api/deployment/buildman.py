@@ -11,12 +11,12 @@ from terminaltables import SingleTable
 from fabric.colors import green, cyan
 from fabric.api import cd, hide, shell_env
 
-from boss import BASE_PATH, __version__ as BOSS_VERSION, constants
+from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config, get_stage_config
 from boss.util import info, remote_info, remote_print, merge, localize_utc_timestamp
 from boss.api import fs, shell, runner
 from boss.core import env
-from boss.core.constants import presets
+from boss.core.constants import presets, known_scripts
 
 LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']
 INITIAL_BUILD_HISTORY = {
@@ -397,9 +397,9 @@ def build(stage, config):
     info('Getting the build ready for deployment')
 
     # Trigger the install script
-    runner.run_script(constants.SCRIPT_INSTALL, remote=False)
+    runner.run_script(known_scripts.INSTALL, remote=False)
 
     env_vars = get_build_env_vars(stage, config)
 
     with shell_env(**env_vars):
-        runner.run_script(constants.SCRIPT_BUILD, remote=False)
+        runner.run_script(known_scripts.BUILD, remote=False)

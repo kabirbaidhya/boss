@@ -11,14 +11,10 @@ from datetime import datetime
 
 from fabric.api import task, cd
 
-from boss import constants
 from boss.util import info, remote_info, halt
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
-from boss.core.constants.notification import (
-    DEPLOYMENT_STARTED,
-    DEPLOYMENT_FINISHED
-)
+from boss.core.constants import known_scripts, notification_types
 from .. import buildman
 
 
@@ -82,7 +78,7 @@ def deploy():
 
     deployer_user = shell.get_user()
 
-    notif.send(DEPLOYMENT_STARTED, {
+    notif.send(notification_types.DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'commit': commit,
         'branch': branch,
@@ -148,7 +144,7 @@ def deploy():
     })
 
     # Send deployment finished notification.
-    notif.send(DEPLOYMENT_FINISHED, {
+    notif.send(notification_types.DEPLOYMENT_FINISHED, {
         'user': deployer_user,
         'branch': branch,
         'commit': commit,
@@ -161,40 +157,40 @@ def deploy():
 def install_remote_dependencies():
     ''' Install dependencies on the remote host. '''
     remote_info('Installing dependencies on the remote')
-    if runner.is_script_defined(constants.SCRIPT_INSTALL_REMOTE):
-        runner.run_script(constants.SCRIPT_INSTALL_REMOTE)
+    if runner.is_script_defined(known_scripts.INSTALL_REMOTE):
+        runner.run_script(known_scripts.INSTALL_REMOTE)
     else:
-        runner.run_script(constants.SCRIPT_INSTALL)
+        runner.run_script(known_scripts.INSTALL)
 
 
 def start_or_reload_service(has_started=False):
     ''' Start or reload the application service. '''
     with cd(buildman.get_deploy_dir()):
-        if runner.is_script_defined(constants.SCRIPT_START_OR_RELOAD):
+        if runner.is_script_defined(known_scripts.START_OR_RELOAD):
             remote_info('Starting/Reloading the service.')
-            runner.run_script(constants.SCRIPT_START_OR_RELOAD)
+            runner.run_script(known_scripts.START_OR_RELOAD)
 
-        elif has_started and runner.is_script_defined(constants.SCRIPT_RELOAD):
+        elif has_started and runner.is_script_defined(known_scripts.RELOAD):
             remote_info('Reloading the service.')
-            runner.run_script_safely(constants.SCRIPT_RELOAD)
+            runner.run_script_safely(known_scripts.RELOAD)
 
-        elif runner.is_script_defined(constants.SCRIPT_START):
+        elif runner.is_script_defined(known_scripts.START):
             remote_info('Starting the service.')
-            runner.run_script(constants.SCRIPT_START)
+            runner.run_script(known_scripts.START)
 
 
 def reload_service():
     ''' Restart the application service. '''
     with cd(buildman.get_deploy_dir()):
         remote_info('Reloading the service.')
-        runner.run_script_safely(constants.SCRIPT_RELOAD)
+        runner.run_script_safely(known_scripts.RELOAD)
 
 
 def stop_service():
     ''' Stop the application service. '''
     with cd(buildman.get_deploy_dir()):
         remote_info('Stopping the service.')
-        runner.run_script_safely(constants.SCRIPT_STOP)
+        runner.run_script_safely(known_scripts.STOP)
 
 
 @task(alias='reload')
@@ -213,7 +209,7 @@ def stop():
 def status():
     ''' Get the status of the service. '''
     with cd(buildman.get_current_path()):
-        runner.run_script(constants.SCRIPT_STATUS_CHECK)
+        runner.run_script(known_scripts.STATUS_CHECK)
 
 
 @task
@@ -234,4 +230,4 @@ def run(script):
 def services():
     ''' List the services running for the application. '''
     with cd(buildman.get_current_path()):
-        runner.run_script(constants.SCRIPT_LIST_SERVICES)
+        runner.run_script(known_scripts.LIST_SERVICES)
