@@ -6,7 +6,7 @@ from boss.core.ci import (
     is_travis,
     get_ci_link
 )
-from boss.constants import DEFAULT_CONFIG
+from boss.core.constants.config import DEFAULT_CONFIG
 
 
 def test_is_ci_returns_true_case_1():

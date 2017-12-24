@@ -3,10 +3,10 @@ Boss default tasks module.
 '''
 
 from fabric.api import run as _run, task
-import boss.constants as constants
 from .util import halt
 from .api import shell, runner
 from .config import get_stage_config, get as get_config
+from .core.constants import known_scripts
 
 
 @task
@@ -24,7 +24,7 @@ def logs():
         return
 
     # If logs script is defined, run it
-    runner.run_script_safely(constants.SCRIPT_LOGS)
+    runner.run_script_safely(known_scripts.LOGS)
 
 
 @task
@@ -35,5 +35,6 @@ def run(script):
         runner.run_script(script)
     except RuntimeError as e:
         halt(str(e))
+
 
 __all__ = ['run', 'logs']

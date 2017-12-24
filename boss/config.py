@@ -8,7 +8,8 @@ import yaml
 import dotenv
 from .core import fs
 from .util import halt, merge, info
-from .constants import DEFAULT_CONFIG, DEFAULT_CONFIG_FILE, PRESET_SPECIFIC_DEFAULTS
+from .constants import DEFAULT_CONFIG_FILE
+from .core.constants.config import DEFAULT_CONFIG, PSD
 
 
 _config = deepcopy(DEFAULT_CONFIG)
@@ -64,7 +65,7 @@ def merge_config(raw_config):
     to each stage too and return the merged result.
     '''
     preset = get_deployment_preset(raw_config)
-    preset_defaults = PRESET_SPECIFIC_DEFAULTS[preset]
+    preset_defaults = PSD[preset]
     all_defaults = merge(DEFAULT_CONFIG, preset_defaults)
     result = merge(all_defaults, raw_config)
     base_config = get_base_config(result)
@@ -127,8 +128,3 @@ def get_stage_config(stage):
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
         ))
-
-
-def fallback_branch(stage):
-    ''' Get the fallback branch for the stage. '''
-    return get_stage_config(stage).get('branch') or _config['branch']

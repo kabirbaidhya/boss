@@ -6,9 +6,10 @@ from click.testing import CliRunner
 from boss import __version__
 from boss.cli import main as cli
 from boss.constants import (
-    DEFAULT_CONFIG_FILE, FABFILE_PATH,
+    FABFILE_PATH,
     BOSS_HOME_PATH,
-    BOSS_CACHE_PATH
+    BOSS_CACHE_PATH,
+    DEFAULT_CONFIG_FILE
 )
 
 

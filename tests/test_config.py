@@ -1,8 +1,8 @@
 ''' Unit tests for boss.config module. '''
 
 from mock import patch
-from boss.constants import DEFAULT_CONFIG
 from boss.core.util.string import strip_ansi
+from boss.core.constants.config import DEFAULT_CONFIG
 from boss.config import (
     load,
     merge_config,
