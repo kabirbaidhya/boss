@@ -14,7 +14,7 @@ def echo(msg):
 
 
 def info(msg):
-    ''' Print a message (Information) '''
+    ''' Print a message (Information). '''
     echo('\n' + green(msg))
 
 
