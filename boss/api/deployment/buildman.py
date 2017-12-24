@@ -8,7 +8,6 @@ import time
 from datetime import datetime
 
 from terminaltables import SingleTable
-from fabric.colors import green, cyan
 from fabric.api import cd, hide, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION
@@ -19,6 +18,7 @@ from boss.core import env
 from boss.core.util import ts
 from boss.core.output import info
 from boss.core.util.object import merge
+from boss.core.util.colors import green, cyan
 from boss.core.constants import presets, known_scripts
 
 LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']

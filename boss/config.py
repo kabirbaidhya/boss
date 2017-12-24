@@ -4,13 +4,13 @@ import os
 import yaml
 import dotenv
 from copy import deepcopy
-from fabric.colors import cyan
 
 
 from .constants import DEFAULT_CONFIG_FILE
 from .core import fs
 from .core.output import halt, info
 from .core.util.object import merge
+from .core.util.colors import cyan
 from .core.constants.config import DEFAULT_CONFIG, PSD
 
 
