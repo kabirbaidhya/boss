@@ -1,4 +1,6 @@
-from boss.util import halt
+''' Deployer module. '''
+
+from boss.core.output import halt
 from boss.core.constants import presets
 
 

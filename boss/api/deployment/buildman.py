@@ -13,10 +13,11 @@ from fabric.api import cd, hide, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config, get_stage_config
-from boss.util import info, remote_info, remote_print
+from boss.util import remote_info, remote_print
 from boss.api import fs, shell, runner
 from boss.core import env
 from boss.core.util import ts
+from boss.core.output import info
 from boss.core.util.object import merge
 from boss.core.constants import presets, known_scripts
 

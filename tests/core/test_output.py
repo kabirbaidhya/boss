@@ -1,16 +1,12 @@
-''' Unit tests for boss.util module. '''
+''' Tests for boss.core.output module. '''
 
 import pytest
 
-from boss.util import (
-    halt,
-    info,
-    echo
-)
+from boss.core.output import halt, info, echo
 
 
 def test_halt():
-    ''' Test for boss.util.halt() '''
+    ''' Test for halt() '''
     message = 'Test message'
 
     with pytest.raises(SystemExit, match=message):
@@ -18,7 +14,7 @@ def test_halt():
 
 
 def test_echo(capsys):
-    ''' Test for boss.util.echo() '''
+    ''' Test for echo() '''
     message = 'Test message'
     echo(message)
 
@@ -28,7 +24,7 @@ def test_echo(capsys):
 
 
 def test_info(capsys):
-    ''' Test for boss.util.info() '''
+    ''' Test for info() '''
     message = 'Test message'
     info(message)
 

@@ -4,7 +4,8 @@ Module that exposes functions related with the user's current execution shell.
 
 import sys
 import commands
-from ..util import halt
+
+from boss.core.output import halt
 
 
 def get_user():

@@ -1,11 +1,10 @@
-'''
-Boss default tasks module.
-'''
+''' Boss default tasks module. '''
 
 from fabric.api import run as _run, task
-from .util import halt
+
 from .api import shell, runner
 from .config import get_stage_config, get as get_config
+from .core.output import halt
 from .core.constants import known_scripts
 
 
