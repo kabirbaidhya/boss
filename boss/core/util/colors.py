@@ -21,11 +21,24 @@ def wrap_with_color(code):
     return inner
 
 
-grey = wrap_with_color('30')
-red = wrap_with_color('31')
-green = wrap_with_color('32')
-yellow = wrap_with_color('33')
-blue = wrap_with_color('34')
-magenta = wrap_with_color('35')
-cyan = wrap_with_color('36')
-white = wrap_with_color('37')
+
+# Color code constants
+COLOR_GREY = '30'
+COLOR_RED = '31'
+COLOR_GREEN = '32'
+COLOR_YELLOW = '33'
+COLOR_BLUE = '34'
+COLOR_MAGENTA = '35'
+COLOR_CYAN = '36'
+COLOR_WHITE = '37'
+
+
+# Color util functions
+grey = wrap_with_color(COLOR_GREY)
+red = wrap_with_color(COLOR_RED)
+green = wrap_with_color(COLOR_GREEN)
+yellow = wrap_with_color(COLOR_YELLOW)
+blue = wrap_with_color(COLOR_BLUE)
+magenta = wrap_with_color(COLOR_MAGENTA)
+cyan = wrap_with_color(COLOR_CYAN)
+white = wrap_with_color(COLOR_WHITE)
