@@ -1,27 +1,12 @@
 '''
-Module for utility functions
+Module for utility functions.
 
-TODO: Have a separate package `util` and have sub modules under it
-to better categorize utilities.
+TODO: Remove all fabric dependant util functions.
 '''
 
 from fabric.api import run as _run, local as _local, hide
-from fabric.colors import red, green, yellow
 
-
-def halt(msg):
-    ''' Terminate the script execution with a message '''
-    raise SystemExit(red(msg))
-
-
-def echo(msg):
-    ''' Pring a plain message on the console. '''
-    print(msg)
-
-
-def info(msg):
-    ''' Print a message (Information) '''
-    echo('\n' + green(msg))
+from boss.core.util.colors import green
 
 
 def host_print(msg, remote=True, leading_chars='\n'):
@@ -48,13 +33,3 @@ def remote_print(msg):
 def remote_info(msg):
     ''' Print a message (Information) on the remote logs. '''
     host_info(msg, remote=True)
-
-
-def warn(msg):
-    ''' Print a warning message. '''
-    print('\n' + yellow(msg))
-
-
-def warn_deprecated(msg):
-    ''' Print a deprecated warning message. '''
-    warn('Deprecated: {}'.format(msg))
