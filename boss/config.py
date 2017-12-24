@@ -7,8 +7,9 @@ from fabric.colors import cyan
 import yaml
 import dotenv
 from .core import fs
-from .util import halt, merge, info
+from .util import halt, info
 from .constants import DEFAULT_CONFIG_FILE
+from .core.util.object import merge
 from .core.constants.config import DEFAULT_CONFIG, PSD
 
 

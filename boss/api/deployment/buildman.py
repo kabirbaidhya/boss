@@ -13,9 +13,10 @@ from fabric.api import cd, hide, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config, get_stage_config
-from boss.util import info, remote_info, remote_print, merge, localize_utc_timestamp
+from boss.util import info, remote_info, remote_print, localize_utc_timestamp
 from boss.api import fs, shell, runner
 from boss.core import env
+from boss.core.util.object import merge
 from boss.core.constants import presets, known_scripts
 
 LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']
