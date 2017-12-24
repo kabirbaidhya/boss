@@ -7,7 +7,7 @@ from fabric.api import hide, put, get
 from fabric.contrib import files, project
 
 from . import runner
-from .. import util
+from boss.core.util.types import is_iterable, is_string
 
 
 def get_temp_filename(prefix=''):
@@ -36,7 +36,7 @@ def rm_rf(path, remote=True):
 
     # If path is not a string but a list of multiple paths,
     # remove them all.
-    if util.is_iterable(path) and not util.is_string(path):
+    if is_iterable(path) and not is_string(path):
         removal_path = ' '.join(path)
 
     runner.run('rm -rf {}'.format(removal_path), remote=remote)
