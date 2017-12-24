@@ -2,11 +2,13 @@
 
 from os.path import expanduser
 from boss.core.constants import ci
+from boss.core.constants.presets import (
+    WEB,
+    NODE,
+    REMOTE_SOURCE
+)
 
 # Predefined deployment presets
-PRESET_WEB = 'web'
-PRESET_NODE = 'node'
-PRESET_REMOTE_SOURCE = 'remote-source'
 
 # Default boss configuration
 DEFAULT_CONFIG_FILE = 'boss.yml'
@@ -36,7 +38,7 @@ DEFAULT_CONFIG = {
         'base_url': ci.TRAVIS_PAID_BASE_URL
     },
     'deployment': {
-        'preset': PRESET_REMOTE_SOURCE,
+        'preset': REMOTE_SOURCE,
         'build_dir': None,
         'base_dir': '~/deployment',
         'keep_builds': 5,
@@ -81,9 +83,9 @@ SCRIPT_START_OR_RELOAD = 'start_or_reload'
 
 # Preset specific defaults
 PRESET_SPECIFIC_DEFAULTS = {
-    PRESET_REMOTE_SOURCE: {},
-    PRESET_WEB: {},
-    PRESET_NODE: {
+    REMOTE_SOURCE: {},
+    WEB: {},
+    NODE: {
         'deployment': {
             'include_files': [
                 'package.json', 'package-lock.json', 'yarn.lock', 'pm2.config.js'

@@ -3,7 +3,8 @@ A module to handle interaction of the CLI with the user.
 '''
 from inquirer import Text, List, prompt
 
-from boss.constants import DEFAULT_CONFIG, PRESET_NODE, PRESET_REMOTE_SOURCE, PRESET_WEB
+from boss.constants import DEFAULT_CONFIG
+from boss.core.constants import presets
 
 
 def get_initial_config_params():
@@ -30,7 +31,11 @@ def get_initial_config_params():
         List(
             'deployment_preset',
             message='Select your deployment preset',
-            choices=[PRESET_WEB, PRESET_NODE, PRESET_REMOTE_SOURCE]
+            choices=[
+                presets.WEB,
+                presets.NODE,
+                presets.REMOTE_SOURCE
+            ]
         ),
 
         Text(

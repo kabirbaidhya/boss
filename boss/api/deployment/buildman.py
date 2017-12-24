@@ -16,6 +16,7 @@ from boss.config import get as get_config, get_stage_config
 from boss.util import info, remote_info, remote_print, merge, localize_utc_timestamp
 from boss.api import fs, shell, runner
 from boss.core import env
+from boss.core.constants import presets
 
 LOCAL_BUILD_DIRECTORIES = ['build/', 'dist/']
 INITIAL_BUILD_HISTORY = {
@@ -205,7 +206,7 @@ def setup_remote(quiet=True):
         save_history(merge(INITIAL_BUILD_HISTORY, {'preset': preset}))
 
         # Setup a default web page for web deployment.
-        if preset == constants.PRESET_WEB:
+        if preset == presets.WEB:
             setup_default_html(base_dir)
 
         did_setup = True
