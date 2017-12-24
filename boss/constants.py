@@ -38,7 +38,7 @@ DEFAULT_CONFIG = {
     'deployment': {
         'preset': PRESET_REMOTE_SOURCE,
         'build_dir': None,
-        'base_dir': '~/boss',
+        'base_dir': '~/deployment',
         'keep_builds': 5,
         'include_files': []
     },
