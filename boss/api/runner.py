@@ -29,6 +29,19 @@ def run_script_safely(script, remote=True):
         run_script(script, remote)
 
 
+def should_notify(script):
+    ''' Check if the script being run should be notified. '''
+    notified_scripts = _get_config()['notified_hooks']['scripts']
+
+    if notified_scripts == 'all':
+        return True
+
+    if script in notified_scripts:
+        return True
+
+    return False
+
+
 def run_script(script, remote=True):
     ''' Run a script. '''
     custom_scripts = _get_config()['scripts']
