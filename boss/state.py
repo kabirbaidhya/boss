@@ -1,8 +1,11 @@
 ''' Boss State. '''
+
 from copy import deepcopy
 
 
-_state = {}
+_state = {
+    'sftp_connections': {}
+}
 
 
 def get(key=None):
@@ -10,7 +13,8 @@ def get(key=None):
     Return the current boss state.
 
     If `key` is provided, returns a value in the state
-    identified by `key`.'''
+    identified by `key`.
+    '''
 
     from fabric import state as fabric_state
 
@@ -24,12 +28,6 @@ def get(key=None):
     return merged_state[key]
 
 
-# def get_fabric_state():
-#     '''
-#     Returns fabric state variables.
-
-#     Note: Don't rely on this function, this will be removed in the future.
-#     The purpose of this function is just to abstract over fabric's state,
-#     instead of using fabric.state.* directly, so that it would be easier
-#     to get rid of fabric in the future major releases.
-#     '''
+def replace(key, value):
+    ''' Set or replace a key with the provided value in the state. '''
+    _state[key] = value
