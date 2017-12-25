@@ -54,7 +54,7 @@ def run(client, command, **params):
     environment = params.get('env')
 
     # Execute the command.
-    client.exec_command(
+    return client.exec_command(
         command,
         bufsize=bufsize,
         timeout=timeout,

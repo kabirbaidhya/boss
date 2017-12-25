@@ -47,3 +47,12 @@ def test_get(server):
                 local_path=target_file
             )
             assert fs.read(target_file) == 'Test get operation'
+
+
+def test_run(server):
+    ''' Test run() executes a command over ssh. '''
+    for uid in server.users:
+        with server.client(uid) as client:
+            (_, stdout, _) = remote.run(client, 'python --version')
+
+            assert stdout.read() is not None
