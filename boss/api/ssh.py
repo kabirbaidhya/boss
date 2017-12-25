@@ -13,7 +13,7 @@ def resolve_sftp_client():
 
     # If already opened sftp connection found in the state, return it.
     if sftp_connections.has_key(host_string):
-        return sftp_connections(host_string)
+        return sftp_connections[host_string]
 
     # Open a new SFTP connection and put in on the state.
     sftp = state.get('connections')[host_string].open_sftp()

@@ -1,29 +1,58 @@
 ''' Tests for ssh module. '''
 
 from mock import patch, Mock
-from boss.api.ssh import put
-from paramiko import SFTP
+
+from boss.api.ssh import resolve_sftp_client
 
 
-# @patch('boss.state.get')
-# def test_put(get_m):
-#     ''' Test put() works. '''
+@patch('boss.api.ssh.state.get')
+def test_resolve_sftp_client_existing_client(get_m):
+    '''
+    Test resolve_sftp_client() returns an
+    existing sftp connection if it exists.
+    '''
 
-#     attrs = {'open_sftp.return_value': Mock(SFTP)}
-#     connection_m = Mock(**attrs)
+    sftp_client = Mock(foo='bar')
 
-#     def get_side_effect(key):
-#         values = {
-#             'env': {
-#                 'host_string': 'test-host'
-#             },
-#             'connections': {
-#                 'test-host': connection_m
-#             }
-#         }
+    def side_effect(x):
+        d = {
+            'env': Mock(host_string='localhost'),
+            'sftp_connections': {
+                'localhost': sftp_client
+            }
+        }
 
-#         return values[key]
+        return d[x]
 
-#     get_m.side_effect = get_side_effect
+    get_m.side_effect = side_effect
+    result = resolve_sftp_client()
 
-#     put('localfile', 'remotefile')
+    assert result == sftp_client
+
+
+@patch('boss.api.ssh.state.get')
+def test_resolve_sftp_client_new_client(get_m):
+    '''
+    Test resolve_sftp_client() returns
+    a new sftp connection if it doesn't exists.
+    '''
+
+    sftp_client = Mock(foo='bar')
+    attrs = {'open_sftp.return_value': sftp_client}
+    client = Mock(**attrs)
+
+    def side_effect(x):
+        d = {
+            'env': Mock(host_string='localhost'),
+            'sftp_connections': {},
+            'connections': {
+                'localhost': client
+            }
+        }
+
+        return d[x]
+
+    get_m.side_effect = side_effect
+    result = resolve_sftp_client()
+
+    assert result == sftp_client
