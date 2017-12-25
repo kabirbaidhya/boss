@@ -16,6 +16,7 @@ def send(notif_type, **params):
         config=get_config(),
         notif_config=config(),
         create_link=create_link,
+        pre_format=pre_format,
         **params
     )
 
@@ -47,3 +48,8 @@ def create_link(url, title):
         url=url,
         title=title
     )
+
+
+def pre_format(text):
+    ''' Return pre-formatted text for slack. '''
+    return '`{text}`'.format(text=text)

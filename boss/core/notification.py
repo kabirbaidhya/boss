@@ -87,4 +87,8 @@ def get_notification_params(**params):
             params['branch']
         )
 
+    if params.get('script'):
+        preformat = params.get('pre_format') or (lambda x: x)
+        result['script'] = preformat(params['script'])
+
     return result
