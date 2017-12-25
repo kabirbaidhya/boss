@@ -1,11 +1,23 @@
 ''' Tests for boss.api.hipchat module. '''
 
+from pytest import fixture
 from mock import patch
 from boss.api import hipchat
 from boss.core.constants.notification_types import (
     DEPLOYMENT_STARTED,
-    DEPLOYMENT_FINISHED
+    DEPLOYMENT_FINISHED,
+    RUNNING_SCRIPT_STARTED,
+    RUNNING_SCRIPT_FINISHED
 )
+
+
+@fixture(scope='function')
+def base_url():
+    return hipchat.API_BASE_URL.format(
+        company_name=hipchat.config()['company_name'],
+        room_id=hipchat.config()['room_id'],
+        auth_token=hipchat.config()['auth_token']
+    )
 
 
 def test_create_link():
@@ -17,7 +29,7 @@ def test_create_link():
     assert hipchat.create_link(url, title) == expected_link
 
 
-def test_notity_deploying():
+def test_notity_deploying(base_url):
     ''' Test hipchat.notify_deploying(). '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -38,18 +50,13 @@ def test_notity_deploying():
         'notify': True,
         'message_format': 'html'
     }
-    url = hipchat.API_BASE_URL.format(
-        company_name=hipchat.config()['company_name'],
-        room_id=hipchat.config()['room_id'],
-        auth_token=hipchat.config()['auth_token']
-    )
 
     with patch('requests.post') as mock_post:
         hipchat.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(url, json=payload)
+        mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deployed():
+def test_notity_deployed(base_url):
     ''' Test hipchat.notify_deployed(). '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -71,18 +78,12 @@ def test_notity_deployed():
         'message_format': 'html'
     }
 
-    url = hipchat.API_BASE_URL.format(
-        company_name=hipchat.config()['company_name'],
-        room_id=hipchat.config()['room_id'],
-        auth_token=hipchat.config()['auth_token']
-    )
-
     with patch('requests.post') as mock_post:
         hipchat.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(url, json=payload)
+        mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deploying_with_no_branch():
+def test_notity_deploying_with_no_branch(base_url):
     '''
     Test hipchat.notify_deploying() doesn't show branch link,
     if branch is not provided.
@@ -104,18 +105,13 @@ def test_notity_deploying_with_no_branch():
         'notify': True,
         'message_format': 'html'
     }
-    url = hipchat.API_BASE_URL.format(
-        company_name=hipchat.config()['company_name'],
-        room_id=hipchat.config()['room_id'],
-        auth_token=hipchat.config()['auth_token']
-    )
 
     with patch('requests.post') as mock_post:
         hipchat.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(url, json=payload)
+        mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deployed_with_no_branch():
+def test_notity_deployed_with_no_branch(base_url):
     '''
     Test hipchat.notify_deployed() doesn't show branch link,
     if branch is not provided.
@@ -138,12 +134,56 @@ def test_notity_deployed_with_no_branch():
         'message_format': 'html'
     }
 
-    url = hipchat.API_BASE_URL.format(
-        company_name=hipchat.config()['company_name'],
-        room_id=hipchat.config()['room_id'],
-        auth_token=hipchat.config()['auth_token']
-    )
-
     with patch('requests.post') as mock_post:
         hipchat.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(url, json=payload)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_send_running_script_started_notification(base_url):
+    ''' Test send() sends RUNNING_SCRIPT_STARTED notfication. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        script='migration',
+        user='user'
+    )
+
+    payload = {
+        'color': 'green',
+        'notify': True,
+        'message_format': 'html',
+        'message': 'user is running <pre>migration</pre> for <a href="http://repository-url">project-name</a> on <a href="http://public-url">stage</a> server.'
+    }
+
+    with patch('requests.post') as mock_post:
+        hipchat.send(RUNNING_SCRIPT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_send_running_script_finished_notification(base_url):
+    ''' Test send() sends RUNNING_SCRIPT_FINISHED notfication. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        script='migration',
+        user='user'
+    )
+
+    payload = {
+        'color': 'purple',
+        'notify': True,
+        'message_format': 'html',
+        'message': 'user finished running <pre>migration</pre> for <a href="http://repository-url">project-name</a> on <a href="http://public-url">stage</a> server.'
+    }
+
+    with patch('requests.post') as mock_post:
+        hipchat.send(RUNNING_SCRIPT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
