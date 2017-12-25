@@ -55,6 +55,9 @@ DEFAULT_CONFIG = {
             'ci_deploying_color': 'gray',
             'ci_deployed_color': 'yellow',
         }
+    },
+    'notified_hooks': {
+        'scripts': []
     }
 }
 
