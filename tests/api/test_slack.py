@@ -44,7 +44,8 @@ def test_send(base_url):
         'attachments': [
             {
                 'color': 'good',
-                'text': 'user is deploying <http://repository-url|project-name>:<http://branch-url|temp> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
+                'text': 'user is deploying <http://repository-url|project-name>:<http://branch-url|temp> (<http://commit-url|tttt>) to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
             }
         ]
     }
@@ -75,7 +76,8 @@ def test_send_with_no_branch_name(base_url):
         'attachments': [
             {
                 'color': 'good',
-                'text': 'user is deploying <http://repository-url|project-name> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
+                'text': 'user is deploying <http://repository-url|project-name> (<http://commit-url|tttt>) to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
             }
         ]
     }
@@ -104,7 +106,8 @@ def test_notity_deployed(base_url):
         'attachments': [
             {
                 'color': '#764FA5',
-                'text': 'user finished deploying <http://repository-url|project-name>:<http://branch-url|temp> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
+                'text': 'user finished deploying <http://repository-url|project-name>:<http://branch-url|temp> (<http://commit-url|tttt>) to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
             }
         ]
     }
@@ -135,7 +138,8 @@ def test_notity_deployed_with_no_branch_name(base_url):
         'attachments': [
             {
                 'color': '#764FA5',
-                'text': 'user finished deploying <http://repository-url|project-name> (<http://commit-url|tttt>) to <http://public-url|server-name> server.'
+                'text': 'user finished deploying <http://repository-url|project-name> (<http://commit-url|tttt>) to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
             }
         ]
     }
@@ -162,7 +166,8 @@ def test_send_running_script_started_notification(base_url):
         'attachments': [
             {
                 'color': 'good',
-                'text': 'user is running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.'
+                'text': 'user is running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.',
+                'mrkdwn_in': ['text']
             }
         ]
     }
@@ -189,7 +194,8 @@ def test_send_running_script_finished_notification(base_url):
         'attachments': [
             {
                 'color': '#764FA5',
-                'text': 'user finished running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.'
+                'text': 'user finished running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.',
+                'mrkdwn_in': ['text']
             }
         ]
     }
