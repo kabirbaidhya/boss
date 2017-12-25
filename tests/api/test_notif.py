@@ -1,6 +1,6 @@
 ''' Tests for boss.api.notif module. '''
 
-from mock import patch, call
+from mock import patch
 
 from boss.api import notif
 from boss.core.constants.notification_types import (
@@ -46,34 +46,30 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
         'stage': 'test-server'
     })
 
-    slack_send_m.assert_has_calls([
-        call(
-            DEPLOYMENT_STARTED,
-            branch='my-branch',
-            commit=commit,
-            commit_url=commit_url,
-            branch_url=branch_url,
-            host='example.com',
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        ),
-        call(
-            DEPLOYMENT_FINISHED,
-            host='example.com',
-            commit=commit,
-            commit_url=commit_url,
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        )
-    ])
+    (call1, call2) = slack_send_m.call_args_list
+
+    assert call1[0][0] == DEPLOYMENT_STARTED
+    assert call1[1]['branch'] == 'my-branch'
+    assert call1[1]['commit'] == commit
+    assert call1[1]['commit_url'] == commit_url
+    assert call1[1]['branch_url'] == branch_url
+    assert call1[1]['host'] == 'example.com'
+    assert call1[1]['project_name'] == 'test-project'
+    assert call1[1]['public_url'] == 'https://example.com'
+    assert call1[1]['repository_url'] == 'https://github.com/kabirbaidhya/boss'
+    assert call1[1]['server_name'] == 'test-server'
+    assert call1[1]['user'] == 'ssh-user'
+
+    assert call2[0][0] == DEPLOYMENT_FINISHED
+    assert call2[1]['branch'] is None
+    assert call2[1]['commit'] == commit
+    assert call2[1]['commit_url'] == commit_url
+    assert call2[1]['host'] == 'example.com'
+    assert call2[1]['project_name'] == 'test-project'
+    assert call2[1]['public_url'] == 'https://example.com'
+    assert call2[1]['repository_url'] == 'https://github.com/kabirbaidhya/boss'
+    assert call2[1]['server_name'] == 'test-server'
+    assert call2[1]['user'] == 'ssh-user'
 
 
 @patch('boss.api.notif.remote_info')
@@ -112,31 +108,27 @@ def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, 
         'stage': 'test-server'
     })
 
-    hipchat_send_m.assert_has_calls([
-        call(
-            DEPLOYMENT_FINISHED,
-            branch='my-branch',
-            commit=commit,
-            commit_url=commit_url,
-            branch_url=branch_url,
-            host='example.com',
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        ),
-        call(
-            DEPLOYMENT_STARTED,
-            host='example.com',
-            commit=commit,
-            commit_url=commit_url,
-            project_description='Just a test project',
-            project_name='test-project',
-            public_url='https://example.com',
-            repository_url='https://github.com/kabirbaidhya/boss',
-            server_name='test-server',
-            user='ssh-user'
-        )
-    ])
+    (call1, call2) = hipchat_send_m.call_args_list
+
+    assert call1[0][0] == DEPLOYMENT_FINISHED
+    assert call1[1]['branch'] == 'my-branch'
+    assert call1[1]['commit'] == commit
+    assert call1[1]['commit_url'] == commit_url
+    assert call1[1]['branch_url'] == branch_url
+    assert call1[1]['host'] == 'example.com'
+    assert call1[1]['project_name'] == 'test-project'
+    assert call1[1]['public_url'] == 'https://example.com'
+    assert call1[1]['repository_url'] == 'https://github.com/kabirbaidhya/boss'
+    assert call1[1]['server_name'] == 'test-server'
+    assert call1[1]['user'] == 'ssh-user'
+
+    assert call2[0][0] == DEPLOYMENT_STARTED
+    assert call2[1]['branch'] is None
+    assert call2[1]['commit'] == commit
+    assert call2[1]['commit_url'] == commit_url
+    assert call2[1]['host'] == 'example.com'
+    assert call2[1]['project_name'] == 'test-project'
+    assert call2[1]['public_url'] == 'https://example.com'
+    assert call2[1]['repository_url'] == 'https://github.com/kabirbaidhya/boss'
+    assert call2[1]['server_name'] == 'test-server'
+    assert call2[1]['user'] == 'ssh-user'
