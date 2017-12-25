@@ -33,15 +33,14 @@ def extract_notification_params(params):
     commit_url = git.get_tree_url(params['commit'], config['repository_url'])
 
     notif_params = dict(
-        user=params['user'],
         commit_url=commit_url,
-        commit=params['commit'],
-        project_name=config['project_name'],
-        project_description=config['project_description'],
-        repository_url=config['repository_url'],
+        host=stage_config['host'],
         server_name=params['stage'],
         public_url=stage_config['public_url'],
-        host=stage_config['host']
+        repository_url=config['repository_url'],
+        project_name=config['project_name'],
+        project_description=config['project_description'],
+        **params
     )
 
     # If branch is provided and branch is not HEAD, then add branch & branch_url.
@@ -52,6 +51,10 @@ def extract_notification_params(params):
     if params.get('branch') and params.get('branch') != 'HEAD':
         notif_params['branch'] = params['branch']
         notif_params['branch_url'] = git.get_tree_url(
-            params['branch'], config['repository_url'])
+            params['branch'],
+            config['repository_url']
+        )
+    else:
+        notif_params['branch'] = None
 
     return notif_params
