@@ -19,6 +19,12 @@ def sftp():
     return Mock()
 
 
+@pytest.fixture()
+def client():
+    ''' Get the mocked ssh client. '''
+    return Mock()
+
+
 def test_put(sftp, callback):
     ''' Test put() works. '''
     local_path = 'test.yml'
@@ -46,3 +52,27 @@ def test_get(sftp, callback):
         callback=callback
     )
     sftp.get.assert_called_with(remote_path, local_path, callback)
+
+
+def test_run(client):
+    ''' Test run() works. '''
+    command = 'python --version'
+    remote.run(client, command)
+    client.exec_command.assert_called_with(
+        command,
+        bufsize=None,
+        timeout=None,
+        environment=None
+    )
+
+
+def test_run_with_environment(client):
+    ''' Test run() works with env vars. '''
+    command = 'npm start'
+    remote.run(client, command, env={'NODE_ENV': 'production'})
+    client.exec_command.assert_called_with(
+        command,
+        bufsize=None,
+        timeout=None,
+        environment={'NODE_ENV': 'production'}
+    )
