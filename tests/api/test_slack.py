@@ -1,11 +1,19 @@
 ''' Tests for boss.api.slack module. '''
 
 from mock import patch
+from pytest import fixture
 from boss.api import slack
 from boss.core.constants.notification_types import (
     DEPLOYMENT_STARTED,
-    DEPLOYMENT_FINISHED
+    DEPLOYMENT_FINISHED,
+    RUNNING_SCRIPT_STARTED,
+    RUNNING_SCRIPT_FINISHED
 )
+
+
+@fixture(scope='function')
+def base_url():
+    return slack.config()['base_url'] + slack.config()['endpoint']
 
 
 def test_create_link():
@@ -16,7 +24,7 @@ def test_create_link():
     assert slack.create_link(url, title) == expected_link
 
 
-def test_send():
+def test_send(base_url):
     ''' Test slack.send(). '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -31,6 +39,7 @@ def test_send():
         server_link='http://server-link',
         user='user',
     )
+
     payload = {
         'attachments': [
             {
@@ -39,13 +48,13 @@ def test_send():
             }
         ]
     }
-    base_url = slack.config()['base_url'] + slack.config()['endpoint']
+
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_send_with_no_branch_name():
+def test_send_with_no_branch_name(base_url):
     '''
     Test slack.send() doesn't show the branch link,
     if branch name is not provided.
@@ -61,6 +70,7 @@ def test_send_with_no_branch_name():
         server_link='http://server-link',
         user='user',
     )
+
     payload = {
         'attachments': [
             {
@@ -69,13 +79,13 @@ def test_send_with_no_branch_name():
             }
         ]
     }
-    base_url = slack.config()['base_url'] + slack.config()['endpoint']
+
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deployed():
+def test_notity_deployed(base_url):
     ''' Test slack.notify_deployed(). '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -98,14 +108,13 @@ def test_notity_deployed():
             }
         ]
     }
-    base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
-def test_notity_deployed_with_no_branch_name():
+def test_notity_deployed_with_no_branch_name(base_url):
     '''
     Test slack.notify_deployed() doesn't show the branch link,
     if branch name is not provided.
@@ -130,8 +139,61 @@ def test_notity_deployed_with_no_branch_name():
             }
         ]
     }
-    base_url = slack.config()['base_url'] + slack.config()['endpoint']
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_send_running_script_started_notification(base_url):
+    ''' Test send() sends RUNNING_SCRIPT_STARTED notfication. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        script='migration',
+        user='user'
+    )
+
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.'
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(RUNNING_SCRIPT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_send_running_script_finished_notification(base_url):
+    ''' Test send() sends RUNNING_SCRIPT_FINISHED notfication. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        script='migration',
+        user='user'
+    )
+
+    payload = {
+        'attachments': [
+            {
+                'color': '#764FA5',
+                'text': 'user finished running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.'
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(RUNNING_SCRIPT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
