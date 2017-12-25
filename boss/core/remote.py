@@ -42,3 +42,21 @@ def get(sftp_client, **params):
     callback = params.get('callback')
 
     return sftp_client.get(remote_path, local_path, callback)
+
+
+def run(client, command, **params):
+    '''
+    Execute a command on a opened instance
+    of SSHClient for a remote host.
+    '''
+    bufsize = params.get('bufsize')
+    timeout = params.get('timeout')
+    environment = params.get('env')
+
+    # Execute the command.
+    client.exec_command(
+        command,
+        bufsize=bufsize,
+        timeout=timeout,
+        environment=environment
+    )
