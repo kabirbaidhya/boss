@@ -55,7 +55,11 @@ def test_should_notify_returns_false(gc_m):
 @patch('boss.api.runner.host_info')
 @patch('boss.api.runner._get_config')
 @patch('boss.api.runner.notif.send')
-def test_run_script_send_script_running_notifications(send_m, gc_m, hi_m, h_m, r_m):
+@patch('boss.api.runner.shell.get_user')
+@patch('boss.api.runner.shell.get_stage')
+def test_run_script_send_script_running_notifications(gs_m, gu_m, send_m, gc_m, hi_m, h_m, r_m):
+    gs_m.return_value = 'prod'
+    gu_m.return_value = 'kabir'
     gc_m.return_value = {
         'scripts': {
             'foo': 'just foo'
@@ -72,6 +76,10 @@ def test_run_script_send_script_running_notifications(send_m, gc_m, hi_m, h_m, r
 
     assert call1[0][0] == RUNNING_SCRIPT_STARTED
     assert call1[0][1]['script'] == 'foo'
+    assert call1[0][1]['user'] == 'kabir'
+    assert call1[0][1]['stage'] == 'prod'
 
     assert call2[0][0] == RUNNING_SCRIPT_FINISHED
     assert call2[0][1]['script'] == 'foo'
+    assert call2[0][1]['user'] == 'kabir'
+    assert call2[0][1]['stage'] == 'prod'
