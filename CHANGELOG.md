@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.0.0-alpha.14](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.14) (2017-12-26)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.13...v1.0.0-alpha.14)
+
+**Closed issues:**
+
+- Generic task notifications about configured scripts [\#91](https://github.com/kabirbaidhya/boss/issues/91) [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[notification](https://github.com/kabirbaidhya/boss/labels/notification)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)]
+
+**Improvements:**
+
+- Support custom scripts notifications [\#100](https://github.com/kabirbaidhya/boss/pull/100) [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[notification](https://github.com/kabirbaidhya/boss/labels/notification)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add basic SSH and SFTP functions directly over paramiko [\#98](https://github.com/kabirbaidhya/boss/pull/98) [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Refactor utils [\#96](https://github.com/kabirbaidhya/boss/pull/96) [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Refactor config constants and move them to separate constant files. [\#95](https://github.com/kabirbaidhya/boss/pull/95) [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Change config default values for user and base\_dir [\#94](https://github.com/kabirbaidhya/boss/pull/94) [[breaking-change](https://github.com/kabirbaidhya/boss/labels/breaking-change)] [[config](https://github.com/kabirbaidhya/boss/labels/config)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.13](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.13) (2017-12-23)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.12...v1.0.0-alpha.13)
 
