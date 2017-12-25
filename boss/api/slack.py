@@ -24,7 +24,8 @@ def send(notif_type, **params):
         'attachments': [
             {
                 'color': color,
-                'text': text
+                'text': text,
+                'mrkdwn_in': ['text']
             }
         ]
     }
