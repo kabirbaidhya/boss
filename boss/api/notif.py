@@ -30,10 +30,8 @@ def extract_notification_params(params):
     ''' Extract parameters for notification. '''
     config = get_config()
     stage_config = get_stage_config(params['stage'])
-    commit_url = git.get_tree_url(params['commit'], config['repository_url'])
 
     notif_params = dict(
-        commit_url=commit_url,
         host=stage_config['host'],
         server_name=params['stage'],
         public_url=stage_config['public_url'],
@@ -42,6 +40,13 @@ def extract_notification_params(params):
         project_description=config['project_description'],
         **params
     )
+
+    # If commit is provided, send commit_url too.
+    if params.get('commit'):
+        notif_params['commit_url'] = git.get_tree_url(
+            params['commit'],
+            config['repository_url']
+        )
 
     # If branch is provided and branch is not HEAD, then add branch & branch_url.
     #
