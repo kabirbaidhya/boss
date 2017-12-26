@@ -4,16 +4,14 @@ TODO: Replace mock-ssh-server with some other alternatives.
 '''
 
 import os
-import tempfile
 from boss.core import remote, fs
 
 
 def test_put(server):
     ''' Test put() transfers file to the remote end. '''
     for uid in server.users:
-        target_dir = tempfile.mkdtemp()
-        source_file = os.path.join(target_dir, 'foo_src')
-        target_file = os.path.join(target_dir, 'foo_dest')
+        source_file = os.path.join(server.ROOT_DIR, 'foo_src')
+        target_file = os.path.join(server.ROOT_DIR, 'foo_dest')
 
         fs.write(source_file, 'Test put operation')
         assert not fs.exists(target_file)
@@ -32,9 +30,8 @@ def test_put(server):
 def test_get(server):
     ''' Test get() transfers remote file to the local. '''
     for uid in server.users:
-        target_dir = tempfile.mkdtemp()
-        source_file = os.path.join(target_dir, 'foo_src')
-        target_file = os.path.join(target_dir, 'foo_dest')
+        source_file = os.path.join(server.ROOT_DIR, 'foo_src')
+        target_file = os.path.join(server.ROOT_DIR, 'foo_dest')
 
         fs.write(source_file, 'Test get operation')
         assert not fs.exists(target_file)
@@ -61,8 +58,7 @@ def test_run(server):
 def test_read(server):
     ''' Test read() returns remote file contents. '''
     for uid in server.users:
-        target_dir = tempfile.mkdtemp()
-        path = os.path.join(target_dir, 'foo_src')
+        path = os.path.join(server.ROOT_DIR, 'foo_src')
 
         fs.write(path, 'Hello World')
 
@@ -76,8 +72,7 @@ def test_read(server):
 def test_write(server):
     ''' Test write() writes data to a remote file. '''
     for uid in server.users:
-        target_dir = tempfile.mkdtemp()
-        path = os.path.join(target_dir, 'foo_src')
+        path = os.path.join(server.ROOT_DIR, 'foo_src')
 
         with server.client(uid) as client:
             sftp = client.open_sftp()
@@ -89,8 +84,7 @@ def test_write(server):
 def test_write_overwrites_existing_file(server):
     ''' Test write() writes and overwrites data on a remote file. '''
     for uid in server.users:
-        target_dir = tempfile.mkdtemp()
-        path = os.path.join(target_dir, 'foo_src')
+        path = os.path.join(server.ROOT_DIR, 'foo_src')
 
         fs.write(path, 'Hello!')
 
