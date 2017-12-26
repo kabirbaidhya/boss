@@ -56,3 +56,31 @@ def test_run(server):
             (_, stdout, _) = remote.run(client, 'python --version')
 
             assert stdout.read() is not None
+
+
+def test_read(server):
+    ''' Test read() returns remote file contents. '''
+    for uid in server.users:
+        target_dir = tempfile.mkdtemp()
+        path = os.path.join(target_dir, 'foo_src')
+
+        fs.write(path, 'Hello World')
+
+        with server.client(uid) as client:
+            sftp = client.open_sftp()
+            result = remote.read(sftp, path)
+
+            assert result == 'Hello World'
+
+
+def test_write(server):
+    ''' Test write() writes data to a remote file. '''
+    for uid in server.users:
+        target_dir = tempfile.mkdtemp()
+        path = os.path.join(target_dir, 'foo_src')
+
+        with server.client(uid) as client:
+            sftp = client.open_sftp()
+            remote.write(sftp, path, data='Hello World!')
+
+            assert fs.read(path) == 'Hello World!'
