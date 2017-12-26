@@ -63,7 +63,7 @@ def run(client, command, **params):
     )
 
 
-def read_file(client, remote_path, callback=None):
+def read(client, remote_path, callback=None):
     '''
     Read a remote file given by the path on the remote host
     and return it's contents as string.
@@ -72,3 +72,17 @@ def read_file(client, remote_path, callback=None):
     client.getfo(remote_path, fd, callback)
 
     return fd.getvalue()
+
+
+def write(client, remote_path, **params):
+    '''
+    Write data to a remote file on the remote host.
+    '''
+    data = params['data']
+    file_size = params.get('file_size')
+    callback = params.get('callback')
+    confirm = params.get('confirm')
+
+    fd = StringIO(data)
+
+    return client.putfo(fd, remote_path, file_size, callback, confirm)
