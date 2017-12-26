@@ -58,21 +58,14 @@ def test_run(client):
     ''' Test run() works. '''
     command = 'python --version'
     remote.run(client, command)
-    client.exec_command.assert_called_with(
-        command,
-        bufsize=None,
-        timeout=None,
-        environment=None
-    )
+    client.exec_command.assert_called_with(command)
 
 
 def test_run_with_environment(client):
     ''' Test run() works with env vars. '''
     command = 'npm start'
-    remote.run(client, command, env={'NODE_ENV': 'production'})
+    remote.run(client, command, environment={'NODE_ENV': 'production'})
     client.exec_command.assert_called_with(
         command,
-        bufsize=None,
-        timeout=None,
         environment={'NODE_ENV': 'production'}
     )

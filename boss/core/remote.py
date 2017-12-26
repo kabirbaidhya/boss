@@ -50,17 +50,9 @@ def run(client, command, **params):
     Execute a command on a opened instance
     of SSHClient for a remote host.
     '''
-    bufsize = params.get('bufsize')
-    timeout = params.get('timeout')
-    environment = params.get('env')
 
     # Execute the command.
-    return client.exec_command(
-        command,
-        bufsize=bufsize,
-        timeout=timeout,
-        environment=environment
-    )
+    return client.exec_command(command, **params)
 
 
 def read(client, remote_path, callback=None):
