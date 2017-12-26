@@ -2,8 +2,7 @@
 
 import os
 import time
-from StringIO import StringIO
-from fabric.api import hide, put, get
+from fabric.api import hide, put
 from fabric.contrib import files, project
 
 from . import runner
@@ -92,22 +91,6 @@ def upload(local_path, remote_path):
 def upload_dir(local_dir, remote_dir):
     ''' Uploads a local directory to the remote path. '''
     project.upload_project(local_dir, remote_dir)
-
-
-def save_remote_file(path, data):
-    ''' Save data to the remote file. '''
-    fd = StringIO(data)
-    put(fd, path)
-
-    return fd.getvalue()
-
-
-def read_remote_file(path):
-    ''' Read remote file contents. '''
-    fd = StringIO()
-    get(path, fd)
-
-    return fd.getvalue()
 
 
 def update_symlink(src, link_path, remote=True):
