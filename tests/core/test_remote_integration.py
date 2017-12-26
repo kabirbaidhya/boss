@@ -84,3 +84,20 @@ def test_write(server):
             remote.write(sftp, path, data='Hello World!')
 
             assert fs.read(path) == 'Hello World!'
+
+
+def test_write_overwrites_existing_file(server):
+    ''' Test write() writes and overwrites data on a remote file. '''
+    for uid in server.users:
+        target_dir = tempfile.mkdtemp()
+        path = os.path.join(target_dir, 'foo_src')
+
+        fs.write(path, 'Hello!')
+
+        assert fs.read(path) == 'Hello!'
+
+        with server.client(uid) as client:
+            sftp = client.open_sftp()
+            remote.write(sftp, path, data='Hello World!')
+
+            assert fs.read(path) == 'Hello World!'
