@@ -50,3 +50,29 @@ def get(local_path, remote_path, callback=None):
         local_path=local_path,
         callback=callback
     )
+
+
+def read(remote_path, callback=None):
+    '''
+    Read a remote file given by the path on the remote host
+    and return it's contents as string.
+    '''
+    sftp = resolve_sftp_client()
+
+    return remote.read(sftp, remote_path, callback)
+
+
+def write(remote_path, data, **params):
+    '''
+    Write data to a remote file on the remote host.
+    '''
+    sftp = resolve_sftp_client()
+
+    return remote.write(
+        sftp,
+        remote_path,
+        data=data,
+        file_size=params.get('file_size'),
+        callback=params.get('callback'),
+        confirm=params.get('confirm')
+    )
