@@ -94,7 +94,7 @@ def load_history():
 
 def save_history(data):
     ''' Save build history. '''
-    fs.save_remote_file(get_builds_file(), json.dumps(data))
+    return ssh.write(get_builds_file(), json.dumps(data))
 
 
 def local_timestamp(timestamp, tz=True):
