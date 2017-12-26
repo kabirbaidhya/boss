@@ -364,7 +364,7 @@ def load_remote_env_vars(remote_env_path):
     Load remote env variables and return them as
     key-value pairs (dict) of environment variables.
     '''
-    env_def = fs.read_remote_file(remote_env_path)
+    env_def = ssh.read(remote_env_path)
     env_vars = env.parse(env_def)
 
     return env_vars
