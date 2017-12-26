@@ -7,6 +7,7 @@ which uses paramiko directly for remote execution and transfers.
 '''
 
 import os
+from StringIO import StringIO
 
 
 def normalize_path(sftp_client, remote_path):
@@ -60,3 +61,14 @@ def run(client, command, **params):
         timeout=timeout,
         environment=environment
     )
+
+
+def read_file(client, remote_path, callback=None):
+    '''
+    Read a remote file given by the path on the remote host
+    and return it's contents as string.
+    '''
+    fd = StringIO()
+    client.getfo(remote_path, fd, callback)
+
+    return fd.getvalue()
