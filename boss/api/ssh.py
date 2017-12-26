@@ -4,6 +4,23 @@ from boss import state
 from boss.core import remote
 
 
+def run(command, **params):
+    '''
+    Execute a command on the remote host over SSH.
+    '''
+    return remote.run(resolve_client(), command, **params)
+
+
+def resolve_client():
+    '''
+    Resolves already opened SSHClient connection.
+    '''
+    host_string = state.get('env').host_string
+    client = state.get('connections')[host_string]
+
+    return client
+
+
 def resolve_sftp_client():
     '''
     Resolves (opens or gets already opened) sftp connection.
