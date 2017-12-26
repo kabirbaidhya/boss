@@ -5,7 +5,7 @@ import time
 from fabric.api import hide, put
 from fabric.contrib import files, project
 
-from . import runner
+from . import runner, ssh
 from boss.core.util.types import is_iterable, is_string
 
 
@@ -28,7 +28,7 @@ def rm(path, remote=True):
     runner.run('rm ' + path, remote=remote)
 
 
-def rm_rf(path, remote=True):
+def rm_rf(path):
     ''' Remote the specified path recursively (both files and directories). '''
 
     removal_path = path
@@ -38,7 +38,7 @@ def rm_rf(path, remote=True):
     if is_iterable(path) and not is_string(path):
         removal_path = ' '.join(path)
 
-    runner.run('rm -rf {}'.format(removal_path), remote=remote)
+    return ssh.run('rm -rf {}'.format(removal_path))
 
 
 def chown(path, user, group=None, remote=True):
