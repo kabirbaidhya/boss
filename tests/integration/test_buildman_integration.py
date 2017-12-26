@@ -8,6 +8,11 @@ from mock import patch
 from boss.core import fs
 from boss.api.deployment import buildman
 
+REMOTE_ENV_FILE = '''
+FOO=bar
+GREETING=Hello World
+'''
+
 
 def test_load_history(server):
     ''' Test load_history() works. '''
@@ -49,3 +54,21 @@ def test_save_history(server):
                     result = fs.read(path)
 
                     assert result == '{"foo": "bar", "hello": "world"}'
+
+
+def test_load_remote_env_vars(server):
+    '''
+    Test load_remote_env_vars() loads remote .env file
+    and returns it as dict().
+    '''
+    for uid in server.users:
+        path = os.path.join(server.ROOT_DIR, 'test.env')
+        fs.write(path, REMOTE_ENV_FILE)
+
+        with server.client(uid) as client:
+            with patch('boss.api.ssh.resolve_sftp_client') as rsc_m:
+                rsc_m.return_value = client.open_sftp()
+                result = buildman.load_remote_env_vars(path)
+
+                assert result['FOO'] == 'bar'
+                assert result['GREETING'] == 'Hello World'
