@@ -72,3 +72,47 @@ def test_load_remote_env_vars(server):
 
                 assert result['FOO'] == 'bar'
                 assert result['GREETING'] == 'Hello World'
+
+
+def test_delete_old_builds(server):
+    '''
+    Test delete_old_builds() deletes old builds from the remote filesystem.
+    '''
+    history = {
+        'builds': [
+            {'id': '1'},
+            {'id': '2'}
+        ]
+    }
+
+    for uid in server.users:
+        # Build directory setup
+        base_path = os.path.join(server.ROOT_DIR, 'builds')
+        build_path1 = os.path.join(server.ROOT_DIR, 'builds/build-1')
+        build_path2 = os.path.join(server.ROOT_DIR, 'builds/build-2')
+        build_path3 = os.path.join(server.ROOT_DIR, 'builds/build-3')
+        build_path4 = os.path.join(server.ROOT_DIR, 'builds/build-4')
+
+        os.mkdir(base_path)
+        os.mkdir(build_path1)
+        os.mkdir(build_path2)
+        os.mkdir(build_path3)
+        os.mkdir(build_path4)
+
+        with server.client(uid) as client:
+            with patch('boss.api.deployment.buildman.get_release_dir') as grd_m:
+                grd_m.return_value = base_path
+
+                with patch('boss.api.ssh.resolve_client') as rc_m:
+                    rc_m.return_value = client
+                    assert fs.exists(build_path1)
+                    assert fs.exists(build_path2)
+                    assert fs.exists(build_path3)
+                    assert fs.exists(build_path4)
+
+                    buildman.delete_old_builds(history)
+
+                    assert fs.exists(build_path1)
+                    assert fs.exists(build_path2)
+                    assert not fs.exists(build_path3)
+                    assert not fs.exists(build_path4)
