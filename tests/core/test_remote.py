@@ -61,10 +61,33 @@ def test_run(client):
     client.exec_command.assert_called_with(command)
 
 
-def test_run_with_environment(client):
-    ''' Test run() works with env vars. '''
+def test_run_with_additional_params(client):
+    ''' Test run() works with additional params. '''
     command = 'npm start'
-    remote.run(client, command, environment={'NODE_ENV': 'production'})
+    remote.run(
+        client,
+        command,
+        bufsize=10,
+        environment={'NODE_ENV': 'production'}
+    )
+    client.exec_command.assert_called_with(
+        command,
+        bufsize=10,
+        environment={'NODE_ENV': 'production'}
+    )
+
+
+def test_run_with_unknown_params(client):
+    ''' Test run() works with unknown params, and test that they're ignored. '''
+    command = 'npm start'
+    remote.run(
+        client,
+        command,
+        environment={'NODE_ENV': 'production'},
+        unknown_param1='hello',
+        unknown_param2='world',
+        foo='bar'
+    )
     client.exec_command.assert_called_with(
         command,
         environment={'NODE_ENV': 'production'}

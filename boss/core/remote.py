@@ -9,6 +9,8 @@ which uses paramiko directly for remote execution and transfers.
 import os
 from StringIO import StringIO
 
+from boss.core.util.object import with_only
+
 
 def normalize_path(sftp_client, remote_path):
     home = sftp_client.normalize('.')
@@ -51,8 +53,16 @@ def run(client, command, **params):
     of SSHClient for a remote host.
     '''
 
+    # Pass only the parameters known to exec_command function.
+    known_params = with_only(params, [
+        'bufsize',
+        'timeout',
+        'get_pty',
+        'environment'
+    ])
+
     # Execute the command.
-    return client.exec_command(command, **params)
+    return client.exec_command(command, **known_params)
 
 
 def read(client, remote_path, callback=None):
