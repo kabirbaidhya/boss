@@ -2,11 +2,10 @@
 
 import os
 import time
-from StringIO import StringIO
-from fabric.api import hide, put, get
+from fabric.api import hide, put
 from fabric.contrib import files, project
 
-from . import runner
+from . import runner, ssh
 from boss.core.util.types import is_iterable, is_string
 
 
@@ -29,7 +28,7 @@ def rm(path, remote=True):
     runner.run('rm ' + path, remote=remote)
 
 
-def rm_rf(path, remote=True):
+def rm_rf(path):
     ''' Remote the specified path recursively (both files and directories). '''
 
     removal_path = path
@@ -39,7 +38,7 @@ def rm_rf(path, remote=True):
     if is_iterable(path) and not is_string(path):
         removal_path = ' '.join(path)
 
-    runner.run('rm -rf {}'.format(removal_path), remote=remote)
+    return ssh.run('rm -rf {}'.format(removal_path))
 
 
 def chown(path, user, group=None, remote=True):
@@ -66,10 +65,9 @@ def tar_extract(src, dest, remote=True):
     runner.run(cmd, remote=remote)
 
 
-def glob(path, remote=True):
+def glob(path):
     ''' Glob a directory path to get the list of files. '''
-    with hide('everything'):
-        return runner.run('ls -1 {}'.format(path), remote=remote).split()
+    return ssh.run('ls -1 {}'.format(path))
 
 
 def exists(path, remote=True):
@@ -92,22 +90,6 @@ def upload(local_path, remote_path):
 def upload_dir(local_dir, remote_dir):
     ''' Uploads a local directory to the remote path. '''
     project.upload_project(local_dir, remote_dir)
-
-
-def save_remote_file(path, data):
-    ''' Save data to the remote file. '''
-    fd = StringIO(data)
-    put(fd, path)
-
-    return fd.getvalue()
-
-
-def read_remote_file(path):
-    ''' Read remote file contents. '''
-    fd = StringIO()
-    get(path, fd)
-
-    return fd.getvalue()
 
 
 def update_symlink(src, link_path, remote=True):

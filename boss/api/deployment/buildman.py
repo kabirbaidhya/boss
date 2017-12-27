@@ -8,12 +8,12 @@ import time
 from datetime import datetime
 
 from terminaltables import SingleTable
-from fabric.api import cd, hide, shell_env
+from fabric.api import cd, shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config, get_stage_config
 from boss.util import remote_info, remote_print
-from boss.api import fs, shell, runner
+from boss.api import fs, shell, runner, ssh
 from boss.core import env
 from boss.core.util import ts
 from boss.core.output import info
@@ -87,15 +87,14 @@ def get_build_name(id):
 
 def load_history():
     ''' Load build history. '''
-    with hide('everything'):
-        data = fs.read_remote_file(get_builds_file())
+    data = ssh.read(get_builds_file())
 
-        return json.loads(data)
+    return json.loads(data)
 
 
 def save_history(data):
     ''' Save build history. '''
-    fs.save_remote_file(get_builds_file(), json.dumps(data))
+    return ssh.write(get_builds_file(), json.dumps(data))
 
 
 def local_timestamp(timestamp, tz=True):
@@ -241,23 +240,22 @@ def setup_default_html(base_dir):
 
 
 def delete_old_builds(history):
-    ''' Auto delete unnecessary build directories from the filesystem. '''
+    ''' Delete old unnecessary build directories from the remote. '''
     build_path = get_release_dir()
     kept_builds = map(lambda x: get_build_name(x['id']), history['builds'])
     found_builds = fs.glob(build_path)
-    to_be_deleted_builds = [x for x in found_builds if x not in kept_builds]
-    deletion_count = len(to_be_deleted_builds)
+    old_builds = [x for x in found_builds if x not in kept_builds]
 
     # Skip, if there are no builds to be deleted.
-    if deletion_count == 0:
+    if not old_builds:
         return
 
+    old_builds = map(lambda x: os.path.join(build_path, x), old_builds)
+
     # Remove directories to be deleted.
-    with cd(build_path):
-        fs.rm_rf(to_be_deleted_builds)
-        remote_info(
-            'Deleted {} old build(s) from the remote'.format(deletion_count)
-        )
+    fs.rm_rf(old_builds)
+
+    info('Deleted {} old build(s) from the remote'.format(len(old_builds)))
 
 
 def record_history(build_info):
@@ -365,7 +363,7 @@ def load_remote_env_vars(remote_env_path):
     Load remote env variables and return them as
     key-value pairs (dict) of environment variables.
     '''
-    env_def = fs.read_remote_file(remote_env_path)
+    env_def = ssh.read(remote_env_path)
     env_vars = env.parse(env_def)
 
     return env_vars

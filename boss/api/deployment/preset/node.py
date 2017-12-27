@@ -14,6 +14,7 @@ from boss.util import remote_info
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from boss.core.output import halt, info
+from boss.core.fs import exists as exists_local, rm as rm_local
 from boss.core.constants import known_scripts, notification_types
 from .. import buildman
 
@@ -51,7 +52,7 @@ def upload_included_files(files, remote_path):
     ''' Upload the local files if they were to be included. '''
     for filename in files:
         # Skip upload if the file doesn't exist.
-        if not fs.exists(filename, remote=False):
+        if not exists_local(filename):
             continue
 
         fs.upload(filename, remote_path)
@@ -103,7 +104,7 @@ def deploy():
     fs.upload(build_compressed, tmp_path)
 
     # Remove the compressed build from the local directory.
-    fs.rm(build_compressed, remote=False)
+    rm_local(build_compressed)
 
     # Once, the build is uploaded to the remote,
     # set things up in the remote server.

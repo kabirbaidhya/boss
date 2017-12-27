@@ -1,6 +1,6 @@
 ''' Tests for boss.core.util.object module. '''
 
-from boss.core.util.object import merge
+from boss.core.util.object import merge, with_only
 
 
 def test_merge_v0():
@@ -70,3 +70,22 @@ def test_merge_v1():
     merged = merge(dict1, dict2)
 
     assert merged == expectedmerge
+
+
+def test_with_only():
+    ''' Test with_only() util function. '''
+    d1 = {
+        'foo': 'Foo',
+        'bar': 'Bar',
+        'key1': 'Key1',
+        'some_other_key': 'Abc'
+    }
+
+    expected = {
+        'foo': 'Foo',
+        'some_other_key': 'Abc'
+    }
+
+    result = with_only(d1, ['foo', 'some_other_key'])
+
+    assert result == expected
