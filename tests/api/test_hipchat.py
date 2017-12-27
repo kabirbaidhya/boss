@@ -156,7 +156,7 @@ def test_send_running_script_started_notification(base_url):
         'color': 'green',
         'notify': True,
         'message_format': 'html',
-        'message': 'user is running <pre>migration</pre> for <a href="http://repository-url">project-name</a> on <a href="http://public-url">stage</a> server.'
+        'message': 'user is running migration for <a href="http://repository-url">project-name</a> on <a href="http://public-url">stage</a> server.'
     }
 
     with patch('requests.post') as mock_post:
@@ -181,7 +181,7 @@ def test_send_running_script_finished_notification(base_url):
         'color': 'purple',
         'notify': True,
         'message_format': 'html',
-        'message': 'user finished running <pre>migration</pre> for <a href="http://repository-url">project-name</a> on <a href="http://public-url">stage</a> server.'
+        'message': 'user finished running migration for <a href="http://repository-url">project-name</a> on <a href="http://public-url">stage</a> server.'
     }
 
     with patch('requests.post') as mock_post:

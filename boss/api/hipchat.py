@@ -24,7 +24,6 @@ def send(notif_type, **params):
         config=get_config(),
         notif_config=config(),
         create_link=create_link,
-        pre_format=pre_format,
         **params
     )
 
@@ -53,8 +52,3 @@ def create_link(url, title):
     markup = '<a href="{url}">{title}</a>'
 
     return markup.format(url=url, title=title)
-
-
-def pre_format(text):
-    ''' Return pre-formatted text for hipchat. '''
-    return '<pre>{text}</pre>'.format(text=text)
