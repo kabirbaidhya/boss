@@ -8,7 +8,33 @@ def run(command, **params):
     '''
     Execute a command on the remote host over SSH.
     '''
-    return remote.run(resolve_client(), command, **params)
+
+    # Keyword args
+    raw = params.get('raw') or False
+    return_output = params.get('return_output') or True
+
+    # Execute the command and get the IO streams.
+    (stdin, stdout, stderr) = remote.run(resolve_client(), command, **params)
+
+    # Return the raw result if raw=True.
+    if raw:
+        return (stdin, stdout, stderr)
+
+    # If output is required (usually),
+    # return a list of each output line.
+    if return_output:
+        lines = []
+
+        for l in stdout:
+            lines.append(l.strip())
+
+        return lines
+
+    # For return_output=False,
+    # just walk until the end of the stream
+    # and just return without any output.
+    for _ in stdout:
+        pass
 
 
 def resolve_client():
