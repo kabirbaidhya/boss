@@ -65,10 +65,9 @@ def tar_extract(src, dest, remote=True):
     runner.run(cmd, remote=remote)
 
 
-def glob(path, remote=True):
+def glob(path):
     ''' Glob a directory path to get the list of files. '''
-    with hide('everything'):
-        return runner.run('ls -1 {}'.format(path), remote=remote).split()
+    return ssh.run('ls -1 {}'.format(path))
 
 
 def exists(path, remote=True):
