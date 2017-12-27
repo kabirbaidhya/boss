@@ -240,23 +240,22 @@ def setup_default_html(base_dir):
 
 
 def delete_old_builds(history):
-    ''' Auto delete unnecessary build directories from the filesystem. '''
+    ''' Delete old unnecessary build directories from the remote. '''
     build_path = get_release_dir()
     kept_builds = map(lambda x: get_build_name(x['id']), history['builds'])
     found_builds = fs.glob(build_path)
-    to_be_deleted_builds = [x for x in found_builds if x not in kept_builds]
-    deletion_count = len(to_be_deleted_builds)
+    old_builds = [x for x in found_builds if x not in kept_builds]
 
     # Skip, if there are no builds to be deleted.
-    if deletion_count == 0:
+    if not old_builds:
         return
 
+    old_builds = map(lambda x: os.path.join(build_path, x), old_builds)
+
     # Remove directories to be deleted.
-    with cd(build_path):
-        fs.rm_rf(to_be_deleted_builds)
-        remote_info(
-            'Deleted {} old build(s) from the remote'.format(deletion_count)
-        )
+    fs.rm_rf(old_builds)
+
+    info('Deleted {} old build(s) from the remote'.format(len(old_builds)))
 
 
 def record_history(build_info):
