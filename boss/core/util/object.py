@@ -18,3 +18,17 @@ def merge(dict1, dict2):
             result[key] = deepcopy(dict2[key])
 
     return result
+
+
+def with_only(src, attrs):
+    '''
+    Return a new copy of source dictionary
+    containing only the attributes provided.
+    '''
+    result = {}
+
+    for key, value in src.iteritems():
+        if key in attrs:
+            result[key] = value
+
+    return result
