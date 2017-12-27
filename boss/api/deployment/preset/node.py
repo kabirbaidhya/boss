@@ -14,6 +14,7 @@ from boss.util import remote_info
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
 from boss.core.output import halt, info
+from boss.core.fs import exists as exists_locally
 from boss.core.constants import known_scripts, notification_types
 from .. import buildman
 
@@ -51,7 +52,7 @@ def upload_included_files(files, remote_path):
     ''' Upload the local files if they were to be included. '''
     for filename in files:
         # Skip upload if the file doesn't exist.
-        if not fs.exists(filename, remote=False):
+        if not exists_locally(filename):
             continue
 
         fs.upload(filename, remote_path)
