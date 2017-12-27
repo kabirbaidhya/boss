@@ -14,6 +14,7 @@ setup_ci() {
 }
 
 publish() {
+  test
   echo "Publishing"
   python setup.py egg_info
   python setup.py build
