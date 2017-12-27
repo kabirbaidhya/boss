@@ -15,6 +15,7 @@ from boss.util import remote_info
 from boss.api import shell, notif, fs, git
 from boss.config import get_stage_config, get as get_config
 from boss.core.output import info
+from boss.core.fs import rm as rm_local
 from boss.core.constants import notification_types
 from .. import buildman
 
@@ -91,7 +92,7 @@ def deploy():
     fs.upload(build_compressed, tmp_path)
 
     # Remove the compressed build from the local directory.
-    fs.rm(build_compressed, remote=False)
+    rm_local(build_compressed, remote=False)
 
     # Once, the build is uploaded to the remote,
     # set things up in the remote server.
