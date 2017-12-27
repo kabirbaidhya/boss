@@ -74,7 +74,7 @@ def test_load_remote_env_vars(server):
                 assert result['GREETING'] == 'Hello World'
 
 
-def test_delete_old_builds(server):
+def test_delete_old_builds(server, capsys):
     '''
     Test delete_old_builds() deletes old builds from the remote filesystem.
     '''
@@ -116,3 +116,7 @@ def test_delete_old_builds(server):
                     assert fs.exists(build_path2)
                     assert not fs.exists(build_path3)
                     assert not fs.exists(build_path4)
+
+                    out, _ = capsys.readouterr()
+
+                    assert 'Deleted 2 old build(s) from the remote' in out
