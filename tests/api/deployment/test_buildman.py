@@ -53,8 +53,40 @@ def test_resolve_local_build_dir_when_build_dir_none_with_fallback_directory(gsc
         'deployment': {
             'build_dir': None
         }
-    }
 
+    }
     result = buildman.resolve_local_build_dir()
 
     assert result in buildman.LOCAL_BUILD_DIRECTORIES[0]
+
+
+@patch('boss.api.deployment.buildman.load_history')
+@patch('boss.api.deployment.buildman.git.last_commit')
+def test_is_up_to_date_returns_true(glc_m, lh_m):
+    ''' Test is_up_to_date(). '''
+    glc_m.return_value = '5ff8648'
+    lh_m.return_value = {
+        'builds': [
+            {'id': '1', 'commit': '1232333'},
+            {'id': '2', 'commit': '5ff8648'}
+        ],
+        'current': '2'
+    }
+
+    assert buildman.is_remote_up_to_date()
+
+
+@patch('boss.api.deployment.buildman.load_history')
+@patch('boss.api.deployment.buildman.git.last_commit')
+def test_is_up_to_date_returns_false(glc_m, lh_m):
+    ''' Test is_up_to_date(). '''
+    glc_m.return_value = '5ff8648'
+    lh_m.return_value = {
+        'builds': [
+            {'id': '1', 'commit': '1255452'},
+            {'id': '2', 'commit': '1232333'}
+        ],
+        'current': '2'
+    }
+
+    assert not buildman.is_remote_up_to_date()

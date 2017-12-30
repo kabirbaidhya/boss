@@ -13,7 +13,7 @@ from fabric.api import task, cd
 from boss.util import remote_info
 from boss.api import shell, notif, runner, fs, git
 from boss.config import get as get_config
-from boss.core.output import halt, info
+from boss.core.output import halt, info, echo
 from boss.core.fs import exists as exists_local, rm as rm_local
 from boss.core.constants import known_scripts, notification_types
 from .. import buildman
@@ -65,6 +65,10 @@ def deploy():
     stage = shell.get_stage()
     is_first_deployment = not buildman.is_remote_setup()
 
+    if buildman.is_remote_up_to_date():
+        echo('Remote build is already up to date.')
+        return
+
     branch = git.current_branch(remote=False)
     commit = git.last_commit(remote=False, short=True)
     info('Deploying <{branch}:{commit}> to the {stage} server'.format(
@@ -76,7 +80,6 @@ def deploy():
     tmp_path = fs.get_temp_filename()
     build_dir = buildman.resolve_local_build_dir()
     included_files = config['deployment']['include_files']
-
     deployer_user = shell.get_user()
 
     notif.send(notification_types.DEPLOYMENT_STARTED, {
