@@ -8,12 +8,12 @@ import time
 from datetime import datetime
 
 from terminaltables import SingleTable
-from fabric.api import cd, shell_env
+from fabric.api import shell_env
 
 from boss import BASE_PATH, __version__ as BOSS_VERSION
 from boss.config import get as get_config, get_stage_config
 from boss.util import remote_info, remote_print
-from boss.api import fs, shell, runner, ssh
+from boss.api import fs, shell, runner, ssh, git
 from boss.core import env
 from boss.core.util import ts
 from boss.core.output import info
@@ -87,6 +87,7 @@ def get_build_name(id):
 
 def load_history():
     ''' Load build history. '''
+    # TODO: Maintain build history in the local state.
     data = ssh.read(get_builds_file())
 
     return json.loads(data)
@@ -404,3 +405,20 @@ def build(stage, config):
 
     with shell_env(**env_vars):
         runner.run_script(known_scripts.BUILD, remote=False)
+
+
+def get_local_commit():
+    ''' Get the local commit. '''
+    return git.last_commit(remote=False, short=True)
+
+
+def is_remote_up_to_date():
+    '''
+    Check the the last build (commit) deployed to the remote,
+    and see if it's already up to date.
+    '''
+    history = load_history()
+    commit = get_local_commit()
+    deployed_build = get_build_info(history, history['current'])
+
+    return deployed_build['commit'] == commit
