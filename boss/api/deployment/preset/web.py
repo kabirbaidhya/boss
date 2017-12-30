@@ -14,7 +14,7 @@ from fabric.api import task, cd
 from boss.util import remote_info
 from boss.api import shell, notif, fs, git
 from boss.config import get_stage_config, get as get_config
-from boss.core.output import info
+from boss.core.output import info, echo
 from boss.core.fs import rm as rm_local
 from boss.core.constants import notification_types
 from .. import buildman
@@ -52,6 +52,10 @@ def deploy():
     config = get_config()
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
+
+    if buildman.is_remote_up_to_date():
+        echo('Remote build is already up to date.')
+        return
 
     # Get the current branch and commit (locally).
     branch = git.current_branch(remote=False)
