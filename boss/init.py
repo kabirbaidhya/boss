@@ -5,11 +5,12 @@ import sys
 from fabric.api import env, task
 from fabric.tasks import _is_task
 
+from boss.core.output import halt
+from boss.core.constants import presets
+from boss.core.initializer import setup_boss_home
 
-from .config import load as load_config, get as get_config, get_stage_config
-from .core.initializer import setup_boss_home
-from .api.shell import get_stage
-from .api.deployment import deployer
+from boss.config import load as load_config, get as get_config, get_stage_config
+from boss.api.shell import get_stage
 
 
 def init(module_name):
@@ -28,7 +29,7 @@ def init(module_name):
 
 def define_preset_tasks(module, config):
     ''' Define tasks for the configured deployment preset. '''
-    deployment = deployer.import_preset(config)
+    deployment = import_preset(config)
     # Now that we have deployment preset set, import all the tasks.
     for (task_name, func) in deployment.__dict__.iteritems():
         if not _is_task(func):
@@ -83,3 +84,19 @@ def set_verbose_logging():
 
     logging.basicConfig(level=logging.DEBUG)
     ssh.util.log_to_file('paramiko.log')
+
+
+def import_preset(config):
+    ''' Import the configured deployment preset module and return it. '''
+    preset = config['deployment']['preset']
+
+    if preset == presets.REMOTE_SOURCE:
+        from .api.deployment.preset import remote_source as module
+    elif preset == presets.WEB:
+        from .api.deployment.preset import web as module
+    elif preset == presets.NODE:
+        from .api.deployment.preset import node as module
+    else:
+        halt('Unsupported boss preset "{}".'.format(preset))
+
+    return module
