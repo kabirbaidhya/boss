@@ -421,4 +421,4 @@ def is_remote_up_to_date():
     commit = get_local_commit()
     deployed_build = get_build_info(history, history['current'])
 
-    return deployed_build['commit'] == commit
+    return deployed_build and deployed_build['commit'] == commit
