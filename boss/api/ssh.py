@@ -59,10 +59,34 @@ def resolve_sftp_client():
         return sftp_connections[host_string]
 
     # Open a new SFTP connection and put in on the state.
-    sftp = state.get('connections')[host_string].open_sftp()
+    ssh_client = state.get('connections')[host_string]
+    sftp = ssh_client.open_sftp()
     sftp_connections.update({host_string: sftp})
 
     return sftp
+
+
+def resolve_cwd(host_string):
+    '''
+    Resolve current working directory of the remote host.
+
+    TODO: After refactor resolve cwd at the very begining,
+    instead of every time before any operation.
+    '''
+    remote_state = state.get('remote')
+
+    if not remote_state.get(host_string):
+        remote_state[host_string] = {}
+
+    remote_host_state = remote_state.get(host_string)
+
+    if not remote_host_state.get('cwd'):
+        cwd = remote.cwd(resolve_client())
+        remote_host_state['cwd'] = cwd
+
+        return cwd
+
+    return remote_host_state.get('cwd')
 
 
 def put(local_path, remote_path, callback=None):
