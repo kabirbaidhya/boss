@@ -7,11 +7,13 @@ Here the source is built locally and uploaded to the server, then the applicatio
 is started on restarted on the remote server.
 '''
 import os
+import sys
 from datetime import datetime
 from fabric.api import task, cd
 
 from boss.util import remote_info
 from boss.config import get as get_config
+from boss.core.util.colors import green
 from boss.core.output import halt, info, echo
 from boss.core.fs import exists as exists_local
 from boss.core.constants import known_scripts, notification_types
@@ -100,9 +102,8 @@ def deploy():
 
     buildman.build(stage, config)
 
-    # TODO: Upload progress
-    info('Uploading the build to {} server'.format(stage))
-    ssh.upload_dir(build_dir, dist_path)
+    echo('')
+    ssh.upload_dir(build_dir, dist_path, upload_callback)
 
     # Upload the files to be included eg: package.json file
     # to the remote build location.
@@ -219,3 +220,18 @@ def services():
     ''' List the services running for the application. '''
     with cd(buildman.get_current_path()):
         runner.run_script(known_scripts.LIST_SERVICES)
+
+
+def upload_callback(sent, total):
+    '''
+    Display the upload progress.
+    TODO: Find a better solution.
+    '''
+    progress = (sent * 100.0 / total)
+    message = 'Uploading the build.'
+    sys.stdout.write('\r{} [{:.2f}%]'.format(green(message), progress))
+
+    if sent == total:
+        echo('\n')
+
+    sys.stdout.flush()
