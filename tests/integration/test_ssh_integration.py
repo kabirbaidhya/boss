@@ -6,7 +6,7 @@ from tempfile import mkdtemp
 from mock import patch
 
 from boss.core import fs
-from boss.api.ssh import upload_dir
+from boss.api import ssh
 
 
 def test_upload_dir(server):
@@ -32,7 +32,7 @@ def test_upload_dir(server):
                 assert not fs.exists(remote_path)
 
                 # Upload the directory
-                upload_dir(local_dir, remote_path)
+                ssh.upload_dir(local_dir, remote_path)
 
                 # Test the whole directory got uploaded with all files
                 assert fs.exists(remote_path)
@@ -73,7 +73,7 @@ def test_upload_dir_with_home_directory(server):
                     assert not fs.exists(expanded_remote_path)
 
                     # Upload the directory
-                    upload_dir(local_dir, remote_path)
+                    ssh.upload_dir(local_dir, remote_path)
 
                     # Test the whole directory got uploaded with all files
                     assert fs.exists(expanded_remote_path)
@@ -83,3 +83,31 @@ def test_upload_dir_with_home_directory(server):
                         expanded_remote_path, 'a/foo.txt')) == 'Foo'
                     assert fs.read(os.path.join(
                         expanded_remote_path, 'b/bar.txt')) == 'Bar'
+
+
+def test_put_when_remote_directory_provided(server):
+    '''
+    If remote directory path is provided instead of remote filename,
+    put() should upload the local file to the remote directory with the same filename.
+    '''
+    for uid in server.users:
+        source_file = os.path.join(server.ROOT_DIR, 'abc.txt')
+        target_directory = os.path.join(server.ROOT_DIR, 'remote-directory')
+        expected_target_file = os.path.join(target_directory, 'abc.txt')
+        os.mkdir(target_directory)
+
+        fs.write(source_file, 'Test put operation')
+
+        assert fs.exists(target_directory)
+        assert not fs.exists(expected_target_file)
+
+        with server.client(uid) as client:
+            with patch('boss.api.ssh.resolve_client') as rc_m:
+                rc_m.return_value = client
+                ssh.put(
+                    local_path=source_file,
+                    remote_path=target_directory
+                )
+
+                assert fs.exists(expected_target_file)
+                assert fs.read(expected_target_file) == 'Test put operation'
