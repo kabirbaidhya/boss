@@ -1,7 +1,12 @@
 ''' SSH module based on paramiko. '''
 
+import os
+from time import time
+from tempfile import mkdtemp
+
 from boss import state
 from boss.core import remote
+from boss.core.fs import compress
 
 
 def run(command, **params):
@@ -161,3 +166,31 @@ def write(remote_path, data, **params):
         callback=params.get('callback'),
         confirm=params.get('confirm')
     )
+
+
+def upload_dir(local_path, remote_path, callback=None):
+    ''' Upload local directory to the remote. '''
+    tmp_folder = mkdtemp()
+    tar_filename = os.path.basename(local_path) + '.tar.gz'
+    tar_path = os.path.join(tmp_folder, tar_filename)
+
+    # Compress the directory.
+    compress(local_path, tar_path)
+
+    # Upload the tar zipped file to the remote.
+    # The compressed folder gets uploaded to a temp path first.
+    # Then later is extracted to the provided path on the remote.
+    remote_tmp_path = '/tmp/upload-' + str(time()).replace('.', '-')
+    put(tar_path, remote_tmp_path, callback)
+
+    # Extract the files to the remote directory
+    run('mkdir -p {}'.format(remote_path))
+    run(
+        'tar zxvf {src} --strip-components=1 -C {dest}'.format(
+            src=remote_tmp_path,
+            dest=remote_path
+        )
+    )
+    run('rm -rf {}'.format(remote_tmp_path))
+
+    os.remove(tar_path)
