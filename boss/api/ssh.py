@@ -3,6 +3,7 @@
 import os
 from time import time
 from tempfile import mkdtemp
+from stat import S_ISDIR
 
 from boss import state
 from boss.core import remote
@@ -115,6 +116,11 @@ def put(local_path, remote_path, callback=None):
     sftp = resolve_sftp_client()
     remote_path = normalize_path(remote_path)
 
+    # If remote_path is a directory, upload it with the same filename.
+    if is_dir(remote_path):
+        filename = os.path.basename(local_path)
+        remote_path = os.path.join(remote_path, filename)
+
     # Do the put operation.
     return remote.put(
         sftp,
@@ -168,6 +174,12 @@ def write(remote_path, data, **params):
     )
 
 
+def upload_files(files, remote_path):
+    ''' Upload multiple files. '''
+    for filename in files:
+        put(filename, remote_path)
+
+
 def upload_dir(local_path, remote_path, callback=None):
     ''' Upload local directory to the remote. '''
     tmp_folder = mkdtemp()
@@ -183,7 +195,6 @@ def upload_dir(local_path, remote_path, callback=None):
     # Then later is extracted to the provided path on the remote.
     remote_tmp_path = '/tmp/upload-' + str(time()).replace('.', '-')
     put(tar_path, remote_tmp_path, callback)
-
     # Extract the files to the remote directory
     run('mkdir -p {}'.format(remote_path))
     run(
@@ -195,3 +206,36 @@ def upload_dir(local_path, remote_path, callback=None):
     run('rm -rf {}'.format(remote_tmp_path))
 
     os.remove(tar_path)
+
+
+def stat(remote_path):
+    '''
+    Retrieve information about a file on the remote system.
+    '''
+    sftp = resolve_sftp_client()
+
+    return remote.stat(sftp, remote_path)
+
+
+def exists(path):
+    '''
+    Check if the remote path exists.
+    '''
+    try:
+        stat(path)
+        return True
+    except IOError:
+        return False
+
+
+def is_dir(path):
+    '''
+    Check if the remote path a directory.
+    TODO: Move this to a remote fs module.
+    '''
+    try:
+        mode = stat(path).st_mode
+
+        return S_ISDIR(mode)
+    except IOError:
+        return False

@@ -2,10 +2,8 @@
 
 import os
 import time
-from fabric.api import hide, put
-from fabric.contrib import files, project
 
-from . import runner, ssh
+from boss.api import ssh
 from boss.core.util.types import is_iterable, is_string
 
 
@@ -14,18 +12,18 @@ def get_temp_filename(prefix=''):
     return '/tmp/' + (prefix + str(time.time()).replace('.', '-'))
 
 
-def mkdir(path, remote=True, nested=False):
+def mkdir(path, nested=False):
     ''' Create a new directory. '''
     options = '-p ' if nested else ''
     cmd = 'mkdir {0}{1}'.format(options, path)
 
     # Run the command.
-    runner.run(cmd, remote=remote)
+    ssh.run(cmd)
 
 
 def rm(path, remote=True):
     ''' Remove a file given by the path. '''
-    runner.run('rm ' + path, remote=remote)
+    ssh.run('rm ' + path, remote=remote)
 
 
 def rm_rf(path):
@@ -41,28 +39,27 @@ def rm_rf(path):
     return ssh.run('rm -rf {}'.format(removal_path))
 
 
-def chown(path, user, group=None, remote=True):
+def chown(path, user, group=None):
     ''' Change ownership of a path recursively to the specified user and group. '''
     if group:
         cmd = 'chown -R {0}:{1} {2}'.format(user, group, path)
     else:
         cmd = 'chown -R {0} {1}'.format(user, path)
 
-    runner.run(cmd, remote=remote)
+    ssh.run(cmd)
 
 
-def tar_archive(name, path, remote=True):
+def tar_archive(name, path):
     ''' Compress the source path into a tar archive. '''
     cmd = 'tar -czvf {} {}'.format(name, path)
 
-    with hide('stdout'):
-        runner.run(cmd, remote=remote)
+    ssh.run(cmd)
 
 
-def tar_extract(src, dest, remote=True):
+def tar_extract(src, dest):
     ''' Extract a source tar archive to the specified destination path. '''
     cmd = 'tar zxvf {} --strip-components=1 -C {}'.format(src, dest)
-    runner.run(cmd, remote=remote)
+    ssh.run(cmd)
 
 
 def glob(path):
@@ -77,22 +74,22 @@ def exists(path, remote=True):
     '''
 
     if remote:
-        return files.exists(path)
+        return ssh.exists(path)
 
     return os.path.exists(path)
 
 
 def upload(local_path, remote_path):
     ''' Upload one or more files to a remote host. '''
-    return put(local_path, remote_path)
+    return ssh.put(local_path, remote_path)
 
 
 def upload_dir(local_dir, remote_dir):
     ''' Uploads a local directory to the remote path. '''
-    project.upload_project(local_dir, remote_dir)
+    return ssh.upload_dir(local_dir, remote_dir)
 
 
-def update_symlink(src, link_path, remote=True):
+def update_symlink(src, link_path):
     ''' Update the current build symlink. '''
     cmd = 'ln -sfn {} {}'.format(src, link_path)
-    runner.run(cmd, remote=remote)
+    ssh.run(cmd)

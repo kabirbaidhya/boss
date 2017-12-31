@@ -84,3 +84,10 @@ def write(client, remote_path, **params):
     fd = StringIO(data)
 
     return client.putfo(fd, remote_path, file_size, callback, confirm)
+
+
+def stat(sftp_client, path):
+    '''
+    Retrieve information about a file on the remote system.
+    '''
+    return sftp_client.stat(path)
