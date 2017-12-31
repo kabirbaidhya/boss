@@ -4,7 +4,8 @@ from copy import deepcopy
 
 
 _state = {
-    'sftp_connections': {}
+    'sftp_connections': {},
+    'remote': {}
 }
 
 

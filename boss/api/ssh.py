@@ -37,6 +37,20 @@ def run(command, **params):
         pass
 
 
+def normalize_path(remote_path):
+    '''
+    Normalize remote path.
+    Expand home directory '~' in the path if it exists.
+    '''
+    home = resolve_cwd()
+
+    # Expand home directory markers (tildes, etc)
+    if remote_path.startswith('~'):
+        remote_path = remote_path.replace('~', home)
+
+    return remote_path
+
+
 def resolve_client():
     '''
     Resolves already opened SSHClient connection.
@@ -59,14 +73,13 @@ def resolve_sftp_client():
         return sftp_connections[host_string]
 
     # Open a new SFTP connection and put in on the state.
-    ssh_client = state.get('connections')[host_string]
-    sftp = ssh_client.open_sftp()
+    sftp = resolve_client().open_sftp()
     sftp_connections.update({host_string: sftp})
 
     return sftp
 
 
-def resolve_cwd(host_string):
+def resolve_cwd():
     '''
     Resolve current working directory of the remote host.
 
@@ -74,6 +87,7 @@ def resolve_cwd(host_string):
     instead of every time before any operation.
     '''
     remote_state = state.get('remote')
+    host_string = state.get('env').host_string
 
     if not remote_state.get(host_string):
         remote_state[host_string] = {}
@@ -94,6 +108,7 @@ def put(local_path, remote_path, callback=None):
     Transfers a local file to the remote path via SFTP (Paramiko).
     '''
     sftp = resolve_sftp_client()
+    remote_path = normalize_path(remote_path)
 
     # Do the put operation.
     return remote.put(
@@ -109,6 +124,7 @@ def get(local_path, remote_path, callback=None):
     Transfers a remote file to local path via SFTP (Paramiko).
     '''
     sftp = resolve_sftp_client()
+    remote_path = normalize_path(remote_path)
 
     # Do the get operation.
     return remote.get(
@@ -125,6 +141,7 @@ def read(remote_path, callback=None):
     and return it's contents as string.
     '''
     sftp = resolve_sftp_client()
+    remote_path = normalize_path(remote_path)
 
     return remote.read(sftp, remote_path, callback)
 
@@ -134,6 +151,7 @@ def write(remote_path, data, **params):
     Write data to a remote file on the remote host.
     '''
     sftp = resolve_sftp_client()
+    remote_path = normalize_path(remote_path)
 
     return remote.write(
         sftp,

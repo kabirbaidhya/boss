@@ -24,8 +24,8 @@ def test_load_history(server):
             with patch('boss.api.deployment.buildman.get_builds_file') as gbf_m:
                 gbf_m.return_value = path
 
-                with patch('boss.api.ssh.resolve_sftp_client') as rsc_m:
-                    rsc_m.return_value = client.open_sftp()
+                with patch('boss.api.ssh.resolve_client') as rc_m:
+                    rc_m.return_value = client
                     result = buildman.load_history()
 
                     assert result['foo'] == 'bar'
@@ -44,8 +44,8 @@ def test_save_history(server):
             with patch('boss.api.deployment.buildman.get_builds_file') as gbf_m:
                 gbf_m.return_value = path
 
-                with patch('boss.api.ssh.resolve_sftp_client') as rsc_m:
-                    rsc_m.return_value = client.open_sftp()
+                with patch('boss.api.ssh.resolve_client') as rc_m:
+                    rc_m.return_value = client
                     buildman.save_history({
                         'foo': 'bar',
                         'hello': 'world'
@@ -66,8 +66,8 @@ def test_load_remote_env_vars(server):
         fs.write(path, REMOTE_ENV_FILE)
 
         with server.client(uid) as client:
-            with patch('boss.api.ssh.resolve_sftp_client') as rsc_m:
-                rsc_m.return_value = client.open_sftp()
+            with patch('boss.api.ssh.resolve_client') as rc_m:
+                rc_m.return_value = client
                 result = buildman.load_remote_env_vars(path)
 
                 assert result['FOO'] == 'bar'
