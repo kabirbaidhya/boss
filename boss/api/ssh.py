@@ -203,17 +203,34 @@ def upload_dir(local_path, remote_path, callback=None):
     os.remove(tar_path)
 
 
-def stat(path):
+def stat(remote_path):
     '''
     Retrieve information about a file on the remote system.
     '''
     sftp = resolve_sftp_client()
 
-    return remote.stat(sftp, path)
+    return remote.stat(sftp, remote_path)
+
+
+def exists(path):
+    '''
+    Check if the remote path exists.
+    '''
+    try:
+        stat(path)
+        return True
+    except IOError:
+        return False
 
 
 def is_dir(path):
-    ''' Check if the remote path a directory. '''
-    mode = stat(path).st_mode
+    '''
+    Check if the remote path a directory.
+    TODO: Move this to a remote fs module.
+    '''
+    try:
+        mode = stat(path).st_mode
 
-    return S_ISDIR(mode)
+        return S_ISDIR(mode)
+    except IOError:
+        return False
