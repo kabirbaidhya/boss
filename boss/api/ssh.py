@@ -222,6 +222,7 @@ def exists(path):
     Check if the remote path exists.
     '''
     try:
+        path = normalize_path(path)
         stat(path)
         return True
     except IOError:
@@ -234,6 +235,7 @@ def is_dir(path):
     TODO: Move this to a remote fs module.
     '''
     try:
+        path = normalize_path(path)
         mode = stat(path).st_mode
 
         return S_ISDIR(mode)

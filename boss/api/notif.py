@@ -2,9 +2,9 @@
 Notification API module.
 '''
 
-from ..util import remote_info
-from . import slack, hipchat, git
-from ..config import get_stage_config, get as get_config
+from boss.core.output import warn
+from boss.api import slack, hipchat, git
+from boss.config import get_stage_config, get as get_config
 
 # Notification Services
 notifiers = [slack, hipchat]
@@ -19,11 +19,15 @@ def send(notif_type, params):
     if not enabled_services:
         return
 
-    remote_info('Sending notifications')
     notif_params = extract_notification_params(params)
 
-    for service in enabled_services:
-        service.send(notif_type, **notif_params)
+    try:
+        for service in enabled_services:
+            service.send(notif_type, **notif_params)
+    except:
+        # Should still proceed if error sending notification,
+        # printing an warning message.
+        warn('Warning: Failed sending notifications.')
 
 
 def extract_notification_params(params):

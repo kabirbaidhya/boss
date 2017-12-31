@@ -1,6 +1,5 @@
-''' File System utilities API. '''
+''' File System utilities over SSH for the Remote end. '''
 
-import os
 import time
 
 from boss.api import ssh
@@ -21,14 +20,13 @@ def mkdir(path, nested=False):
     ssh.run(cmd)
 
 
-def rm(path, remote=True):
+def rm(path):
     ''' Remove a file given by the path. '''
-    ssh.run('rm ' + path, remote=remote)
+    ssh.run('rm ' + path)
 
 
 def rm_rf(path):
     ''' Remote the specified path recursively (both files and directories). '''
-
     removal_path = path
 
     # If path is not a string but a list of multiple paths,
@@ -67,16 +65,11 @@ def glob(path):
     return ssh.run('ls -1 {}'.format(path))
 
 
-def exists(path, remote=True):
+def exists(path):
     '''
-    Check if the path exists in the remote or locally,
-    depending upon the `remote` parameter.
+    Check if the path exists in the remote.
     '''
-
-    if remote:
-        return ssh.exists(path)
-
-    return os.path.exists(path)
+    return ssh.exists(path)
 
 
 def upload(local_path, remote_path):
