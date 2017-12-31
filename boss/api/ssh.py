@@ -3,6 +3,7 @@
 import os
 from time import time
 from tempfile import mkdtemp
+from stat import S_ISDIR
 
 from boss import state
 from boss.core import remote
@@ -168,6 +169,12 @@ def write(remote_path, data, **params):
     )
 
 
+def upload_files(files, remote_path):
+    ''' Upload multiple files. '''
+    for filename in files:
+        put(filename, remote_path)
+
+
 def upload_dir(local_path, remote_path, callback=None):
     ''' Upload local directory to the remote. '''
     tmp_folder = mkdtemp()
@@ -183,7 +190,6 @@ def upload_dir(local_path, remote_path, callback=None):
     # Then later is extracted to the provided path on the remote.
     remote_tmp_path = '/tmp/upload-' + str(time()).replace('.', '-')
     put(tar_path, remote_tmp_path, callback)
-
     # Extract the files to the remote directory
     run('mkdir -p {}'.format(remote_path))
     run(
