@@ -173,6 +173,7 @@ def upload_dir(local_path, remote_path, callback=None):
     tmp_folder = mkdtemp()
     tar_filename = os.path.basename(local_path) + '.tar.gz'
     tar_path = os.path.join(tmp_folder, tar_filename)
+    remote_path = normalize_path(remote_path)
 
     # Compress the directory.
     compress(local_path, tar_path)
