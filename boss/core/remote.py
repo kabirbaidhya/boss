@@ -65,6 +65,13 @@ def run(client, command, **params):
     return client.exec_command(command, **known_params)
 
 
+def cwd(client):
+    ''' Get current working directory of remote host. '''
+    (_, stdout, _) = run(client, 'pwd')
+
+    return stdout.read().strip()
+
+
 def read(client, remote_path, callback=None):
     '''
     Read a remote file given by the path on the remote host

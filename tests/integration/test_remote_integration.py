@@ -95,3 +95,13 @@ def test_write_overwrites_existing_file(server):
             remote.write(sftp, path, data='Hello World!')
 
             assert fs.read(path) == 'Hello World!'
+
+
+def test_cwd(server):
+    ''' Test cwd() returns remote current. '''
+    for uid in server.users:
+        with server.client(uid) as client:
+            cwd = remote.cwd(client)
+
+            assert cwd is not None
+            assert fs.exists(cwd)
