@@ -6,12 +6,12 @@ This would be useful for deploying node js projects to the remote server.
 Here the source is built locally and uploaded to the server, then the application service
 is started on restarted on the remote server.
 '''
-
+import os
 from datetime import datetime
 from fabric.api import task, cd
 
 from boss.util import remote_info
-from boss.api import shell, notif, runner, fs, git
+from boss.api import shell, notif, runner, fs, git, ssh
 from boss.config import get as get_config
 from boss.core.output import halt, info, echo
 from boss.core.fs import exists as exists_local, rm as rm_local
@@ -51,11 +51,12 @@ def setup():
 def upload_included_files(files, remote_path):
     ''' Upload the local files if they were to be included. '''
     for filename in files:
+        path = os.path.abspath(filename)
         # Skip upload if the file doesn't exist.
-        if not exists_local(filename):
+        if not exists_local(path):
             continue
 
-        fs.upload(filename, remote_path)
+        ssh.put(path, remote_path)
 
 
 @task
@@ -78,8 +79,7 @@ def deploy():
         stage=stage
     ))
 
-    tmp_path = fs.get_temp_filename()
-    build_dir = buildman.resolve_local_build_dir()
+    build_dir = os.path.abspath(buildman.resolve_local_build_dir())
     included_files = config['deployment']['include_files']
     deployer_user = shell.get_user()
 
@@ -95,41 +95,24 @@ def deploy():
     timestamp = datetime.utcnow()
     build_id = timestamp.strftime('%Y%m%d%H%M%S')
     build_name = buildman.get_build_name(build_id)
-    build_compressed = build_name + '.tar.gz'
-    release_path = release_dir + '/' + build_name
-    dist_path = build_name + '/dist'
+    release_path = os.path.join(release_dir + '/' + build_name)
+    dist_path = os.path.join(release_dir, build_name + '/dist')
 
     buildman.build(stage, config)
 
-    info('Compressing the build')
-    fs.tar_archive(build_compressed, build_dir, remote=False)
+    # TODO: Upload progress
+    info('Uploading the build to {} server'.format(stage))
+    ssh.upload_dir(build_dir, dist_path)
 
-    info('Uploading the build {} to {}'.format(build_compressed, tmp_path))
-    fs.upload(build_compressed, tmp_path)
+    # Upload the files to be included eg: package.json file
+    # to the remote build location.
+    upload_included_files(included_files, release_path)
 
-    # Remove the compressed build from the local directory.
-    rm_local(build_compressed)
+    remote_info('Updating the current symlink')
+    fs.update_symlink(release_path, current_path)
 
     # Once, the build is uploaded to the remote,
     # set things up in the remote server.
-    with cd(release_dir):
-        remote_info('Extracting the build {}'.format(build_compressed))
-        # Create a new directory for the build in the remote.
-        fs.mkdir(dist_path, nested=True)
-
-        # Extract the build.
-        fs.tar_extract(tmp_path, dist_path)
-
-        # Remove the uploaded archived from the temp path.
-        fs.rm_rf(tmp_path)
-
-        # Upload the files to be included eg: package.json file
-        # to the remote build location.
-        upload_included_files(included_files, release_path)
-
-        remote_info('Pointing the current symlink to the latest build')
-        fs.update_symlink(release_path, current_path)
-
     # Change directory to the release path.
     with cd(current_path):
         install_remote_dependencies()
@@ -156,7 +139,7 @@ def deploy():
         'stage': stage
     })
 
-    remote_info('Deployment Completed')
+    info('Deployment Completed')
 
 
 def install_remote_dependencies():
