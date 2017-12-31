@@ -201,3 +201,19 @@ def upload_dir(local_path, remote_path, callback=None):
     run('rm -rf {}'.format(remote_tmp_path))
 
     os.remove(tar_path)
+
+
+def stat(path):
+    '''
+    Retrieve information about a file on the remote system.
+    '''
+    sftp = resolve_sftp_client()
+
+    return remote.stat(sftp, path)
+
+
+def is_dir(path):
+    ''' Check if the remote path a directory. '''
+    mode = stat(path).st_mode
+
+    return S_ISDIR(mode)
