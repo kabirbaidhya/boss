@@ -52,8 +52,9 @@ def deploy():
     config = get_config()
     stage = shell.get_stage()
     user = get_stage_config(stage)['user']
+    is_remote_setup = buildman.is_remote_setup()
 
-    if buildman.is_remote_up_to_date():
+    if is_remote_setup and buildman.is_remote_up_to_date():
         echo('Remote build is already up to date.')
         return
 

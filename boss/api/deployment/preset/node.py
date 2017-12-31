@@ -63,9 +63,10 @@ def deploy():
     ''' Zero-Downtime deployment for the backend. '''
     config = get_config()
     stage = shell.get_stage()
-    is_first_deployment = not buildman.is_remote_setup()
+    is_remote_setup = buildman.is_remote_setup()
+    is_first_deployment = not is_remote_setup
 
-    if buildman.is_remote_up_to_date():
+    if is_remote_setup and buildman.is_remote_up_to_date():
         echo('Remote build is already up to date.')
         return
 
