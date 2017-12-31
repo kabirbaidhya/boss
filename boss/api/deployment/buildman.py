@@ -187,25 +187,16 @@ def setup_remote(quiet=True):
     base_dir = get_deploy_dir()
     release_dir = get_release_dir()
     current_path = get_current_path()
-    build_history_path = get_builds_file()
     preset = get_config()['deployment']['preset']
     did_setup = False
     stage = shell.get_stage()
 
     # If the release directory does not exist, create it.
     if not fs.exists(release_dir):
-        remote_info(
-            'Setting up {} server for {} deployment'.format(stage, preset)
-        )
-        remote_info(
-            'Creating the releases directory {}'.format(cyan(release_dir))
-        )
+        info('Setting up {} server for {} deployment'.format(stage, preset))
         fs.mkdir(release_dir, nested=True)
 
-        # Add build history file.
-        remote_info(
-            'Creating new build meta file {}'.format(cyan(build_history_path))
-        )
+        # Create new build meta file.
         save_history(merge(INITIAL_BUILD_HISTORY, {'preset': preset}))
 
         # Setup a default web page for web deployment.
@@ -215,7 +206,7 @@ def setup_remote(quiet=True):
         did_setup = True
 
     if not did_setup and not quiet:
-        remote_info('Remote already setup for deployment')
+        info('Remote already setup for deployment')
 
     return (release_dir, current_path)
 
