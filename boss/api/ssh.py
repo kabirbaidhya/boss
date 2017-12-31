@@ -116,6 +116,11 @@ def put(local_path, remote_path, callback=None):
     sftp = resolve_sftp_client()
     remote_path = normalize_path(remote_path)
 
+    # If remote_path is a directory, upload it with the same filename.
+    if is_dir(remote_path):
+        filename = os.path.basename(local_path)
+        remote_path = os.path.join(remote_path, filename)
+
     # Do the put operation.
     return remote.put(
         sftp,
