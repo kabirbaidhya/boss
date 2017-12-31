@@ -11,12 +11,12 @@ from datetime import datetime
 from fabric.api import task, cd
 
 from boss.util import remote_info
-from boss.api import shell, notif, runner, fs, git, ssh
 from boss.config import get as get_config
 from boss.core.output import halt, info, echo
-from boss.core.fs import exists as exists_local, rm as rm_local
+from boss.core.fs import exists as exists_local
 from boss.core.constants import known_scripts, notification_types
-from .. import buildman
+from boss.api import shell, notif, runner, fs, git, ssh
+from boss.api.deployment import buildman
 
 
 @task
