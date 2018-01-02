@@ -4,7 +4,62 @@ from tempfile import mkdtemp
 from mock import patch
 
 from boss.core import fs
-from boss.api.transfers import upload_dir
+from boss.api.transfers import upload, upload_dir
+
+
+def test_upload(server, capsys):
+    '''
+    Test upload() uploads the local file to the remote directory.
+    '''
+    for uid in server.users:
+        local_file = os.path.join(server.ROOT_DIR, 'abc.txt')
+        target_directory = os.path.join(server.ROOT_DIR, 'remote-directory')
+        remote_path = os.path.join(server.ROOT_DIR, 'remote-directory/abc.txt')
+
+        os.mkdir(target_directory)
+
+        fs.write(local_file, 'Test put operation')
+
+        assert not fs.exists(remote_path)
+
+        with server.client(uid) as client:
+            with patch('boss.api.ssh.resolve_client') as rc_m:
+                rc_m.return_value = client
+
+                upload(local_file, remote_path)
+
+                capsys.readouterr()
+
+                assert fs.exists(remote_path)
+                assert fs.read(remote_path) == 'Test put operation'
+
+
+def test_upload_when_remote_directory_provided(server, capsys):
+    '''
+    If remote directory path is provided instead of remote filename,
+    upload() should upload the local file to the remote directory with the same filename.
+    '''
+    for uid in server.users:
+        source_file = os.path.join(server.ROOT_DIR, 'abc.txt')
+        target_directory = os.path.join(server.ROOT_DIR, 'remote-directory')
+        expected_target_file = os.path.join(target_directory, 'abc.txt')
+        os.mkdir(target_directory)
+
+        fs.write(source_file, 'Test put operation')
+
+        assert fs.exists(target_directory)
+        assert not fs.exists(expected_target_file)
+
+        with server.client(uid) as client:
+            with patch('boss.api.ssh.resolve_client') as rc_m:
+                rc_m.return_value = client
+
+                upload(source_file, target_directory)
+
+                capsys.readouterr()
+
+                assert fs.exists(expected_target_file)
+                assert fs.read(expected_target_file) == 'Test put operation'
 
 
 def test_upload_dir(server, capsys):
