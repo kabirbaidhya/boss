@@ -152,6 +152,13 @@ def default_status_message(status, **params):
     return result
 
 
+def upload(local_path, remote_path, callback=None):
+    ''' Upload a local file to the remote. '''
+    uploader = FileUploader(local_path, callback)
+
+    return uploader.upload(remote_path)
+
+
 def upload_dir(local_path, remote_path, callback=None):
     ''' Upload local directory to the remote. '''
     uploader = DirectoryUploader(local_path, callback)
