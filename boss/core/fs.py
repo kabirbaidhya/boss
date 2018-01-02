@@ -31,3 +31,17 @@ def compress(source_dir, filename):
 def rm(path):
     ''' Remove a file given by the path. '''
     return os.remove(path)
+
+
+def size_unit(size):
+    '''
+    Get a human readable size unit (eg: KB, MB, GB etc) for the
+    given file size in bytes.
+    '''
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
+        if abs(size) < 1024.0:
+            return '%3.1f %s' % (size, unit)
+
+        size /= 1024.0
+
+    return '%.1f %s' % (size, 'YB')
