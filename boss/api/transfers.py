@@ -106,3 +106,10 @@ def default_status_message(status, **params):
         return blank + '{} [{}] - {:.2f}%'.format(message, cyan(size_unit(total)), progress)
 
     return blank + message
+
+
+def upload_dir(local_path, remote_path, callback=None):
+    ''' Upload local directory to the remote. '''
+    uploader = Uploader(local_path, callback)
+
+    return uploader.upload(remote_path)
