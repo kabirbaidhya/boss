@@ -26,20 +26,11 @@ DEFAULT_MESSAGES[FINALIZING] = 'Finalizing'
 DEFAULT_MESSAGES[DONE] = 'Upload Completed'
 
 
-class DirectoryUploader(object):
-    '''
-    DirectoryUploader
-    A utility class for uploading files and directories easily.
-    '''
+class Uploader(object):
+    ''' Abstract base uploader class. '''
 
-    def __init__(self, local_path, callback=None):
-        ''' DirectoryUploader constructor. '''
-        tmp_folder = mkdtemp()
-        self.local_path = local_path
-        self.name = 'upload-{}.tar.gz'.format(str(time()).replace('.', '-'))
-        self.tar_path = os.path.join(tmp_folder, self.name)
-        self.remote_tmp_path = '/tmp/' + self.name
-
+    def __init__(self, callback=None):
+        ''' Uploader constructor. '''
         self.callback = callback or default_status_message
 
     def update(self, status, **params):
@@ -47,6 +38,23 @@ class DirectoryUploader(object):
         message = self.callback(status, **params)
         sys.stdout.write(message)
         sys.stdout.flush()
+
+
+class DirectoryUploader(Uploader):
+    '''
+    DirectoryUploader
+    A utility class for uploading files and directories easily.
+    '''
+
+    def __init__(self, local_path, callback=None):
+        ''' DirectoryUploader constructor. '''
+        Uploader.__init__(self, callback)
+
+        tmp_folder = mkdtemp()
+        self.local_path = local_path
+        self.name = 'upload-{}.tar.gz'.format(str(time()).replace('.', '-'))
+        self.tar_path = os.path.join(tmp_folder, self.name)
+        self.remote_tmp_path = '/tmp/' + self.name
 
     def upload(self, remote_path):
         ''' Start the upload operation. '''
@@ -83,7 +91,7 @@ class DirectoryUploader(object):
         self.update(DONE)
 
 
-class FileUploader(object):
+class FileUploader(Uploader):
     '''
     FileUploader
     A utility class for uploading a single file.
@@ -91,16 +99,11 @@ class FileUploader(object):
 
     def __init__(self, path, callback=None):
         ''' FileUploader constructor. '''
+        Uploader.__init__(self, callback)
+
         self.path = os.path.abspath(path)
         self.filename = os.path.basename(path)
         self.remote_tmp_path = '/tmp/' + self.filename
-        self.callback = callback or default_status_message
-
-    def update(self, status, **params):
-        ''' Update status to the stdout. '''
-        message = self.callback(status, **params)
-        sys.stdout.write(message)
-        sys.stdout.flush()
 
     def upload(self, remote_path):
         ''' Start the upload operation. '''
