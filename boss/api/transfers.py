@@ -89,10 +89,11 @@ class FileUploader(object):
     A utility class for uploading a single file.
     '''
 
-    def __init__(self, filename, callback=None):
+    def __init__(self, path, callback=None):
         ''' FileUploader constructor. '''
-        self.filename = filename
-        self.remote_tmp_path = '/tmp/' + os.path.basename(filename)
+        self.path = os.path.abspath(path)
+        self.filename = os.path.basename(path)
+        self.remote_tmp_path = '/tmp/' + self.filename
         self.callback = callback or default_status_message
 
     def update(self, status, **params):
@@ -105,14 +106,14 @@ class FileUploader(object):
         ''' Start the upload operation. '''
         self.update(PREPARING)
         remote_path = normalize_path(remote_path)
-        total_size = os.path.getsize(self.filename)
+        total_size = os.path.getsize(self.path)
 
         def put_callback(sent, total):
             self.update(UPLOADING, sent=sent, total=total)
 
         # Upload the file to a tmp path.
         self.update(PREPARING_TO_UPLOAD, total=total_size)
-        put(self.filename, self.remote_tmp_path, put_callback)
+        put(self.path, self.remote_tmp_path, put_callback)
 
         self.update(FINALIZING)
         # Move the uploaded file to the remote_path.
