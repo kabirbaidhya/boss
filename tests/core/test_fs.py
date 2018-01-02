@@ -32,3 +32,13 @@ def test_write():
         fs.write(filename, data)
         mock_file.assert_called_with(filename, 'w')
         m().write.assert_called_with(data)
+
+
+def test_size_unit():
+    ''' Test size_unit() works. '''
+
+    assert fs.size_unit(12) == '12.0 B'
+    assert fs.size_unit(1200) == '1.2 KB'
+    assert fs.size_unit(2048) == '2.0 KB'
+    assert fs.size_unit(3169744) == '3.0 MB'
+    assert fs.size_unit(3169744000) == '3.0 GB'
