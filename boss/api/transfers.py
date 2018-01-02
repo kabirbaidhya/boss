@@ -94,18 +94,27 @@ def default_status_message(status, **params):
     ''' Default status callback function for Uploader. '''
     message = green(DEFAULT_MESSAGES[status])
     blank = '\r' + (' ' * 50) + '\r'  # Blank padding to clear the output line
+    result = blank + message
 
-    if status == Uploader.STATUS_PREPARING_TO_UPLOAD:
-        return blank + '{} [{}]'.format(message, cyan(size_unit(params['total'])))
-
-    if status == Uploader.STATUS_UPLOADING:
+    if status == Uploader.STATUS_PREPARING:
+        result = '\n' + result
+    elif status == Uploader.STATUS_PREPARING_TO_UPLOAD:
+        result = blank + '{} [{}]'.format(
+            message,
+            cyan(size_unit(params['total']))
+        )
+    elif status == Uploader.STATUS_UPLOADING:
         sent = params['sent']
         total = params['total']
-
         progress = (sent * 100.0 / total)
-        return blank + '{} [{}] - {:.2f}%'.format(message, cyan(size_unit(total)), progress)
+        result = blank + '{} [{}] - {:.2f}%'.format(
+            message,
+            cyan(size_unit(total)), progress
+        )
+    elif status == Uploader.STATUS_DONE:
+        result += '\n\n'
 
-    return blank + message
+    return result
 
 
 def upload_dir(local_path, remote_path, callback=None):
