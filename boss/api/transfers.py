@@ -83,6 +83,44 @@ class DirectoryUploader(object):
         self.update(DONE)
 
 
+class FileUploader(object):
+    '''
+    FileUploader
+    A utility class for uploading a single file.
+    '''
+
+    def __init__(self, filename, callback=None):
+        ''' FileUploader constructor. '''
+        self.filename = filename
+        self.remote_tmp_path = '/tmp/' + os.path.basename(filename)
+        self.callback = callback or default_status_message
+
+    def update(self, status, **params):
+        ''' Update status to the stdout. '''
+        message = self.callback(status, **params)
+        sys.stdout.write(message)
+        sys.stdout.flush()
+
+    def upload(self, remote_path):
+        ''' Start the upload operation. '''
+        self.update(PREPARING)
+        remote_path = normalize_path(remote_path)
+        total_size = os.path.getsize(self.filename)
+
+        def put_callback(sent, total):
+            self.update(UPLOADING, sent=sent, total=total)
+
+        # Upload the file to a tmp path.
+        self.update(PREPARING_TO_UPLOAD, total=total_size)
+        put(self.filename, self.remote_tmp_path, put_callback)
+
+        self.update(FINALIZING)
+        # Move the uploaded file to the remote_path.
+        run('mv {} {}'.format(self.remote_tmp_path, remote_path))
+
+        self.update(DONE)
+
+
 def default_status_message(status, **params):
     ''' Default status callback function for DirectoryUploader. '''
     message = green(DEFAULT_MESSAGES[status])
