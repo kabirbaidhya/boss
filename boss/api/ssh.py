@@ -8,16 +8,22 @@ from stat import S_ISDIR
 from boss import state
 from boss.core import remote
 from boss.core.fs import compress
+from boss.core.util.types import is_string, is_iterable
 
 
 def run(command, **params):
     '''
-    Execute a command on the remote host over SSH.
+    Execute a command or a list of commands on the remote host over SSH.
     '''
 
     # Keyword args
     raw = params.get('raw') or False
     return_output = params.get('return_output') or True
+
+    # If command is a list of commands,
+    # concat the commands and run them all.
+    if not is_string(command) and is_iterable(command):
+        command = '; '.join(command)
 
     # Execute the command and get the IO streams.
     (stdin, stdout, stderr) = remote.run(resolve_client(), command, **params)
