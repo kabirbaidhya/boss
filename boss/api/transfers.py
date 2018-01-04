@@ -3,6 +3,7 @@
 import os
 import sys
 from time import time
+from shutil import copy
 from tempfile import mkdtemp
 
 from boss.core.fs import compress, size_unit
@@ -52,7 +53,7 @@ class DirectoryUploader(Uploader):
 
         tmp_folder = mkdtemp()
         self.local_path = local_path
-        self.name = 'upload-{}.tar.gz'.format(str(time()).replace('.', '-'))
+        self.name = 'upload-{}.tar.gz'.format(tmp_path())
         self.tar_path = os.path.join(tmp_folder, self.name)
         self.remote_tmp_path = '/tmp/' + self.name
 
@@ -154,6 +155,92 @@ def default_status_message(status, **params):
         result += '\n\n'
 
     return result
+
+
+class BulkUploader(Uploader):
+    '''
+    BulkUploader
+    A utility class for uploading multiple files and directories in bulk easily.
+    '''
+
+    def __init__(self, callback=None):
+        ''' BulkUploader constructor. '''
+        Uploader.__init__(self, callback)
+
+        self.bundle_path = mkdtemp()
+        self.name = 'upload-{}.tar.gz'.format(tmp_path())
+        self.tar_path = os.path.join(mkdtemp(), self.name)
+        self.paths = []
+
+    def add(self, local_path, remote_path):
+        ''' Add a path (file or directory) to be uploaded to the remote end. '''
+        self.paths.append((local_path, remote_path))
+
+    def prepare_bundle(self):
+        ''' Prepare the bundle of files to be uploaded. '''
+        paths = []
+
+        # Copy each of the files to be uploaded in a temporary directory
+        for (local_path, remote_path) in self.paths:
+            copy(local_path, self.bundle_path)
+
+            paths.append((
+                os.path.basename(local_path),
+                normalize_path(remote_path))
+            )
+
+        self.paths = paths
+
+    def upload(self):
+        ''' Start the upload operation. '''
+        remote_upload_path = tmp_path()
+        remote_extract_path = tmp_path()
+
+        if not self.paths:
+            raise RuntimeError('No files to be uploaded.')
+
+        self.update(PREPARING)
+        self.prepare_bundle()
+
+        # Compress the files to be uploaded.
+        self.update(COMPRESSING)
+        compress(self.bundle_path, self.tar_path)
+
+        total_size = os.path.getsize(self.tar_path)
+        self.update(COMPRESSED, total=total_size)
+
+        def put_callback(sent, total):
+            self.update(UPLOADING, sent=sent, total=total)
+
+        # Upload the tar zipped file to the remote.
+        # The compressed folder gets uploaded to a temp path first.
+        # Then later is extracted to the provided path on the remote.
+        self.update(PREPARING_TO_UPLOAD, total=total_size)
+        put(self.tar_path, remote_upload_path, put_callback)
+
+        # Extract the files to the remote directory
+        self.update(FINALIZING)
+
+        moves = []
+        for (filename, destination) in self.paths:
+            src = os.path.join(remote_extract_path, filename)
+            moves.append('mv {} {}'.format(src, destination))
+
+        run([
+            'tar zxvf {src} --strip-components=1 -C {dest}'.format(
+                src=remote_upload_path,
+                dest=remote_extract_path
+            ),
+            'rm {}'.format(remote_upload_path)
+        ] + moves)
+
+        os.remove(self.tar_path)
+        self.update(DONE)
+
+
+def tmp_path():
+    ''' Get a temp path. '''
+    return '/tmp/' + str(time()).replace('.', '')
 
 
 def upload(local_path, remote_path, callback=None):
