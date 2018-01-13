@@ -285,7 +285,19 @@ More information, examples and documentation coming soon :).
 
 ## Special Thanks
 
-Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
+1. [**Shirish Shikhrakar**](https://github.com/sshikhrakar) - Awesome Logo, Static page Design overhaul | [#68](https://github.com/kabirbaidhya/boss/pull/68) [#69](https://github.com/kabirbaidhya/boss/pull/69)
+
+2. [**Shreya Dahal**](https://github.com/squgeim) - Hipchat Notifications | [#5](https://github.com/kabirbaidhya/boss/pull/5) [#6](https://github.com/kabirbaidhya/boss/pull/6)
+
+3. [**Sanjeev Kumar Pandit**](https://github.com/sanjeevkpandit) - Config Documentation | [#7](https://github.com/kabirbaidhya/boss/pull/7) [#23](https://github.com/kabirbaidhya/boss/pull/23) [#34](https://github.com/kabirbaidhya/boss/pull/34) [#37](https://github.com/kabirbaidhya/boss/pull/37) [#38](https://github.com/kabirbaidhya/boss/pull/38)
+
+4. [**Srishan Bhattarai**](https://github.com/srishanbhattarai) - Interactive init (`boss init --interactive`), Tests | [#72](https://github.com/kabirbaidhya/boss/pull/72) [#73](https://github.com/kabirbaidhya/boss/pull/73) [#75](https://github.com/kabirbaidhya/boss/pull/75)
+
+5. [**Saugat Acharya**](https://github.com/mesaugat) - Simpler slack notifications | [#71](https://github.com/kabirbaidhya/boss/pull/71)
+
+6. [**Songkran Nethan**](https://github.com/gigkokman) - Tests | [#65](https://github.com/kabirbaidhya/boss/pull/65)
+
+7. [**enzosk8**](https://github.com/enzosk8) - Typo fixes | [#67](https://github.com/kabirbaidhya/boss/pull/67)
 
 ## Contributing
 
