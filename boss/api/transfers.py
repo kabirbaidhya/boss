@@ -3,7 +3,7 @@
 import os
 import sys
 from time import time
-from shutil import copy
+from shutil import copy, copytree
 from tempfile import mkdtemp
 
 from boss.core.fs import compress, size_unit
@@ -168,8 +168,8 @@ class BulkUploader(Uploader):
         Uploader.__init__(self, callback)
 
         self.bundle_path = mkdtemp()
-        self.name = 'upload-{}.tar.gz'.format(tmp_path())
-        self.tar_path = os.path.join(mkdtemp(), self.name)
+        # self.name = 'upload-{}.tar.gz'.format(tmp_path())
+        self.tar_path = os.path.join(mkdtemp(), str(time()).replace('.', ''))
         self.paths = []
 
     def add(self, local_path, remote_path):
@@ -182,11 +182,16 @@ class BulkUploader(Uploader):
 
         # Copy each of the files to be uploaded in a temporary directory
         for (local_path, remote_path) in self.paths:
-            copy(local_path, self.bundle_path)
+            filename = os.path.basename(local_path)
+            dest = os.path.join(self.bundle_path, filename)
 
-            paths.append((
-                os.path.basename(local_path),
-                normalize_path(remote_path))
+            if os.path.isdir(local_path):
+                copytree(local_path, dest)
+            else:
+                copy(local_path, dest)
+
+            paths.append(
+                (os.path.basename(local_path), normalize_path(remote_path))
             )
 
         self.paths = paths
