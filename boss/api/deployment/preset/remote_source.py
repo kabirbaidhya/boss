@@ -23,7 +23,7 @@ def deploy(branch=None):
     ''' Deploy to remote source. '''
     stage = shell.get_stage()
     deployer_user = shell.get_user()
-    branch = get_stage_config(stage)['branch']
+    branch = branch or get_stage_config(stage)['branch']
     commit = git.last_commit(short=True)
     notif.send(notification_types.DEPLOYMENT_STARTED, {
         'user': deployer_user,
