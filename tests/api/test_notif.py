@@ -9,12 +9,11 @@ from boss.core.constants.notification_types import (
 )
 
 
-@patch('boss.api.notif.remote_info')
 @patch('boss.api.notif.get_config')
 @patch('boss.api.notif.get_stage_config')
 @patch('boss.api.slack.is_enabled')
 @patch('boss.api.slack.send')
-def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m, get_m, _):
+def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m, get_m):
     ''' Test notif.send sends slack notification if slack is enabled. '''
     commit = 't12345'
     commit_url = 'https://github.com/kabirbaidhya/boss/tree/t12345'
@@ -72,12 +71,11 @@ def test_notif_sends_slack_notification(slack_send_m, slack_is_enabled_m, gsc_m,
     assert call2[1]['user'] == 'ssh-user'
 
 
-@patch('boss.api.notif.remote_info')
 @patch('boss.api.notif.get_config')
 @patch('boss.api.notif.get_stage_config')
 @patch('boss.api.hipchat.is_enabled')
 @patch('boss.api.hipchat.send')
-def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m, _):
+def test_notif_sends_hipchat_notification(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m):
     ''' Test notif.send sends hipchat notification if hipchat is enabled. '''
     commit = 't12345'
     commit_url = 'https://github.com/kabirbaidhya/boss/tree/t12345'
