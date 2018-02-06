@@ -21,7 +21,7 @@ Deploy like a boss.
 ## Installation
 
 ```bash
-$ pip install boss-cli==1.0.0-alpha.15
+$ pip install boss-cli==1.0.0-alpha.16
 ```
 
 ## Configuration
