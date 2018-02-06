@@ -42,7 +42,6 @@ stages:
   prod:
     host: your-server.com
     public_url: 'https://your-server.com'
-    branch: master
 
 scripts:
   hello: 'echo "Hello World!"'
