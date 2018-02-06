@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.0-alpha.16](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.16) (2018-02-06)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-experimental.1...v1.0.0-alpha.16)
+
+**Fixed bugs:**
+
+- Fix provided branch being ignored on the remote-source deployment [\#113](https://github.com/kabirbaidhya/boss/pull/113) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Proceed even if sending notification fails [\#112](https://github.com/kabirbaidhya/boss/pull/112) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-experimental.1](https://github.com/kabirbaidhya/boss/tree/v1.0.0-experimental.1) (2018-01-13)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.15...v1.0.0-experimental.1)
 
