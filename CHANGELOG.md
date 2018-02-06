@@ -1,6 +1,34 @@
 # Change Log
 
-## [v1.0.0-alpha.15](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.15) (2017-12-28)
+## [v1.0.0-alpha.16](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.16) (2018-02-07)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-experimental.1...v1.0.0-alpha.16)
+
+**Fixed bugs:**
+
+- Fix provided branch being ignored on the remote-source deployment [\#113](https://github.com/kabirbaidhya/boss/pull/113) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Proceed even if sending notification fails [\#112](https://github.com/kabirbaidhya/boss/pull/112) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+## [v1.0.0-experimental.1](https://github.com/kabirbaidhya/boss/tree/v1.0.0-experimental.1) (2018-01-13)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.15...v1.0.0-experimental.1)
+
+**Implemented enhancements:**
+
+- Resolve remote cwd and normalize remote paths correctly [\#104](https://github.com/kabirbaidhya/boss/pull/104) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[experimental](https://github.com/kabirbaidhya/boss/labels/experimental)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Fixed bugs:**
+
+- Ignore notification failure, and proceed even if sending notification fails  [\#108](https://github.com/kabirbaidhya/boss/pull/108) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Improvements:**
+
+- Support running a list of commands with ssh.run\(\) function [\#109](https://github.com/kabirbaidhya/boss/pull/109) [[api](https://github.com/kabirbaidhya/boss/labels/api)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Refactor buildman and node deployment [\#107](https://github.com/kabirbaidhya/boss/pull/107) [[breaking-change](https://github.com/kabirbaidhya/boss/labels/breaking-change)] [[experimental](https://github.com/kabirbaidhya/boss/labels/experimental)] [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Normalize remote path while invoking ssh.upload\_dir\(\) [\#106](https://github.com/kabirbaidhya/boss/pull/106) [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Introduce ssh.upload\_dir\(\) to upload a local directory to the remote host [\#105](https://github.com/kabirbaidhya/boss/pull/105) [[api](https://github.com/kabirbaidhya/boss/labels/api)] [[experimental](https://github.com/kabirbaidhya/boss/labels/experimental)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Check if remote is up to date on deployment [\#103](https://github.com/kabirbaidhya/boss/pull/103) [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Rewrite basic ssh operations using the new ssh module w/o relying on fabric [\#101](https://github.com/kabirbaidhya/boss/pull/101) [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] [[refactor](https://github.com/kabirbaidhya/boss/labels/refactor)] [[remote execution](https://github.com/kabirbaidhya/boss/labels/remote%20execution)] [[test](https://github.com/kabirbaidhya/boss/labels/test)] [[wip](https://github.com/kabirbaidhya/boss/labels/wip)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+## [v1.0.0-alpha.15](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.15) (2017-12-27)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.14...v1.0.0-alpha.15)
 
 **Fixed bugs:**
