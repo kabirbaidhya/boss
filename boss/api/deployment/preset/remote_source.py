@@ -22,15 +22,15 @@ from boss.core.constants import known_scripts, notification_types
 def deploy(branch=None):
     ''' Deploy to remote source. '''
     stage = shell.get_stage()
-    deployer_user = shell.get_user()
     branch = branch or get_stage_config(stage)['branch']
-    commit = git.last_commit(short=True)
-    notif.send(notification_types.DEPLOYMENT_STARTED, {
-        'user': deployer_user,
-        'branch': branch,
-        'commit': commit,
-        'stage': stage
-    })
+    params = dict(
+        commit=git.last_commit(short=True),
+        user=shell.get_user(),
+        stage=stage,
+        branch=branch
+    )
+
+    notif.send(notification_types.DEPLOYMENT_STARTED, params)
 
     # Get the latest code from the repository
     sync(branch)
@@ -40,13 +40,7 @@ def deploy(branch=None):
     build(stage)
     reload_service()
 
-    notif.send(notification_types.DEPLOYMENT_FINISHED, {
-        'user': deployer_user,
-        'branch': branch,
-        'commit': commit,
-        'stage': stage
-    })
-
+    notif.send(notification_types.DEPLOYMENT_FINISHED, params)
     remote_info('Deployment Completed')
 
 
