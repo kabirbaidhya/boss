@@ -45,6 +45,9 @@ def is_enabled():
 
 def create_link(url, title):
     ''' Create a link for slack payload. '''
+    if not url:
+        return title
+
     return '<{url}|{title}>'.format(
         url=url,
         title=title
