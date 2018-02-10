@@ -8,14 +8,19 @@ It then builds the project and restarts the service if needed.
 '''
 
 
-from fabric.api import task, hide
+from fabric.api import task, hide, cd
 from fabric.context_managers import shell_env
 
-from boss.config import get_stage_config
+from boss import BASE_PATH, __version__
+from boss.config import get_stage_config, get as get_config
 from boss.util import remote_info, remote_print
-from boss.api import git, notif, shell, runner
+from boss.api import git, notif, shell, runner, fs
 from boss.core.util.colors import cyan
 from boss.core.constants import known_scripts, notification_types
+from boss.api.deployment.buildman import get_deploy_dir
+
+REMOTE_SCRIPT = '/sync-{}.sh'.format(__version__)
+REPOSITORY_PATH = '/repo'
 
 
 @task
@@ -24,21 +29,37 @@ def deploy(branch=None):
     stage = shell.get_stage()
     branch = branch or get_stage_config(stage)['branch']
     params = dict(
-        commit=git.last_commit(short=True),
         user=shell.get_user(),
         stage=stage,
         branch=branch
     )
+    script_path = get_deploy_dir() + REMOTE_SCRIPT
+    repo_path = get_deploy_dir() + REPOSITORY_PATH
+
+    # Check if the script exists (with version) on the remote.
+    if not fs.exists(script_path):
+        runner.run('mkdir -p ' + repo_path)
+        fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
 
     notif.send(notification_types.DEPLOYMENT_STARTED, params)
 
-    # Get the latest code from the repository
-    sync(branch)
-    install_dependencies()
+    env_vars = dict(
+        STAGE=stage,
+        BRANCH=branch,
+        REPOSITORY_PATH=repo_path,
+        REPOSITORY_URL=get_config()['repository_url']
+    )
 
-    # Building the app
-    build(stage)
-    reload_service()
+    with shell_env(**env_vars):
+        # Run the sync script on the remote
+        runner.run('sh ' + script_path)
+
+    with cd(repo_path):
+        install_dependencies()
+
+        # Building the app
+        build(stage)
+        reload_service()
 
     notif.send(notification_types.DEPLOYMENT_FINISHED, params)
     remote_info('Deployment Completed')
