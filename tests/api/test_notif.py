@@ -231,9 +231,11 @@ def test_notif_without_repository_url(hipchat_send_m, hipchat_is_enabled_m, gsc_
 
     assert call2[0][0] == DEPLOYMENT_STARTED
     assert call2[1]['branch'] is None
+    assert call1[1]['branch_url'] is None
+    assert call1[1]['commit_url'] is None
+    assert call2[1]['repository_url'] is None
     assert call2[1]['host'] == 'example.com'
     assert call2[1]['project_name'] == 'test-project'
     assert call2[1]['public_url'] == 'https://example.com'
-    assert call2[1]['repository_url'] == None
     assert call2[1]['server_name'] == 'test-server'
     assert call2[1]['user'] == 'ssh-user'
