@@ -73,9 +73,10 @@ def get_notification_params(**params):
         params['project_name']
     )
 
-    if params.get('public_url') and params.get('server_name'):
+    if params.get('server_name'):
         result['server_link'] = create_link(
-            params['public_url'], params['server_name']
+            params.get('public_url'),
+            params['server_name']
         )
 
     if params.get('commit'):
