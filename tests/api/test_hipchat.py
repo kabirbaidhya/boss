@@ -83,6 +83,56 @@ def test_notity_deployed(base_url):
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
+def test_notity_deployment_finished_with_no_commit(base_url):
+    ''' Test deployment finished notification with no commit. '''
+    notify_params = dict(
+        branch_url='http://branch-url',
+        branch='temp',
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        user='user',
+    )
+    payload = {
+        'color': 'purple',
+        'message': 'user finished deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> to <a href="http://public-url">stage</a> server.',
+        'notify': True,
+        'message_format': 'html'
+    }
+
+    with patch('requests.post') as mock_post:
+        hipchat.send(DEPLOYMENT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_notity_deployment_started_with_no_commit(base_url):
+    ''' Test deployment started notification with no commit. '''
+    notify_params = dict(
+        branch_url='http://branch-url',
+        branch='temp',
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='stage',
+        server_link='http://server-link',
+        user='user',
+    )
+    payload = {
+        'color': 'green',
+        'message': 'user is deploying <a href="http://repository-url">project-name</a>:<a href="http://branch-url">temp</a> to <a href="http://public-url">stage</a> server.',
+        'notify': True,
+        'message_format': 'html'
+    }
+
+    with patch('requests.post') as mock_post:
+        hipchat.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
 def test_notity_deploying_with_no_branch(base_url):
     '''
     Test hipchat.notify_deploying() doesn't show branch link,
