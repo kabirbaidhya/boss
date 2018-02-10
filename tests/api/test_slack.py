@@ -205,6 +205,58 @@ def test_notity_deployed_with_no_branch_name(base_url):
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
+def test_notity_deployment_finished_with_no_commit_no_branch(base_url):
+    ''' Test sending deployment finished notification with no commit and no branch. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deployed-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user'
+    )
+    payload = {
+        'attachments': [
+            {
+                'color': '#764FA5',
+                'text': 'user finished deploying <http://repository-url|project-name> to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_notity_deployment_started_with_no_commit_no_branch(base_url):
+    ''' Test sending deployment started notification with no commit and no branch. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deployed-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user'
+    )
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is deploying <http://repository-url|project-name> to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
 def test_send_running_script_started_notification(base_url):
     ''' Test send() sends RUNNING_SCRIPT_STARTED notfication. '''
     notify_params = dict(
