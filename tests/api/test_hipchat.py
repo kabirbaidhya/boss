@@ -29,6 +29,11 @@ def test_create_link():
     assert hipchat.create_link(url, title) == expected_link
 
 
+def test_create_link_supports_empty_url():
+    ''' Test hipchat.create_link() supports empty url. '''
+    assert hipchat.create_link(None, 'Test') == 'Test'
+
+
 def test_notity_deploying(base_url):
     ''' Test hipchat.notify_deploying(). '''
     notify_params = dict(
