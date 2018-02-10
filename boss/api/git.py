@@ -62,7 +62,7 @@ def get_commit_url(commit, repository_url=None):
     return '{repository_url}/commit/{commit}'.format(
         repository_url=repository_url,
         commit=commit
-    ) if repository_url else commit
+    ) if repository_url else None
 
 
 def get_tree_url(ref, repository_url=None):
@@ -70,7 +70,7 @@ def get_tree_url(ref, repository_url=None):
     return '{repository_url}/tree/{ref}'.format(
         repository_url=repository_url,
         ref=ref
-    ) if repository_url else ref
+    ) if repository_url else None
 
 
 def show_last_commit():
