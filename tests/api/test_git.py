@@ -15,3 +15,17 @@ def test_get_tree_url():
     url = get_tree_url('master', 'https://github.com/kabirbaidhya/boss')
 
     assert url == 'https://github.com/kabirbaidhya/boss/tree/master'
+
+
+def test_get_commit_url_when_no_repository_url():
+    ''' Test get_commit_url() returns the commit, if repository_url is not provided. '''
+    url = get_commit_url('f626609')
+
+    assert url == 'f626609'
+
+
+def test_get_tree_url_when_no_repository_url():
+    ''' Test get_tree_url() returns the ref, if repository_url is not provided. '''
+    url = get_tree_url('master')
+
+    assert url == 'master'
