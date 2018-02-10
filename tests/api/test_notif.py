@@ -183,3 +183,57 @@ def test_notif_without_commit(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m
     assert call2[1]['repository_url'] == 'https://github.com/kabirbaidhya/boss'
     assert call2[1]['server_name'] == 'test-server'
     assert call2[1]['user'] == 'ssh-user'
+
+
+@patch('boss.api.notif.get_config')
+@patch('boss.api.notif.get_stage_config')
+@patch('boss.api.hipchat.is_enabled')
+@patch('boss.api.hipchat.send')
+def test_notif_without_repository_url(hipchat_send_m, hipchat_is_enabled_m, gsc_m, get_m):
+    ''' Test notif.send sends hipchat notification without repository_url. '''
+    get_m.return_value = {
+        'project_name': 'test-project',
+        'project_description': 'Just a test project'
+    }
+    gsc_m.return_value = {
+        'public_url': 'https://example.com',
+        'host': 'example.com'
+    }
+    hipchat_is_enabled_m.return_value = True
+
+    # Trigger deployment finished notification
+    notif.send(DEPLOYMENT_FINISHED, {
+        'user': 'ssh-user',
+        'branch': 'my-branch',
+        'commit': '1234567',
+        'stage': 'test-server'
+    })
+
+    # Trigger Deployment Started notification with no branch
+    notif.send(DEPLOYMENT_STARTED, {
+        'user': 'ssh-user',
+        'stage': 'test-server'
+    })
+
+    (call1, call2) = hipchat_send_m.call_args_list
+
+    assert call1[0][0] == DEPLOYMENT_FINISHED
+    assert call1[1]['branch'] == 'my-branch'
+    assert call1[1]['commit'] == '1234567'
+    assert call1[1]['branch_url'] == None
+    assert call1[1]['commit_url'] == None
+    assert call1[1]['host'] == 'example.com'
+    assert call1[1]['project_name'] == 'test-project'
+    assert call1[1]['public_url'] == 'https://example.com'
+    assert call1[1]['repository_url'] == None
+    assert call1[1]['server_name'] == 'test-server'
+    assert call1[1]['user'] == 'ssh-user'
+
+    assert call2[0][0] == DEPLOYMENT_STARTED
+    assert call2[1]['branch'] is None
+    assert call2[1]['host'] == 'example.com'
+    assert call2[1]['project_name'] == 'test-project'
+    assert call2[1]['public_url'] == 'https://example.com'
+    assert call2[1]['repository_url'] == None
+    assert call2[1]['server_name'] == 'test-server'
+    assert call2[1]['user'] == 'ssh-user'
