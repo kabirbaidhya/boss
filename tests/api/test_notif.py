@@ -279,7 +279,7 @@ def test_notif_without_public_url(hipchat_send_m, hipchat_is_enabled_m, gsc_m, g
     assert call1[1]['commit_url'] == None
     assert call1[1]['host'] == '127.0.0.1'
     assert call1[1]['project_name'] == 'test-project'
-    assert call1[1]['public_url'] == '127.0.0.1'
+    assert call1[1]['public_url'] == 'http://127.0.0.1'
     assert call1[1]['repository_url'] == None
     assert call1[1]['server_name'] == 'test-server'
     assert call1[1]['user'] == 'ssh-user'
@@ -291,6 +291,6 @@ def test_notif_without_public_url(hipchat_send_m, hipchat_is_enabled_m, gsc_m, g
     assert call2[1]['repository_url'] is None
     assert call2[1]['host'] == '127.0.0.1'
     assert call2[1]['project_name'] == 'test-project'
-    assert call2[1]['public_url'] == '127.0.0.1'
+    assert call2[1]['public_url'] == 'http://127.0.0.1'
     assert call2[1]['server_name'] == 'test-server'
     assert call2[1]['user'] == 'ssh-user'

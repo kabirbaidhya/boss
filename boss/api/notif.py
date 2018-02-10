@@ -34,7 +34,8 @@ def extract_notification_params(params):
     ''' Extract parameters for notification. '''
     config = get_config()
     stage_config = get_stage_config(params['stage'])
-    public_url = stage_config.get('public_url') or stage_config.get('host')
+    fallback_public_url = 'http://' + stage_config.get('host')
+    public_url = stage_config.get('public_url') or fallback_public_url
     repository_url = config.get('repository_url')
 
     notif_params = dict(
