@@ -43,8 +43,12 @@ def get_message(notif_type, **notification):
 
     messages = MESSAGE_MAP[notif_type]
 
-    if notification.has_key('branch_link'):
+    if notification.has_key('branch_link') and notification.has_key('commit_link'):
+        text = messages['message_full'].format(**notification)
+    elif notification.has_key('branch_link'):
         text = messages['message_with_branch'].format(**notification)
+    elif notification.has_key('commit_link'):
+        text = messages['message_with_commit'].format(**notification)
     else:
         text = messages['message'].format(**notification)
 
