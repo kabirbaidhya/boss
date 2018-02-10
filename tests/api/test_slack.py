@@ -324,6 +324,29 @@ def test_notity_deployment_started_with_no_commit_no_branch(base_url):
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
+def test_notity_deployment_started_no_links_at_all(base_url):
+    ''' Test deployment started notification with no links or urls at all. '''
+    notify_params = dict(
+        project_name='project-name',
+        server_name='staging',
+        user='user',
+    )
+
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is deploying project-name to staging server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
 def test_send_running_script_started_notification(base_url):
     ''' Test send() sends RUNNING_SCRIPT_STARTED notfication. '''
     notify_params = dict(
