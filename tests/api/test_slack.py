@@ -24,6 +24,11 @@ def test_create_link():
     assert slack.create_link(url, title) == expected_link
 
 
+def test_create_link_supports_empty_url():
+    ''' Test slack.create_link() supports empty url. '''
+    assert slack.create_link(None, 'Test') == 'Test'
+
+
 def test_send(base_url):
     ''' Test slack.send(). '''
     notify_params = dict(
@@ -52,6 +57,68 @@ def test_send(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_send_deployment_started_with_no_repository_url(base_url):
+    ''' Test deployment started notification with no repository url. '''
+    notify_params = dict(
+        branch='temp',
+        commit='tttt',
+        commit_url=None,
+        branch_url=None,
+        repository_url=None,
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user',
+    )
+
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is deploying project-name:temp (tttt) to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_send_deployment_finished_with_no_repository_url(base_url):
+    ''' Test deployment finished notification with no repository url. '''
+    notify_params = dict(
+        branch='temp',
+        commit='tttt',
+        commit_url=None,
+        branch_url=None,
+        repository_url=None,
+        public_url='http://public-url',
+        host='test-notify-deploying-host',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user',
+    )
+
+    payload = {
+        'attachments': [
+            {
+                'color': '#764FA5',
+                'text': 'user finished deploying project-name:temp (tttt) to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_FINISHED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
@@ -117,6 +184,62 @@ def test_notity_deployed(base_url):
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
+def test_notity_deployed_with_no_commit(base_url):
+    ''' Test sending deployment finished notification with no commit. '''
+    notify_params = dict(
+        branch_url='http://branch-url',
+        branch='temp',
+        public_url='http://public-url',
+        host='test-notify-deployed-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user'
+    )
+    payload = {
+        'attachments': [
+            {
+                'color': '#764FA5',
+                'text': 'user finished deploying <http://repository-url|project-name>:<http://branch-url|temp> to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_notity_deploying_with_no_commit(base_url):
+    ''' Test sending deployment started notification with no commit. '''
+    notify_params = dict(
+        branch_url='http://branch-url',
+        branch='temp',
+        public_url='http://public-url',
+        host='test-notify-deployed-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user'
+    )
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is deploying <http://repository-url|project-name>:<http://branch-url|temp> to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
 def test_notity_deployed_with_no_branch_name(base_url):
     '''
     Test slack.notify_deployed() doesn't show the branch link,
@@ -146,6 +269,81 @@ def test_notity_deployed_with_no_branch_name(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_notity_deployment_finished_with_no_commit_no_branch(base_url):
+    ''' Test sending deployment finished notification with no commit and no branch. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deployed-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user'
+    )
+    payload = {
+        'attachments': [
+            {
+                'color': '#764FA5',
+                'text': 'user finished deploying <http://repository-url|project-name> to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_FINISHED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_notity_deployment_started_with_no_commit_no_branch(base_url):
+    ''' Test sending deployment started notification with no commit and no branch. '''
+    notify_params = dict(
+        public_url='http://public-url',
+        host='test-notify-deployed-host',
+        repository_url='http://repository-url',
+        project_name='project-name',
+        server_name='server-name',
+        server_link='http://server-link',
+        user='user'
+    )
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is deploying <http://repository-url|project-name> to <http://public-url|server-name> server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
+        mock_post.assert_called_once_with(base_url, json=payload)
+
+
+def test_notity_deployment_started_no_links_at_all(base_url):
+    ''' Test deployment started notification with no links or urls at all. '''
+    notify_params = dict(
+        project_name='project-name',
+        server_name='staging',
+        user='user',
+    )
+
+    payload = {
+        'attachments': [
+            {
+                'color': 'good',
+                'text': 'user is deploying project-name to staging server.',
+                'mrkdwn_in': ['text']
+            }
+        ]
+    }
+
+    with patch('requests.post') as mock_post:
+        slack.send(DEPLOYMENT_STARTED, **notify_params)
         mock_post.assert_called_once_with(base_url, json=payload)
 
 
