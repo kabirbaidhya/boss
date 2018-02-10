@@ -68,26 +68,25 @@ def get_notification_params(**params):
     create_link = params['create_link']
     result = dict(user=params['user'])
 
-    if params.get('repository_url') and params.get('project_name'):
-        result['project_link'] = create_link(
-            params['repository_url'],
-            params['project_name']
-        )
+    result['project_link'] = create_link(
+        params.get('repository_url'),
+        params['project_name']
+    )
 
     if params.get('public_url') and params.get('server_name'):
         result['server_link'] = create_link(
             params['public_url'], params['server_name']
         )
 
-    if params.get('commit_url') and params.get('commit'):
+    if params.get('commit'):
         result['commit_link'] = create_link(
-            params['commit_url'],
+            params.get('commit_url'),
             params['commit']
         )
 
-    if params.get('branch_url') and params.get('branch'):
+    if params.get('branch'):
         result['branch_link'] = create_link(
-            params['branch_url'],
+            params.get('branch_url'),
             params['branch']
         )
 
