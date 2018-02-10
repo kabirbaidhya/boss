@@ -49,6 +49,9 @@ def is_enabled():
 
 def create_link(url, title):
     ''' Create a link for hipchat payload. '''
+    if not url:
+        return title
+
     markup = '<a href="{url}">{title}</a>'
 
     return markup.format(url=url, title=title)
