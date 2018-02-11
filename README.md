@@ -82,10 +82,10 @@ project_description: 'My App'
 repository_url: 'https://github.com/username/repository'
 branch_url: '{repository_url}/tree/{branch}'
 user: deploy_user
-app_dir: /source/my-app
 
 deployment:
   preset: remote-source
+  base_dir: /source/my-app
 
 stages:
   prod:
