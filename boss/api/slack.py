@@ -5,6 +5,7 @@ Module for slack API.
 import requests
 from boss.config import get as get_config
 from boss.core import notification
+from boss.core.util.func import as_is
 
 
 def send(notif_type, **params):
@@ -16,7 +17,7 @@ def send(notif_type, **params):
         config=get_config(),
         notif_config=config(),
         create_link=create_link,
-        pre_format=pre_format,
+        pre_format=as_is,
         **params
     )
 
