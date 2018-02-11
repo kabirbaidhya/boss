@@ -50,9 +50,10 @@ def deploy(branch=None):
         REPOSITORY_URL=get_config()['repository_url']
     )
 
-    with shell_env(**env_vars):
-        # Run the sync script on the remote
-        runner.run('sh ' + script_path)
+    with hide('running'):
+        with shell_env(**env_vars):
+            # Run the sync script on the remote
+            runner.run('sh ' + script_path)
 
     with cd(repo_path):
         install_dependencies()
