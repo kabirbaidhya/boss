@@ -29,13 +29,13 @@ MESSAGE_MAP = {
         'ci_color': 'ci_deployed_color'
     },
     RUNNING_SCRIPT_STARTED: {
-        'message': '{user} is running {script} for {project_link} on {server_link} server.',
+        'message': '{user} is running {project_link}:{script} on {server_link} server.',
         # TODO: Rename this to started_color & ci_started_color
         'color': 'deploying_color',
         'ci_color': 'ci_deploying_color'
     },
     RUNNING_SCRIPT_FINISHED: {
-        'message': '{user} finished running {script} for {project_link} on {server_link} server.',
+        'message': '{user} finished running {project_link}:{script} on {server_link} server.',
         # TODO: Rename this to started_color & ci_started_color
         'color': 'deployed_color',
         'ci_color': 'ci_deployed_color'
