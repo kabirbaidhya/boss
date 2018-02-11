@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.0-alpha.17](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.17) (2018-02-11)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.16...v1.0.0-alpha.17)
+
+**Implemented enhancements:**
+
+- Better wording for script running notification message [\#116](https://github.com/kabirbaidhya/boss/pull/116) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[notification](https://github.com/kabirbaidhya/boss/labels/notification)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Support flexible notification messages [\#114](https://github.com/kabirbaidhya/boss/pull/114) [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] [[notification](https://github.com/kabirbaidhya/boss/labels/notification)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.16](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.16) (2018-02-06)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-experimental.1...v1.0.0-alpha.16)
 
