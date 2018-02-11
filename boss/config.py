@@ -115,7 +115,7 @@ def get_base_config(resolved_config=None):
         'user': config.get('user'),
         'port': config.get('port'),
         'branch': config.get('branch'),
-        'app_dir': config.get('app_dir'),
+        'cwd': config.get('cwd'),
         'deployment': config.get('deployment'),
         'repository_url': config.get('repository_url'),
         'remote_env_path': config.get('remote_env_path')

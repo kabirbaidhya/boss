@@ -11,10 +11,10 @@ from .known_scripts import (
 DEFAULT_CONFIG = {
     'user': 'app',
     'port': 22,
+    'cwd': '/home/app',
     'key_filename': '~/.ssh/id_rsa',
     'ssh_forward_agent': False,
     'verbose_logging': False,
-    'app_dir': '~/',
     'branch': 'master',
     'repository_url': '',
     'project_name': 'untitled',
