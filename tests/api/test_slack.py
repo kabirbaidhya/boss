@@ -364,7 +364,7 @@ def test_send_running_script_started_notification(base_url):
         'attachments': [
             {
                 'color': 'good',
-                'text': 'user is running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.',
+                'text': 'user is running <http://repository-url|project-name>:migration on <http://public-url|stage> server.',
                 'mrkdwn_in': ['text']
             }
         ]
@@ -392,7 +392,7 @@ def test_send_running_script_finished_notification(base_url):
         'attachments': [
             {
                 'color': '#764FA5',
-                'text': 'user finished running `migration` for <http://repository-url|project-name> on <http://public-url|stage> server.',
+                'text': 'user finished running <http://repository-url|project-name>:migration on <http://public-url|stage> server.',
                 'mrkdwn_in': ['text']
             }
         ]
