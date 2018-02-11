@@ -33,27 +33,10 @@ def deploy(branch=None):
         stage=stage,
         branch=branch
     )
-    script_path = get_deploy_dir() + REMOTE_SCRIPT
-    repo_path = get_deploy_dir() + REPOSITORY_PATH
-
-    # Check if the script exists (with version) on the remote.
-    if not fs.exists(script_path):
-        runner.run('mkdir -p ' + repo_path)
-        fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
-
     notif.send(notification_types.DEPLOYMENT_STARTED, params)
 
-    env_vars = dict(
-        STAGE=stage,
-        BRANCH=branch,
-        REPOSITORY_PATH=repo_path,
-        REPOSITORY_URL=get_config()['repository_url']
-    )
-
-    with hide('running'):
-        with shell_env(**env_vars):
-            # Run the sync script on the remote
-            runner.run('sh ' + script_path)
+    repo_path = get_deploy_dir() + REPOSITORY_PATH
+    sync(branch)
 
     with cd(repo_path):
         install_dependencies()
@@ -80,13 +63,32 @@ def install_dependencies():
 @task
 def sync(branch=None):
     ''' Sync the changes on the branch with the remote (origin). '''
-    remote_info('Fetching the latest changes.')
-    git.fetch()
-    branch = branch or git.current_branch()
-    remote_info('Checking out to branch {}.'.format(cyan(branch)))
-    git.checkout(branch, True)
-    remote_info('Synchronizing with the latest changes.')
-    git.sync(branch)
+    stage = shell.get_stage()
+    branch = branch or get_stage_config(stage)['branch']
+    script_path = get_deploy_dir() + REMOTE_SCRIPT
+    repo_path = get_deploy_dir() + REPOSITORY_PATH
+
+    # Check if the script exists (with version) on the remote.
+    if not fs.exists(script_path):
+        runner.run('mkdir -p ' + repo_path)
+        fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
+
+    # Check if the script exists (with version) on the remote.
+    if not fs.exists(script_path):
+        runner.run('mkdir -p ' + repo_path)
+        fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
+
+    env_vars = dict(
+        STAGE=stage,
+        BRANCH=branch,
+        REPOSITORY_PATH=repo_path,
+        REPOSITORY_URL=get_config()['repository_url']
+    )
+
+    with hide('running'):
+        with shell_env(**env_vars):
+            # Run the sync script on the remote
+            runner.run('sh ' + script_path)
 
 
 @task
