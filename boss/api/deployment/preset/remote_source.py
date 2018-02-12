@@ -73,11 +73,6 @@ def sync(branch=None):
         runner.run('mkdir -p ' + repo_path)
         fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
 
-    # Check if the script exists (with version) on the remote.
-    if not fs.exists(script_path):
-        runner.run('mkdir -p ' + repo_path)
-        fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
-
     env_vars = dict(
         STAGE=stage,
         BRANCH=branch,
