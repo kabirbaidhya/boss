@@ -26,6 +26,13 @@ def is_script_defined(script):
     return custom_scripts.has_key(script)
 
 
+def get_script_cmd(script):
+    ''' Return a script command if it does exist. '''
+    scripts = _get_config()['scripts']
+
+    return scripts.get(script)
+
+
 def run_script_safely(script, remote=True):
     '''
     Run a script only if it is defined in the config.
