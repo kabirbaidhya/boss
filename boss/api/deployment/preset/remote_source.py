@@ -61,6 +61,7 @@ def run_deploy_script(stage, branch):
     env_vars = dict(
         STAGE=stage,
         BRANCH=branch,
+        BASE_DIR=get_deploy_dir(),
         REPOSITORY_PATH=repo_path,
         REPOSITORY_URL=get_config()['repository_url'],
         SCRIPT_BUILD=runner.get_script_cmd(known_scripts.BUILD),
