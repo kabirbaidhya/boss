@@ -19,6 +19,7 @@ from boss.core.util.colors import cyan
 from boss.core.constants import known_scripts, notification_types
 from boss.api.deployment.buildman import get_deploy_dir
 
+REMOTE_INIT_SCRIPT = '/init-{}.sh'.format(__version__)
 REMOTE_SCRIPT = '/deploy-{}.sh'.format(__version__)
 REPOSITORY_PATH = '/repo'
 
@@ -47,12 +48,17 @@ def get_repo_path():
 def run_deploy_script(stage, branch):
     ''' Run the deployment script on the remote host. '''
     script_path = get_deploy_dir() + REMOTE_SCRIPT
+    init_script_path = get_deploy_dir() + REMOTE_INIT_SCRIPT
     repo_path = get_repo_path()
 
     # Check if the script exists (with version) on the remote.
     if not fs.exists(script_path):
-        with hide('running'):
+        with hide('everything'):
             runner.run('mkdir -p ' + repo_path)
+            fs.upload(
+                BASE_PATH + '/misc/scripts/init.sh',
+                init_script_path
+            )
             fs.upload(
                 BASE_PATH + '/misc/scripts/remote-source-deploy.sh',
                 script_path
@@ -62,6 +68,7 @@ def run_deploy_script(stage, branch):
         STAGE=stage,
         BRANCH=branch,
         BASE_DIR=get_deploy_dir(),
+        INIT_SCRIPT_PATH=init_script_path,
         REPOSITORY_PATH=repo_path,
         REPOSITORY_URL=get_config()['repository_url'],
         SCRIPT_BUILD=runner.get_script_cmd(known_scripts.BUILD),
