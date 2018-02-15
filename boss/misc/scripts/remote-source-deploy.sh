@@ -1,37 +1,50 @@
 #!/bin/sh
 
+# Initialize the deployment script
+. "$INIT_SCRIPT_PATH"
+
 mkdir -p $REPOSITORY_PATH
 cd $REPOSITORY_PATH
 
 if [ -d ".git" ]; then
-  printf "\nFetching the latest changes."
+  echo_info "Fetching the latest changes."
   git fetch --prune
 
-  printf "\nChecking out to branch ${BRANCH}."
+  echo_info "Checking out to branch ${BRANCH}."
   git checkout -f $BRANCH
+  echo;
+
+  echo_info "Synchronizing with the latest changes on branch ${BRANCH}."
+  git reset --hard origin/$BRANCH
 else
   git clone -b $BRANCH  $REPOSITORY_URL $REPOSITORY_PATH
 fi
-
-printf "\nSynchronizing with the latest changes on branch ${BRANCH}.\n"
-git reset --hard origin/$BRANCH
+echo;
 
 if [ ! -z "$SCRIPT_INSTALL" ]; then
-  printf "\n> $SCRIPT_INSTALL\n";
+  echo_info "Running install"
+  echo_fade "> $SCRIPT_INSTALL";
   $SCRIPT_INSTALL;
+  echo;
 fi
 
 if [ ! -z "$SCRIPT_BUILD" ]; then
-  printf "\n> $SCRIPT_BUILD\n";
+  echo_info "Running build"
+  echo_fade "> $SCRIPT_BUILD";
   $SCRIPT_BUILD;
+  echo;
 fi
 
 if [ ! -z "$SCRIPT_RELOAD" ]; then
-  printf "\n> $SCRIPT_RELOAD\n";
+  echo_info "Running reload"
+  echo_fade "> $SCRIPT_RELOAD";
   $SCRIPT_RELOAD;
+  echo;
 fi
 
 if [ ! -z "$SCRIPT_STATUS_CHECK\n" ]; then
-  printf "\n> $SCRIPT_STATUS_CHECK";
+  echo_info "Running status_check"
+  echo_fade "> $SCRIPT_STATUS_CHECK";
   $SCRIPT_STATUS_CHECK;
+  echo;
 fi
