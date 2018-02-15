@@ -19,7 +19,7 @@ from boss.core.util.colors import cyan
 from boss.core.constants import known_scripts, notification_types
 from boss.api.deployment.buildman import get_deploy_dir
 
-REMOTE_SCRIPT = '/sync-{}.sh'.format(__version__)
+REMOTE_SCRIPT = '/deploy-{}.sh'.format(__version__)
 REPOSITORY_PATH = '/repo'
 
 
@@ -34,66 +34,45 @@ def deploy(branch=None):
         branch=branch
     )
     notif.send(notification_types.DEPLOYMENT_STARTED, params)
-
-    repo_path = get_deploy_dir() + REPOSITORY_PATH
-    sync(branch)
-
-    with cd(repo_path):
-        install_dependencies()
-
-        # Building the app
-        build(stage)
-        reload_service()
-
+    run_deploy_script(stage, branch)
     notif.send(notification_types.DEPLOYMENT_FINISHED, params)
     remote_info('Deployment Completed')
 
 
-def reload_service():
-    ''' Reload the service after deployment. '''
-    runner.run_script_safely(known_scripts.RELOAD)
-    runner.run_script_safely(known_scripts.STATUS_CHECK)
+def get_repo_path():
+    ''' Get remote repository path. '''
+    return get_deploy_dir() + REPOSITORY_PATH
 
 
-def install_dependencies():
-    ''' Install dependencies. '''
-    runner.run_script_safely(known_scripts.INSTALL)
-
-
-@task
-def sync(branch=None):
-    ''' Sync the changes on the branch with the remote (origin). '''
-    stage = shell.get_stage()
-    branch = branch or get_stage_config(stage)['branch']
+def run_deploy_script(stage, branch):
+    ''' Run the deployment script on the remote host. '''
     script_path = get_deploy_dir() + REMOTE_SCRIPT
-    repo_path = get_deploy_dir() + REPOSITORY_PATH
+    repo_path = get_repo_path()
 
     # Check if the script exists (with version) on the remote.
     if not fs.exists(script_path):
-        runner.run('mkdir -p ' + repo_path)
-        fs.upload(BASE_PATH + '/misc/scripts/sync.sh', script_path)
+        with hide('running'):
+            runner.run('mkdir -p ' + repo_path)
+            fs.upload(
+                BASE_PATH + '/misc/scripts/remote-source-deploy.sh',
+                script_path
+            )
 
     env_vars = dict(
         STAGE=stage,
         BRANCH=branch,
         REPOSITORY_PATH=repo_path,
-        REPOSITORY_URL=get_config()['repository_url']
+        REPOSITORY_URL=get_config()['repository_url'],
+        SCRIPT_BUILD=runner.get_script_cmd(known_scripts.BUILD),
+        SCRIPT_RELOAD=runner.get_script_cmd(known_scripts.RELOAD),
+        SCRIPT_INSTALL=runner.get_script_cmd(known_scripts.INSTALL),
+        SCRIPT_STATUS_CHECK=runner.get_script_cmd(known_scripts.STATUS_CHECK)
     )
 
     with hide('running'):
         with shell_env(**env_vars):
             # Run the sync script on the remote
             runner.run('sh ' + script_path)
-
-
-@task
-def build(stage_name=None):
-    ''' Build the application. '''
-    stage = shell.get_stage()
-
-    with shell_env(STAGE=(stage_name or stage)):
-        # Trigger the build script.
-        runner.run_script_safely(known_scripts.BUILD)
 
 
 @task
@@ -117,9 +96,10 @@ def status():
 @task
 def check():
     ''' Check the current remote branch and the last commit. '''
-    with hide('running'):
-        # Show the current branch
-        remote_branch = git.current_branch()
-        remote_print('Branch: {}'.format(remote_branch))
-        # Show the last commit
-        git.show_last_commit()
+    with cd(get_repo_path()):
+        with hide('running'):
+            # Show the current branch
+            remote_branch = git.current_branch()
+            remote_print('Branch: {}'.format(remote_branch))
+            # Show the last commit
+            git.show_last_commit()
