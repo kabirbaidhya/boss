@@ -17,7 +17,7 @@ DEFAULT_CONFIG = {
     'verbose_logging': False,
     'branch': 'master',
     'repository_url': '',
-    'project_name': 'untitled',
+    'project_name': None,
     'project_description': '',
     'branch_url': '{repository_url}/branch/{branch}',
     'remote_env_injection': False,
