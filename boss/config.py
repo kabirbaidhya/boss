@@ -98,6 +98,8 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
 
         _config.update(merged_config)
 
+        validate(_config)
+
         return get()
 
     except KeyError:
@@ -130,3 +132,11 @@ def get_stage_config(stage):
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
         ))
+
+
+def validate(config):
+    ''' Validate loaded configuration. '''
+
+    # TODO: Instead of failing, ask the params and update boss.yml instead.
+    if not config.get('project_name'):
+        halt('`project_name` is not set.')
