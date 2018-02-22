@@ -40,7 +40,12 @@ def get_deploy_dir():
     ''' Get the deployment base directory path. '''
     config = get_stage_config(shell.get_stage())
 
-    return config['deployment']['base_dir'].rstrip('/')
+    deploy_dir = '{}/{}'.format(
+        config['deployment']['base_dir'].rstrip('/'),
+        get_config()['project_name']
+    )
+
+    return deploy_dir
 
 
 def resolve_local_build_dir():
