@@ -121,14 +121,14 @@ The public url to access this website.
 public_url: http://dev.your-app.com
 ```
 
-##### `app_dir`
+##### `cwd`
 
 `string`
 
-The absolute path of the project root directory in the server.
+The absolute path of the current working directory on the remote host.
 
 ```yml
-app_dir: /path/to/your/app
+cwd: /path/to/your/app
 ```
 
 ##### `logging`
@@ -310,7 +310,7 @@ stages:
   dev:
     host: dev.your-app.com
     public_url: http://dev.your-app.com
-    app_dir: /path/to/your/app
+    cwd: /path/to/your/app
     logging:
       files:
         - /path/to/error/log/file
@@ -318,7 +318,7 @@ stages:
   uat:
     host: uat.your-app.com
     public_url: http://uat.your-app.com
-    app_dir: /path/to/your/app
+    cwd: /path/to/your/app
     logging:
       files:
         - /path/to/error/log/file
@@ -328,7 +328,7 @@ stages:
     port: ${PRODUCTION_SERVER_SSH_PORT}
     username: ${PRODUCTION_SERVER_USERNAME}
     public_url: http://your-app.com
-    app_dir: /path/to/your/app
+    cwd: /path/to/your/app
     logging:
       files:
         - /path/to/error/log/file
