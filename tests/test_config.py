@@ -2,6 +2,7 @@
 
 from mock import patch
 from boss.core.util.string import strip_ansi
+from boss.core.constants import presets
 from boss.core.constants.config import DEFAULT_CONFIG
 from boss.config import (
     load,
@@ -211,3 +212,14 @@ def test_resolve_dotenv_file_loads_env_file_if_stage_specific_file_doesnt_exist(
         msg = strip_ansi(info_m.call_args[0][0])
 
         assert msg == 'Resolving env file: .env'
+
+
+def test_merge_config_that_by_default_cache_builds_is_true():
+    '''
+    Ensure build caching is turned on, i.e
+    cache_build=True by default if not set.
+    '''
+    raw_config = {}
+    merged_config = merge_config(raw_config)
+
+    assert merged_config['deployment']['cache_builds'] is True
