@@ -38,6 +38,7 @@ def run(command, **params):
             lines.append(l.strip())
 
         return lines
+    # TODO: Error handling and sending out stderr
 
     # For return_output=False,
     # just walk until the end of the stream

@@ -6,9 +6,9 @@ from time import time
 from shutil import copy, copytree
 from tempfile import mkdtemp
 
-from boss.core.fs import compress, size_unit
-from boss.core.util.colors import green, cyan
 from boss.api.ssh import run, put, normalize_path
+from boss.core.fs import compress, size_unit, tmp_path
+from boss.core.util.colors import green, cyan
 from boss.core.constants.upload_status import (
     PREPARING, COMPRESSING, COMPRESSED,
     PREPARING_TO_UPLOAD, UPLOADING, UPLOADED,
@@ -52,7 +52,7 @@ class DirectoryUploader(Uploader):
         Uploader.__init__(self, callback)
 
         self.local_path = local_path
-        self.tar_path = os.path.join(mkdtemp(), 'upload.tar.gz')
+        self.tar_path = tmp_path()
         self.remote_tmp_path = tmp_path()
 
     def upload(self, remote_path):
@@ -78,16 +78,27 @@ class DirectoryUploader(Uploader):
 
         # Extract the files to the remote directory
         self.update(FINALIZING)
-        run([
-            'mkdir -p {}'.format(remote_path),
-            'tar zxvf {src} --strip-components=1 -C {dest}'.format(
-                src=self.remote_tmp_path,
-                dest=remote_path
-            )
-        ])
+        tar_extract_remote(self.remote_tmp_path, remote_path)
 
         os.remove(self.tar_path)
         self.update(DONE)
+
+
+def tar_extract_remote(src, dest, dry_run=False):
+    ''' Extract tar archive on the remote host. '''
+    commands = [
+        'mkdir -p {}'.format(dest),
+        'tar zxvf {src} --strip-components=1 -C {dest}'.format(
+            src=src,
+            dest=dest
+        ),
+        'rm {}'.format(src)
+    ]
+
+    if dry_run:
+        return commands
+
+    return run(commands)
 
 
 class FileUploader(Uploader):
@@ -166,8 +177,9 @@ class BulkUploader(Uploader):
         Uploader.__init__(self, callback)
 
         self.bundle_path = mkdtemp()
-        # self.name = 'upload-{}.tar.gz'.format(tmp_path())
-        self.tar_path = os.path.join(mkdtemp(), str(time()).replace('.', ''))
+        self.tar_path = tmp_path()
+        self.remote_tmp_path = tmp_path()
+
         self.paths = []
 
     def add(self, local_path, remote_path):
@@ -227,23 +239,19 @@ class BulkUploader(Uploader):
         moves = []
         for (filename, destination) in self.paths:
             src = os.path.join(remote_extract_path, filename)
+            # s = 'mv {} {}'.format(src, destination)
             moves.append('mv {} {}'.format(src, destination))
 
-        run([
-            'tar zxvf {src} --strip-components=1 -C {dest}'.format(
-                src=remote_upload_path,
-                dest=remote_extract_path
-            ),
-            'rm {}'.format(remote_upload_path)
-        ] + moves)
+        run(
+            tar_extract_remote(
+                remote_upload_path,
+                remote_extract_path,
+                dry_run=True
+            ) + moves
+        )
 
         os.remove(self.tar_path)
         self.update(DONE)
-
-
-def tmp_path():
-    ''' Get a temp path. '''
-    return '/tmp/' + str(time()).replace('.', '')
 
 
 def upload(local_path, remote_path, callback=None):
