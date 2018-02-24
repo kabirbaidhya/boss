@@ -67,11 +67,7 @@ DEFAULT_CONFIG = {
 # Preset specific defaults
 PSD = {}
 PSD[presets.REMOTE_SOURCE] = {}
-PSD[presets.WEB] = {
-    'deployment': {
-        'stage_independent_builds': False
-    }
-}
+PSD[presets.WEB] = {}
 PSD[presets.NODE] = {
     'deployment': {
         'include_files': [

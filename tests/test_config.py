@@ -223,18 +223,3 @@ def test_merge_config_that_by_default_cache_builds_is_true():
     merged_config = merge_config(raw_config)
 
     assert merged_config['deployment']['cache_builds'] is True
-
-
-def test_merge_config_that_by_default_cache_builds_is_false_if_preset_web():
-    '''
-    Ensure build caching is turned off for web preset, i.e
-    cache_build=False by default if not set.
-    '''
-    raw_config = {
-        'deployment': {
-            'preset': presets.WEB
-        }
-    }
-    merged_config = merge_config(raw_config)
-
-    assert merged_config['deployment']['cache_builds'] is False
