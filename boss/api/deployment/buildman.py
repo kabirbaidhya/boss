@@ -376,8 +376,9 @@ def get_build_env_vars(stage, config):
         'STAGE': stage
     }
 
-    # If remote env injection is not enabled skip it.
-    if not config['remote_env_injection']:
+    # If either remote env injection is not enabled,
+    # or remote_env_path is not provided skip it.
+    if not config['remote_env_injection'] or not config['remote_env_path']:
         return env_vars
 
     # Remote environment variables are sent to the build script too
