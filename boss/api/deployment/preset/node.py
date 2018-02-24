@@ -67,9 +67,9 @@ def deploy():
     is_remote_setup = buildman.is_remote_setup()
     is_first_deployment = not is_remote_setup
 
-    # if is_remote_setup and buildman.is_remote_up_to_date():
-    #     echo('Remote build is already up to date.')
-    #     return
+    if is_remote_setup and buildman.is_remote_up_to_date():
+        echo('Remote build is already up to date.')
+        return
 
     branch = git.current_branch(remote=False)
     commit = git.last_commit(remote=False, short=True)
