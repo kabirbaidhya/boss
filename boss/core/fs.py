@@ -3,6 +3,8 @@ Boss core file system utilities.
 '''
 import os
 import tarfile
+from time import time
+from random import random
 
 
 def read(filename):
@@ -45,3 +47,8 @@ def size_unit(size):
         size /= 1024.0
 
     return '%.1f %s' % (size, 'YB')
+
+
+def tmp_path():
+    ''' Get a temp path. '''
+    return '/tmp/' + str(time() * (1 + random())).replace('.', '')

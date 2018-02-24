@@ -1,13 +1,10 @@
 ''' SSH module based on paramiko. '''
 
 import os
-from time import time
-from tempfile import mkdtemp
 from stat import S_ISDIR
 
 from boss import state
 from boss.core import remote
-from boss.core.fs import compress
 from boss.core.util.types import is_string, is_iterable
 
 
@@ -41,6 +38,7 @@ def run(command, **params):
             lines.append(l.strip())
 
         return lines
+    # TODO: Error handling and sending out stderr
 
     # For return_output=False,
     # just walk until the end of the stream
@@ -184,34 +182,6 @@ def upload_files(files, remote_path):
     ''' Upload multiple files. '''
     for filename in files:
         put(filename, remote_path)
-
-
-def upload_dir(local_path, remote_path, callback=None):
-    ''' Upload local directory to the remote. '''
-    tmp_folder = mkdtemp()
-    tar_filename = os.path.basename(local_path) + '.tar.gz'
-    tar_path = os.path.join(tmp_folder, tar_filename)
-    remote_path = normalize_path(remote_path)
-
-    # Compress the directory.
-    compress(local_path, tar_path)
-
-    # Upload the tar zipped file to the remote.
-    # The compressed folder gets uploaded to a temp path first.
-    # Then later is extracted to the provided path on the remote.
-    remote_tmp_path = '/tmp/upload-' + str(time()).replace('.', '-')
-    put(tar_path, remote_tmp_path, callback)
-    # Extract the files to the remote directory
-    run('mkdir -p {}'.format(remote_path))
-    run(
-        'tar zxvf {src} --strip-components=1 -C {dest}'.format(
-            src=remote_tmp_path,
-            dest=remote_path
-        )
-    )
-    run('rm -rf {}'.format(remote_tmp_path))
-
-    os.remove(tar_path)
 
 
 def stat(remote_path):
