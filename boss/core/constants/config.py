@@ -69,7 +69,7 @@ PSD = {}
 PSD[presets.REMOTE_SOURCE] = {}
 PSD[presets.WEB] = {
     'deployment': {
-        'cache_builds': False
+        'stage_independent_builds': False
     }
 }
 PSD[presets.NODE] = {
