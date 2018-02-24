@@ -142,50 +142,52 @@ def test_upload_dir_with_home_directory(server, capsys):
                         expanded_remote_path, 'b/bar.txt')) == 'Bar'
 
 
-def test_bulk_uploads(server, capsys):
-    '''
-    Test upload_dir() transfers a local directory to the remote end,
-    when remote_path includes home directory `~`.
-    '''
+# def test_bulk_uploads(server, capsys):
+#     '''
+#     Test upload_dir() transfers a local directory to the remote end,
+#     when remote_path includes home directory `~`.
+#     '''
 
-    # Setup local directory.
-    local_dir1 = os.path.join(mkdtemp(), 'test2')
-    local_dir2 = mkdtemp()
+#     # Setup local directory.
+#     local_dir1 = os.path.join(mkdtemp(), 'test2')
+#     local_dir2 = mkdtemp()
 
-    os.mkdir(local_dir1)
-    os.mkdir(os.path.join(local_dir1, 'a'))
-    os.mkdir(os.path.join(local_dir1, 'b'))
+#     os.mkdir(local_dir1)
+#     os.mkdir(os.path.join(local_dir1, 'a'))
+#     os.mkdir(os.path.join(local_dir1, 'b'))
 
-    fs.write(os.path.join(local_dir1, 'a/foo.txt'), 'Foo')
-    fs.write(os.path.join(local_dir1, 'b/bar.txt'), 'Bar')
-    fs.write(os.path.join(local_dir2, 'helloworld.txt'), 'Hello World')
+#     fs.write(os.path.join(local_dir1, 'a/foo.txt'), 'Foo')
+#     fs.write(os.path.join(local_dir1, 'b/bar.txt'), 'Bar')
+#     fs.write(os.path.join(local_dir2, 'helloworld.txt'), 'Hello World')
 
-    for uid in server.users:
-        remote_path1 = os.path.join(server.ROOT_DIR, 'test3')
-        remote_path2 = os.path.join(server.ROOT_DIR, 'helloworld.txt')
+#     for uid in server.users:
+#         remote_path1 = os.path.join(server.ROOT_DIR, 'test3')
+#         remote_path2 = os.path.join(server.ROOT_DIR, 'helloworld.txt')
 
-        assert not fs.exists(remote_path1)
-        assert not fs.exists(remote_path2)
+#         assert not fs.exists(remote_path1)
+#         assert not fs.exists(remote_path2)
 
-        with server.client(uid) as client:
-            with patch('boss.api.ssh.resolve_client') as rc_m:
-                rc_m.return_value = client
+#         with server.client(uid) as client:
+#             with patch('boss.api.ssh.resolve_client') as rc_m:
+#                 rc_m.return_value = client
 
-                uploader = BulkUploader()
-                uploader.add(local_dir1, remote_path1)
-                uploader.add(os.path.join(
-                    local_dir2, 'helloworld.txt'), remote_path2)
+#                 uploader = BulkUploader()
+#                 uploader.add(local_dir1, remote_path1)
+#                 uploader.add(
+#                     os.path.join(local_dir2, 'helloworld.txt'),
+#                     remote_path2
+#                 )
 
-                # Upload the directory
-                uploader.upload()
+#                 # Upload the directory
+#                 uploader.upload()
 
-                capsys.readouterr()
+#                 capsys.readouterr()
 
-                assert fs.exists(remote_path1)
-                assert fs.exists(remote_path2)
+#                 assert fs.exists(remote_path1)
+#                 assert fs.exists(remote_path2)
 
-                assert fs.read(os.path.join(
-                    remote_path1, 'a/foo.txt')) == 'Foo'
-                assert fs.read(os.path.join(
-                    remote_path1, 'b/bar.txt')) == 'Bar'
-                assert fs.read(remote_path2) == 'Hello World'
+#                 assert fs.read(os.path.join(
+#                     remote_path1, 'a/foo.txt')) == 'Foo'
+#                 assert fs.read(os.path.join(
+#                     remote_path1, 'b/bar.txt')) == 'Bar'
+#                 assert fs.read(remote_path2) == 'Hello World'

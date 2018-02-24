@@ -51,11 +51,9 @@ class DirectoryUploader(Uploader):
         ''' DirectoryUploader constructor. '''
         Uploader.__init__(self, callback)
 
-        tmp_folder = mkdtemp()
         self.local_path = local_path
-        self.name = 'upload-{}.tar.gz'.format(tmp_path())
-        self.tar_path = os.path.join(tmp_folder, self.name)
-        self.remote_tmp_path = '/tmp/' + self.name
+        self.tar_path = os.path.join(mkdtemp(), 'upload.tar.gz')
+        self.remote_tmp_path = tmp_path()
 
     def upload(self, remote_path):
         ''' Start the upload operation. '''
