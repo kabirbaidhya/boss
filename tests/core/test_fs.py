@@ -42,3 +42,11 @@ def test_size_unit():
     assert fs.size_unit(2048) == '2.0 KB'
     assert fs.size_unit(3169744) == '3.0 MB'
     assert fs.size_unit(3169744000) == '3.0 GB'
+
+
+def test_tmp_path():
+    ''' Test tmp_path() returns unique random paths. '''
+    path1 = fs.tmp_path()
+    path2 = fs.tmp_path()
+
+    assert path1 != path2
