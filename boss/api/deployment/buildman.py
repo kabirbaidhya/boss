@@ -308,6 +308,31 @@ def get_build_info(history, id):
     return get_build_by_id(history, id)
 
 
+def get_prev_build_info(history):
+    '''
+    Get previous build information with respect to the `current` build.
+    '''
+    if not history.get('current') or not history.get('builds'):
+        return None
+
+    current_index = get_current_build_index(history)
+
+    # If current_index is None, or there are no builds before the current build
+    # return None
+    build_count = len(history['builds'])
+    has_prev_build = 0 < current_index + 1 < build_count
+
+    if current_index is None or not has_prev_build:
+        return None
+
+    # Get the previous build information.
+    # Note: the builds are ordered in latest first fashion
+    # so the previous build is current_index + 1.
+    prev_build = history['builds'][current_index + 1]
+
+    return prev_build
+
+
 def rollback(id=None):
     '''
     Deployment rollback to the previous build, or
