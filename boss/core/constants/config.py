@@ -32,7 +32,8 @@ DEFAULT_CONFIG = {
         'build_dir': None,
         'base_dir': '~/deployment',
         'keep_builds': 5,
-        'include_files': []
+        'include_files': [],
+        'smart_install': False
     },
     'notifications': {
         'slack': {
@@ -68,6 +69,7 @@ PSD[presets.REMOTE_SOURCE] = {}
 PSD[presets.WEB] = {}
 PSD[presets.NODE] = {
     'deployment': {
+        'smart_install': True,
         'include_files': [
             'package.json', 'package-lock.json', 'yarn.lock', 'pm2.config.js'
         ]
