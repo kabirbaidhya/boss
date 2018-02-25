@@ -90,3 +90,55 @@ def test_is_up_to_date_returns_false(glc_m, lh_m):
     }
 
     assert not buildman.is_remote_up_to_date()
+
+
+def test_get_prev_build_info():
+    ''' Test get_prev_build_info() returns previous build information. '''
+    history = {
+        'builds': [
+            {'id': 'abc0', 'commit': '1255452', 'path': '/home/kabir/builds/test1'},
+            {'id': 'abc1', 'commit': '1232333', 'path': '/home/kabir/builds/test2'}
+        ],
+        'current': 'abc0'
+    }
+
+    prev_build = buildman.get_prev_build_info(history)
+
+    assert prev_build == history['builds'][1]
+
+
+def test_get_prev_build_info_if_no_previous_build():
+    ''' Test get_prev_build_info() returns None if previous build does not exist. '''
+    history = {
+        'builds': [
+            {'id': 'abc0', 'commit': '1255452', 'path': '/home/kabir/builds/test1'},
+            {'id': 'abc1', 'commit': '1232333', 'path': '/home/kabir/builds/test2'}
+        ],
+        'current': 'abc1'
+    }
+
+    prev_build = buildman.get_prev_build_info(history)
+
+    assert prev_build is None
+
+
+def test_get_prev_build_info_if_empty_history():
+    ''' Test get_prev_build_info() returns None if history is empty. '''
+    history = {}
+    prev_build = buildman.get_prev_build_info(history)
+
+    assert prev_build is None
+
+
+def test_get_prev_build_info_if_empty_builds_or_current():
+    '''
+    Test get_prev_build_info() returns None if
+    build history is empty or current is None.
+    '''
+    history = {
+        'builds': [],
+        'current': None
+    }
+    prev_build = buildman.get_prev_build_info(history)
+
+    assert prev_build is None
