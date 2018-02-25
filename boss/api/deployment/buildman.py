@@ -10,7 +10,7 @@ from datetime import datetime
 from terminaltables import SingleTable
 from fabric.api import shell_env
 
-from boss import BASE_PATH, __version__ as BOSS_VERSION
+from boss import BASE_PATH, __version__ as BOSS_VERSION, state
 from boss.config import get as get_config, get_stage_config
 from boss.util import remote_info, remote_print
 from boss.api import fs, shell, runner, ssh, git
@@ -92,10 +92,15 @@ def get_build_name(id):
 
 def load_history():
     ''' Load build history. '''
-    # TODO: Maintain build history in the local state.
-    data = ssh.read(get_builds_file())
 
-    return json.loads(data)
+    if state.has('build_history'):
+        return state.get('build_history')
+
+    data = ssh.read(get_builds_file())
+    history = json.loads(data)
+    state.set('build_history', history)
+
+    return history
 
 
 def save_history(data):
