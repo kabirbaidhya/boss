@@ -11,7 +11,7 @@ from datetime import datetime
 from fabric.api import task, cd
 
 from boss.util import remote_info
-from boss.config import get as get_config
+from boss.config import get as get_config, get_stage_config
 from boss.core.output import halt, info, echo
 from boss.core.fs import exists as exists_local
 from boss.core.constants import known_scripts, notification_types
@@ -109,11 +109,15 @@ def deploy():
     remote_info('Updating the current symlink')
     fs.update_symlink(release_path, current_path)
 
+    history = buildman.load_history()
     # Once, the build is uploaded to the remote,
     # set things up in the remote server.
     # Change directory to the release path.
-    with cd(current_path):
-        install_remote_dependencies()
+    install_remote_dependencies(
+        commit=commit,
+        current_path=current_path,
+        smart_install=get_stage_config(stage)['deployment']['smart_install']
+    )
 
     # Start or restart the application service.
     start_or_reload_service(is_first_deployment)
@@ -151,13 +155,37 @@ def has_updated_dependencies(ref1, ref2):
     )
 
 
-def install_remote_dependencies():
+def install_remote_dependencies(commit, current_path, smart_install):
     ''' Install dependencies on the remote host. '''
-    remote_info('Installing dependencies on the remote')
-    if runner.is_script_defined(known_scripts.INSTALL_REMOTE):
-        runner.run_script(known_scripts.INSTALL_REMOTE)
-    else:
-        runner.run_script(known_scripts.INSTALL)
+    history = buildman.load_history()
+    prev_build = buildman.get_prev_build_info(history)
+
+    # Check if the installation could be skipped (smart_install).
+    can_skip_installation = (
+        smart_install and
+        prev_build and
+        not has_updated_dependencies(prev_build['commit'], commit)
+    )
+
+    # Smart install - copy the node_modules directory from the previous deployment
+    # if it's usable (no dependencies or package manager files have changed).
+    if can_skip_installation:
+        runner.run(
+            'cp -R {src} {dest}'.format(
+                src=os.path.join(prev_build['path'], 'node_modules'),
+                dest=os.path.join(current_path, 'node_modules')
+            )
+        )
+        remote_info('Skipping installation - No change in dependencies.')
+        return
+
+    # Install dependencies on the remote.
+    with cd(current_path):
+        remote_info('Installing dependencies on the remote')
+        if runner.is_script_defined(known_scripts.INSTALL_REMOTE):
+            runner.run_script(known_scripts.INSTALL_REMOTE)
+        else:
+            runner.run_script(known_scripts.INSTALL)
 
 
 def start_or_reload_service(has_started=False):
