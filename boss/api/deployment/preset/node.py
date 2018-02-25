@@ -135,6 +135,22 @@ def deploy():
     info('Deployment Completed')
 
 
+def has_updated_dependencies(ref1, ref2):
+    '''
+    Check if dependencies for a node project has been updated
+    in between the given two refs.
+    '''
+    changed_files = git.diff_files_between(ref1, ref2)
+
+    # Check any of the npm/yarn files have changed
+    # in between the two commits or refs.
+    return (
+        'package.json' in changed_files or
+        'yarn.lock' in changed_files or
+        'package-lock.json' in changed_files
+    )
+
+
 def install_remote_dependencies():
     ''' Install dependencies on the remote host. '''
     remote_info('Installing dependencies on the remote')
