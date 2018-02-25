@@ -82,13 +82,13 @@ def deploy():
     build_dir = os.path.abspath(buildman.resolve_local_build_dir())
     included_files = config['deployment']['include_files']
     deployer_user = shell.get_user()
-
-    notif.send(notification_types.DEPLOYMENT_STARTED, {
-        'user': deployer_user,
-        'commit': commit,
-        'branch': branch,
-        'stage': stage
-    })
+    notif_params = dict(
+        user=deployer_user,
+        commit=commit,
+        branch=branch,
+        stage=stage
+    )
+    notif.send(notification_types.DEPLOYMENT_STARTED, notif_params)
 
     (release_dir, current_path) = buildman.setup_remote()
 
@@ -130,12 +130,7 @@ def deploy():
     })
 
     # Send deployment finished notification.
-    notif.send(notification_types.DEPLOYMENT_FINISHED, {
-        'user': deployer_user,
-        'branch': branch,
-        'commit': commit,
-        'stage': stage
-    })
+    notif.send(notification_types.DEPLOYMENT_FINISHED, notif_params)
 
     info('Deployment Completed')
 
