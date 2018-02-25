@@ -16,7 +16,7 @@ from boss.util import remote_info, remote_print
 from boss.api import fs, shell, runner, ssh, git
 from boss.core import env
 from boss.core.util import ts
-from boss.core.output import info
+from boss.core.output import info, warn
 from boss.core.util.object import merge
 from boss.core.util.colors import green, cyan
 from boss.core.constants import presets, known_scripts
@@ -376,16 +376,25 @@ def get_build_env_vars(stage, config):
         'STAGE': stage
     }
 
-    # If remote env injection is not enabled skip it.
-    if not config['remote_env_injection']:
+    # If either remote env injection is not enabled,
+    # or remote_env_path is not provided skip it.
+    if not config['remote_env_injection'] or not config['remote_env_path']:
         return env_vars
 
-    # Remote environment variables are sent to the build script too
-    # if remote_env_injection is enabled.
-    remote_env_path = config['stages'][stage]['remote_env_path']
-    remote_vars = load_remote_env_vars(remote_env_path)
+    try:
+        # Remote environment variables are sent to the build script too
+        # if remote_env_injection is enabled.
+        remote_env_path = config['stages'][stage]['remote_env_path']
+        remote_vars = load_remote_env_vars(remote_env_path)
 
-    return merge(remote_vars, env_vars)
+        return merge(remote_vars, env_vars)
+    except IOError as e:
+        warn(
+            'Warining: Failed to fetch remote env file from `{}`. {}'.format(
+                remote_env_path, str(e)
+            )
+        )
+        return env_vars
 
 
 def build(stage, config):

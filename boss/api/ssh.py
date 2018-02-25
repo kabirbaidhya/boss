@@ -55,7 +55,7 @@ def normalize_path(remote_path):
     home = resolve_cwd()
 
     # Expand home directory markers (tildes, etc)
-    if remote_path.startswith('~'):
+    if remote_path and remote_path.startswith('~'):
         remote_path = remote_path.replace('~', home)
 
     return remote_path
