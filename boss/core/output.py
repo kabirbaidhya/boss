@@ -9,7 +9,7 @@ def halt(msg):
 
 
 def echo(msg):
-    ''' Pring a plain message on the console. '''
+    ''' Print a plain message on the console. '''
     print(msg)
 
 
