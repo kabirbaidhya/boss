@@ -32,3 +32,16 @@ def get(key=None):
 def replace(key, value):
     ''' Set or replace a key with the provided value in the state. '''
     _state[key] = value
+
+
+def set(key, value):
+    '''
+    Set or replace a key with the provided value in the state.
+    Alias of replace.
+    '''
+    replace(key, value)
+
+
+def has(key):
+    ''' Check if state has provided key. '''
+    return _state.has_key(key)

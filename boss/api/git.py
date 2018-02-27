@@ -1,4 +1,7 @@
+import subprocess
 from fabric.api import run, hide, local
+
+from boss.core.util.types import is_string
 
 
 def fetch(prune=True):
@@ -76,3 +79,17 @@ def get_tree_url(ref, repository_url=None):
 def show_last_commit():
     ''' Display the last commit. '''
     run('git log -1')
+
+
+def diff_files_between(ref1, ref2):
+    '''
+    Get a list of files changed in between two refs.
+    '''
+    output = subprocess.check_output([
+        'git', 'diff', '--name-only', ref1, ref2
+    ])
+
+    if not output or not is_string(output):
+        return []
+
+    return output.splitlines()
