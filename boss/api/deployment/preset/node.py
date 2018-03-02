@@ -15,7 +15,8 @@ from boss.config import get as get_config, get_stage_config
 from boss.core.output import halt, info, echo
 from boss.core.fs import exists as exists_local
 from boss.core.constants import known_scripts, notification_types
-from boss.api import shell, notif, runner, fs, git, ssh, transfers
+from boss.api import shell, notif, runner, fs, git, ssh
+from boss.api.transfers import BulkUploader
 from boss.api.deployment import buildman
 
 
@@ -46,17 +47,6 @@ def buildinfo(id=None):
 def setup():
     ''' Setup remote host for deployment. '''
     buildman.setup_remote(quiet=False)
-
-
-def upload_included_files(files, remote_path):
-    ''' Upload the local files if they were to be included. '''
-    for filename in files:
-        path = os.path.abspath(filename)
-        # Skip upload if the file doesn't exist.
-        if not exists_local(path):
-            continue
-
-        ssh.put(path, remote_path)
 
 
 @task
@@ -100,16 +90,21 @@ def deploy():
 
     buildman.build(stage, config)
 
-    transfers.upload_dir(build_dir, dist_path)
+    uploader = BulkUploader()
+    uploader.add(build_dir, dist_path)
 
     # Upload the files to be included eg: package.json file
     # to the remote build location.
-    upload_included_files(included_files, release_path)
+    for filename in included_files:
+        path = os.path.abspath(filename)
+        # Add for upload if the file exist.
+        if exists_local(path):
+            uploader.add(path, release_path)
 
+    uploader.upload()
     remote_info('Updating the current symlink')
     fs.update_symlink(release_path, current_path)
 
-    history = buildman.load_history()
     # Once, the build is uploaded to the remote,
     # set things up in the remote server.
     # Change directory to the release path.
