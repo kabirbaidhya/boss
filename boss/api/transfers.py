@@ -239,8 +239,16 @@ class BulkUploader(Uploader):
         moves = []
         for (filename, destination) in self.paths:
             src = os.path.join(remote_extract_path, filename)
-            # s = 'mv {} {}'.format(src, destination)
-            moves.append('mv {} {}'.format(src, destination))
+
+            # Ensure destination directory exists before moving.
+            base_dir = os.path.dirname(destination)
+            moves.append(
+                'mkdir -p {base_dir} && mv {src} {dest}'.format(
+                    base_dir=base_dir,
+                    src=src,
+                    dest=destination
+                )
+            )
 
         run(
             tar_extract_remote(
