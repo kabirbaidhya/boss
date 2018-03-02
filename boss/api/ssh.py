@@ -20,7 +20,7 @@ def run(command, **params):
     # If command is a list of commands,
     # concat the commands and run them all.
     if not is_string(command) and is_iterable(command):
-        command = '; '.join(command)
+        command = '&& '.join(command)
 
     # Execute the command and get the IO streams.
     (stdin, stdout, stderr) = remote.run(resolve_client(), command, **params)
