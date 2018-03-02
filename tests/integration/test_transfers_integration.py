@@ -191,3 +191,109 @@ def test_bulk_uploads(server, capsys):
                 assert fs.read(os.path.join(
                     remote_path1, 'b/bar.txt')) == 'Bar'
                 assert fs.read(remote_path2) == 'Hello World'
+
+
+def test_bulk_uploads_with_unexisting_remote_paths(server, capsys):
+    '''
+    Test bulk uploads transfers a local directory to the remote end,
+    when there are the remote paths do not exist.
+    '''
+
+    # Setup local directory.
+    local_path = mkdtemp()
+
+    local_file1 = os.path.join(local_path, 'foo.txt')
+    local_file2 = os.path.join(local_path, 'bar.txt')
+    local_file3 = os.path.join(local_path, 'baz.txt')
+    local_file4 = os.path.join(local_path, 'hello.txt')
+    local_file5 = os.path.join(local_path, 'world.txt')
+
+    fs.write(local_file1, 'Foo')
+    fs.write(local_file2, 'Bar')
+    fs.write(local_file3, 'Baz')
+    fs.write(local_file4, 'Hello')
+    fs.write(local_file5, 'World')
+
+    for uid in server.users:
+        remote_path1 = os.path.join(server.ROOT_DIR, 's0/foo.txt')
+        remote_path2 = os.path.join(server.ROOT_DIR, 's0/s1/bar.txt')
+        remote_path3 = os.path.join(server.ROOT_DIR, 's0/s1/s2/baz.txt')
+        remote_path4 = os.path.join(
+            server.ROOT_DIR, 's1/s0/s2/s3/s4/hello.txt')
+        remote_path5 = os.path.join(server.ROOT_DIR, 's0/s1/s2/s3/world.txt')
+
+        assert not fs.exists(remote_path1)
+        assert not fs.exists(remote_path2)
+        assert not fs.exists(remote_path3)
+        assert not fs.exists(remote_path4)
+        assert not fs.exists(remote_path5)
+
+        with server.client(uid) as client:
+            with patch('boss.api.ssh.resolve_client') as rc_m:
+                rc_m.return_value = client
+
+                uploader = BulkUploader()
+                uploader.add(local_file1, remote_path1)
+                uploader.add(local_file2, remote_path2)
+                uploader.add(local_file3, remote_path3)
+                uploader.add(local_file4, remote_path4)
+                uploader.add(local_file5, remote_path5)
+
+                # Upload the directory
+                uploader.upload()
+
+                capsys.readouterr()
+
+                assert fs.exists(remote_path1)
+                assert fs.exists(remote_path2)
+                assert fs.exists(remote_path3)
+                assert fs.exists(remote_path4)
+                assert fs.exists(remote_path5)
+
+                assert fs.read(remote_path1) == 'Foo'
+                assert fs.read(remote_path2) == 'Bar'
+                assert fs.read(remote_path3) == 'Baz'
+                assert fs.read(remote_path4) == 'Hello'
+                assert fs.read(remote_path5) == 'World'
+
+
+def test_bulk_uploads_supports_different_remote_filenames(server, capsys):
+    '''
+    Test bulk uploads supports transfering files with different
+    filenames on the remote host.
+    '''
+
+    # Setup local directory.
+    local_path = mkdtemp()
+
+    local_file1 = os.path.join(local_path, 'foo.txt')
+    local_file2 = os.path.join(local_path, 'bar.txt')
+
+    fs.write(local_file1, 'Foo')
+    fs.write(local_file2, 'Bar')
+
+    for uid in server.users:
+        remote_path1 = os.path.join(server.ROOT_DIR, 's0/test1.txt')
+        remote_path2 = os.path.join(server.ROOT_DIR, 's0/s1/test2.txt')
+
+        assert not fs.exists(remote_path1)
+        assert not fs.exists(remote_path2)
+
+        with server.client(uid) as client:
+            with patch('boss.api.ssh.resolve_client') as rc_m:
+                rc_m.return_value = client
+
+                uploader = BulkUploader()
+                uploader.add(local_file1, remote_path1)
+                uploader.add(local_file2, remote_path2)
+
+                # Upload the directory
+                uploader.upload()
+
+                capsys.readouterr()
+
+                assert fs.exists(remote_path1)
+                assert fs.exists(remote_path2)
+
+                assert fs.read(remote_path1) == 'Foo'
+                assert fs.read(remote_path2) == 'Bar'
