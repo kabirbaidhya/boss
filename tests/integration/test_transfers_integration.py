@@ -217,9 +217,10 @@ def test_bulk_uploads_with_unexisting_remote_paths(server, capsys):
     for uid in server.users:
         remote_path1 = os.path.join(server.ROOT_DIR, 's0/foo.txt')
         remote_path2 = os.path.join(server.ROOT_DIR, 's0/s1/bar.txt')
-        remote_path3 = os.path.join(server.ROOT_DIR, 's0/s1/s3/baz.txt')
-        remote_path4 = os.path.join(server.ROOT_DIR, 's2/s3/hello.txt')
-        remote_path5 = os.path.join(server.ROOT_DIR, 's2/s3/world.txt')
+        remote_path3 = os.path.join(server.ROOT_DIR, 's0/s1/s2/baz.txt')
+        remote_path4 = os.path.join(
+            server.ROOT_DIR, 's1/s0/s2/s3/s4/hello.txt')
+        remote_path5 = os.path.join(server.ROOT_DIR, 's0/s1/s2/s3/world.txt')
 
         assert not fs.exists(remote_path1)
         assert not fs.exists(remote_path2)
