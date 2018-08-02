@@ -1,3 +1,5 @@
+''' Fabric Script. '''
+
 from boss.init import init
 from boss.tasks import *
 

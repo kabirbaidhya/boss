@@ -1,6 +1,7 @@
 '''
 A module to handle interaction of the CLI with the user.
 '''
+
 from inquirer import Text, List, prompt
 
 from boss.core.constants import presets

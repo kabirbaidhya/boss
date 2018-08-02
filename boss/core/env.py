@@ -7,7 +7,10 @@ __escape_decoder = codecs.getdecoder('unicode_escape')
 
 
 def parse(env_def):
-    ''' Parse env variable definitions. '''
+    '''
+    Parse env variable definitions from a string
+    defining environment variables.
+    '''
     result = {}
 
     for line in env_def.splitlines():
@@ -31,3 +34,7 @@ def parse(env_def):
 
 def decode_escaped(escaped):
     return __escape_decoder(escaped)[0]
+
+
+def decode_escaped(escaped_str):
+    return __escape_decoder(escaped_str)[0]
