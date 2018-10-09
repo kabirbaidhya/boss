@@ -58,7 +58,9 @@ def reload_service():
 
 def install_dependencies():
     ''' Install dependencies. '''
+    runner.run_script_safely(known_scripts.PRE_INSTALL)
     runner.run_script_safely(known_scripts.INSTALL)
+    runner.run_script_safely(known_scripts.POST_INSTALL)
 
 
 @task
