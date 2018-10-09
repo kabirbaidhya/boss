@@ -48,7 +48,12 @@ changelog() {
   fi
 
   echo "Generating changelog upto version: $NEXT"
-  github_changelog_generator --pr-label "**Improvements:**" --issue-line-labels=ALL --future-release="$NEXT"
+  github_changelog_generator \
+    --pr-label "**Improvements:**" \
+    --issue-line-labels=ALL \
+    --future-release="$NEXT" \
+    --release-branch=master \
+    --exclude-labels=unnecessary,duplicate,question,invalid,wontfix
 }
 
 # Run command received from args.
