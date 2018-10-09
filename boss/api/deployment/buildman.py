@@ -407,6 +407,6 @@ def build(stage, config):
     env_vars = get_build_env_vars(stage, config)
 
     with shell_env(**env_vars):
-        runner.run_script(known_scripts.PRE_BUILD, remote=False)
+        runner.run_script_safely(known_scripts.PRE_BUILD, remote=False)
         runner.run_script(known_scripts.BUILD, remote=False)
-        runner.run_script(known_scripts.POST_BUILD, remote=False)
+        runner.run_script_safely(known_scripts.POST_BUILD, remote=False)
