@@ -3,6 +3,13 @@
 # Initialize the deployment script
 . "$INIT_SCRIPT_PATH"
 
+if [ ! -z "$SCRIPT_PRE_DEPLOY" ]; then
+  echo_info "Running pre_deploy"
+  echo_fade "> $SCRIPT_PRE_DEPLOY";
+  $SCRIPT_PRE_DEPLOY;
+  echo;
+fi
+
 mkdir -p $REPOSITORY_PATH
 cd $REPOSITORY_PATH
 
@@ -21,6 +28,13 @@ else
 fi
 echo;
 
+if [ ! -z "$SCRIPT_PRE_INSTALL" ]; then
+  echo_info "Running pre_install"
+  echo_fade "> $SCRIPT_PRE_INSTALL";
+  $SCRIPT_PRE_INSTALL;
+  echo;
+fi
+
 if [ ! -z "$SCRIPT_INSTALL" ]; then
   echo_info "Running install"
   echo_fade "> $SCRIPT_INSTALL";
@@ -28,10 +42,31 @@ if [ ! -z "$SCRIPT_INSTALL" ]; then
   echo;
 fi
 
+if [ ! -z "$SCRIPT_POST_INSTALL" ]; then
+  echo_info "Running post_install"
+  echo_fade "> $SCRIPT_POST_INSTALL";
+  $SCRIPT_POST_INSTALL;
+  echo;
+fi
+
+if [ ! -z "$SCRIPT_PRE_BUILD" ]; then
+  echo_info "Running pre_build"
+  echo_fade "> $SCRIPT_PRE_BUILD";
+  $SCRIPT_PRE_BUILD;
+  echo;
+fi
+
 if [ ! -z "$SCRIPT_BUILD" ]; then
   echo_info "Running build"
   echo_fade "> $SCRIPT_BUILD";
   $SCRIPT_BUILD;
+  echo;
+fi
+
+if [ ! -z "$SCRIPT_POST_BUILD" ]; then
+  echo_info "Running post_build"
+  echo_fade "> $SCRIPT_POST_BUILD";
+  $SCRIPT_POST_BUILD;
   echo;
 fi
 
@@ -46,5 +81,12 @@ if [ ! -z "$SCRIPT_STATUS_CHECK\n" ]; then
   echo_info "Running status_check"
   echo_fade "> $SCRIPT_STATUS_CHECK";
   $SCRIPT_STATUS_CHECK;
+  echo;
+fi
+
+if [ ! -z "$SCRIPT_POST_DEPLOY" ]; then
+  echo_info "Running post_deploy"
+  echo_fade "> $SCRIPT_POST_DEPLOY";
+  $SCRIPT_POST_DEPLOY;
   echo;
 fi
