@@ -16,6 +16,8 @@ START_OR_RELOAD = 'start_or_reload'
 # Hook Scripts
 PRE_BUILD = 'pre_build'
 POST_BUILD = 'post_build'
+PRE_DEPLOY = 'pre_deploy'
+POST_DEPLOY = 'post_deploy'
 PRE_INSTALL = 'pre_install'
 POST_INSTALL = 'post_install'
 PRE_INSTALL_REMOTE = 'pre_install_remote'
