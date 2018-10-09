@@ -400,7 +400,9 @@ def build(stage, config):
     info('Getting the build ready for deployment')
 
     # Trigger the install script
+    runner.run_script_safely(known_scripts.PRE_INSTALL, remote=False)
     runner.run_script(known_scripts.INSTALL, remote=False)
+    runner.run_script_safely(known_scripts.POST_INSTALL, remote=False)
 
     env_vars = get_build_env_vars(stage, config)
 

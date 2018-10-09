@@ -157,10 +157,16 @@ def deploy():
 def install_remote_dependencies():
     ''' Install dependencies on the remote host. '''
     remote_info('Installing dependencies on the remote')
+    runner.run_script_safely(known_scripts.PRE_INSTALL)
+
     if runner.is_script_defined(known_scripts.INSTALL_REMOTE):
+        runner.run_script_safely(known_scripts.PRE_INSTALL_REMOTE)
         runner.run_script(known_scripts.INSTALL_REMOTE)
+        runner.run_script_safely(known_scripts.POST_INSTALL_REMOTE)
     else:
-        runner.run_script(known_scripts.INSTALL)
+        runner.run_script_safely(known_scripts.INSTALL)
+
+    runner.run_script_safely(known_scripts.POST_INSTALL)
 
 
 def start_or_reload_service(has_started=False):
