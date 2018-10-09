@@ -80,7 +80,9 @@ def build(stage_name=None):
 
     with shell_env(STAGE=(stage_name or stage)):
         # Trigger the build script.
+        runner.run_script_safely(known_scripts.PRE_BUILD)
         runner.run_script_safely(known_scripts.BUILD)
+        runner.run_script_safely(known_scripts.POST_BUILD)
 
 
 @task
