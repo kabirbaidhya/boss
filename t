@@ -13,13 +13,20 @@ setup_ci() {
   pip install -U --editable .
 }
 
-publish() {
+publish_legacy() {
   test
-  echo "Publishing"
+  echo "Publishing (legacy way)"
   python setup.py egg_info
   python setup.py build
   python setup.py install
   python setup.py sdist upload -r pypi
+}
+
+publish() {
+  test
+  echo "Publishing"
+  python setup.py sdist bdist_wheel
+  twine upload dist/*
 }
 
 pep8() {
@@ -49,7 +56,12 @@ changelog() {
   fi
 
   echo "Generating changelog upto version: $NEXT"
-  github_changelog_generator --pr-label "**Improvements:**" --issue-line-labels=ALL --future-release="$NEXT"
+  github_changelog_generator \
+    --pr-label "**Improvements:**" \
+    --issue-line-labels=ALL \
+    --future-release="$NEXT" \
+    --release-branch=master \
+    --exclude-labels=unnecessary,duplicate,question,invalid,wontfix
 }
 
 # Run command received from args.

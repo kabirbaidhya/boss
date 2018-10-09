@@ -15,7 +15,7 @@ from boss.config import get as get_config, get_stage_config
 from boss.core.output import halt, info, echo
 from boss.core.fs import exists as exists_local
 from boss.core.constants import known_scripts, notification_types
-from boss.api import shell, notif, runner, fs, git, ssh
+from boss.api import shell, notif, runner, fs, git
 from boss.api.transfers import BulkUploader
 from boss.api.deployment import buildman
 
@@ -79,6 +79,7 @@ def deploy():
         stage=stage
     )
     notif.send(notification_types.DEPLOYMENT_STARTED, notif_params)
+    runner.run_script_safely(known_scripts.PRE_DEPLOY)
 
     (release_dir, current_path) = buildman.setup_remote()
 
@@ -127,6 +128,8 @@ def deploy():
         'createdBy': deployer_user,
         'timestamp': timestamp.strftime(buildman.TS_FORMAT)
     })
+
+    runner.run_script_safely(known_scripts.POST_DEPLOY)
 
     # Send deployment finished notification.
     notif.send(notification_types.DEPLOYMENT_FINISHED, notif_params)
@@ -177,10 +180,16 @@ def install_remote_dependencies(commit, current_path, smart_install):
     # Install dependencies on the remote.
     with cd(current_path):
         remote_info('Installing dependencies on the remote')
+        runner.run_script_safely(known_scripts.PRE_INSTALL)
+
         if runner.is_script_defined(known_scripts.INSTALL_REMOTE):
+            runner.run_script_safely(known_scripts.PRE_INSTALL_REMOTE)
             runner.run_script(known_scripts.INSTALL_REMOTE)
+            runner.run_script_safely(known_scripts.POST_INSTALL_REMOTE)
         else:
-            runner.run_script(known_scripts.INSTALL)
+            runner.run_script_safely(known_scripts.INSTALL)
+
+        runner.run_script_safely(known_scripts.POST_INSTALL)
 
 
 def start_or_reload_service(has_started=False):

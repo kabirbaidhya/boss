@@ -12,11 +12,11 @@ from datetime import datetime
 from fabric.api import task, cd
 
 from boss.util import remote_info
-from boss.api import shell, notif, fs, git
+from boss.api import shell, notif, fs, git, runner
 from boss.config import get_stage_config, get as get_config
-from boss.core.output import info, echo
 from boss.core.fs import rm as rm_local
-from boss.core.constants import notification_types
+from boss.core.output import info, echo
+from boss.core.constants import notification_types, known_scripts
 from .. import buildman
 
 
@@ -80,6 +80,8 @@ def deploy():
         'stage': stage
     })
 
+    runner.run_script_safely(known_scripts.PRE_DEPLOY)
+
     (release_dir, current_path) = buildman.setup_remote()
 
     timestamp = datetime.utcnow()
@@ -130,6 +132,8 @@ def deploy():
         'createdBy': deployer_user,
         'timestamp': timestamp.strftime(buildman.TS_FORMAT)
     })
+
+    runner.run_script_safely(known_scripts.POST_DEPLOY)
 
     # Send deployment finished notification.
     notif.send(notification_types.DEPLOYMENT_FINISHED, {

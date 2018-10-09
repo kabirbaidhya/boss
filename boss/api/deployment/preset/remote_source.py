@@ -15,7 +15,6 @@ from boss import BASE_PATH, __version__
 from boss.config import get_stage_config, get as get_config
 from boss.util import remote_info, remote_print
 from boss.api import git, notif, shell, runner, fs
-from boss.core.util.colors import cyan
 from boss.core.constants import known_scripts, notification_types
 from boss.api.deployment.buildman import get_deploy_dir
 
@@ -74,7 +73,13 @@ def run_deploy_script(stage, branch):
         SCRIPT_BUILD=runner.get_script_cmd(known_scripts.BUILD),
         SCRIPT_RELOAD=runner.get_script_cmd(known_scripts.RELOAD),
         SCRIPT_INSTALL=runner.get_script_cmd(known_scripts.INSTALL),
-        SCRIPT_STATUS_CHECK=runner.get_script_cmd(known_scripts.STATUS_CHECK)
+        SCRIPT_STATUS_CHECK=runner.get_script_cmd(known_scripts.STATUS_CHECK),
+        SCRIPT_PRE_BUILD=runner.get_script_cmd(known_scripts.PRE_BUILD),
+        SCRIPT_POST_BUILD=runner.get_script_cmd(known_scripts.POST_BUILD),
+        SCRIPT_PRE_INSTALL=runner.get_script_cmd(known_scripts.PRE_INSTALL),
+        SCRIPT_POST_INSTALL=runner.get_script_cmd(known_scripts.POST_INSTALL),
+        SCRIPT_PRE_DEPLOY=runner.get_script_cmd(known_scripts.PRE_DEPLOY),
+        SCRIPT_POST_DEPLOY=runner.get_script_cmd(known_scripts.POST_DEPLOY)
     )
 
     with hide('running'):
