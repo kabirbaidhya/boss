@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.0.0-alpha.18](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.18) (2018-10-09)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.17...v1.0.0-alpha.18)
+
+**Improvements:**
+
+- Add deployment hook scripts pre\_deploy and post\_deploy  [\#129](https://github.com/kabirbaidhya/boss/pull/129) [[config](https://github.com/kabirbaidhya/boss/labels/config)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add install hook scripts pre\_install and post\_install [\#128](https://github.com/kabirbaidhya/boss/pull/128) [[config](https://github.com/kabirbaidhya/boss/labels/config)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Add build hook scripts pre\_build and post\_build [\#127](https://github.com/kabirbaidhya/boss/pull/127) [[config](https://github.com/kabirbaidhya/boss/labels/config)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Fix CVE-2018-7750 security vulnerability [\#126](https://github.com/kabirbaidhya/boss/pull/126) ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.17](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.17) (2018-02-11)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.16...v1.0.0-alpha.17)
 
@@ -10,11 +20,6 @@
 
 ## [v1.0.0-alpha.16](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.16) (2018-02-06)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-experimental.1...v1.0.0-alpha.16)
-
-**Fixed bugs:**
-
-- Fix provided branch being ignored on the remote-source deployment [\#113](https://github.com/kabirbaidhya/boss/pull/113) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
-- Proceed even if sending notification fails [\#112](https://github.com/kabirbaidhya/boss/pull/112) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
 ## [v1.0.0-experimental.1](https://github.com/kabirbaidhya/boss/tree/v1.0.0-experimental.1) (2018-01-13)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.15...v1.0.0-experimental.1)
@@ -140,11 +145,9 @@
 **Improvements:**
 
 - Consistent wording for README text [\#73](https://github.com/kabirbaidhya/boss/pull/73) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([srishanbhattarai](https://github.com/srishanbhattarai))
-- Add unit tests for some boss.util modules and some other minor fixes [\#72](https://github.com/kabirbaidhya/boss/pull/72) [[test](https://github.com/kabirbaidhya/boss/labels/test)] ([srishanbhattarai](https://github.com/srishanbhattarai))
 - Website Design Overhaul [\#69](https://github.com/kabirbaidhya/boss/pull/69) [[design](https://github.com/kabirbaidhya/boss/labels/design)] [[ux](https://github.com/kabirbaidhya/boss/labels/ux)] ([sshikhrakar](https://github.com/sshikhrakar))
 - Boss logo update to version 2.0 and readme alignment updates [\#68](https://github.com/kabirbaidhya/boss/pull/68) [[design](https://github.com/kabirbaidhya/boss/labels/design)] [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] [[ux](https://github.com/kabirbaidhya/boss/labels/ux)] ([sshikhrakar](https://github.com/sshikhrakar))
 - Fix general typos [\#67](https://github.com/kabirbaidhya/boss/pull/67) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([enzosk8](https://github.com/enzosk8))
-- Add tests for boss.api.slack module [\#65](https://github.com/kabirbaidhya/boss/pull/65) [[test](https://github.com/kabirbaidhya/boss/labels/test)] ([gigkokman](https://github.com/gigkokman))
 - Configure Travis CI and make CLI tests pass [\#63](https://github.com/kabirbaidhya/boss/pull/63) [[cli](https://github.com/kabirbaidhya/boss/labels/cli)] [[test](https://github.com/kabirbaidhya/boss/labels/test)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Add badges on the README [\#58](https://github.com/kabirbaidhya/boss/pull/58) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
@@ -208,8 +211,6 @@
 - Add instructions for frontend deployment in the README [\#40](https://github.com/kabirbaidhya/boss/pull/40) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Add `setup` task to setup remote for deployment [\#39](https://github.com/kabirbaidhya/boss/pull/39) [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Fix configuration documentation typos [\#38](https://github.com/kabirbaidhya/boss/pull/38) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([sanjeevkpandit](https://github.com/sanjeevkpandit))
-- Add basic, stage and notification configuration in configuration section [\#37](https://github.com/kabirbaidhya/boss/pull/37) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([sanjeevkpandit](https://github.com/sanjeevkpandit))
-- Add Contributing Guidelines [\#36](https://github.com/kabirbaidhya/boss/pull/36) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Add support for Frontend Deployment [\#33](https://github.com/kabirbaidhya/boss/pull/33) [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Add documentation for remote source deployment [\#32](https://github.com/kabirbaidhya/boss/pull/32) [[documentation](https://github.com/kabirbaidhya/boss/labels/documentation)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 - Support deployment preset and change the default deployment to remote source deployment preset [\#31](https://github.com/kabirbaidhya/boss/pull/31) [[deprecation](https://github.com/kabirbaidhya/boss/labels/deprecation)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
