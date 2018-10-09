@@ -31,6 +31,7 @@ def deploy(branch=None):
         'commit': commit,
         'stage': stage
     })
+    runner.run_script_safely(known_scripts.PRE_DEPLOY)
 
     # Get the latest code from the repository
     sync(branch)
@@ -39,6 +40,7 @@ def deploy(branch=None):
     # Building the app
     build(stage)
     reload_service()
+    runner.run_script_safely(known_scripts.POST_DEPLOY)
 
     notif.send(notification_types.DEPLOYMENT_FINISHED, {
         'user': deployer_user,

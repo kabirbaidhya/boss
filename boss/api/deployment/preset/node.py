@@ -84,6 +84,7 @@ def deploy():
         'branch': branch,
         'stage': stage
     })
+    runner.run_script_safely(known_scripts.PRE_DEPLOY)
 
     (release_dir, current_path) = buildman.setup_remote()
 
@@ -142,6 +143,8 @@ def deploy():
         'createdBy': deployer_user,
         'timestamp': timestamp.strftime(buildman.TS_FORMAT)
     })
+
+    runner.run_script_safely(known_scripts.POST_DEPLOY)
 
     # Send deployment finished notification.
     notif.send(notification_types.DEPLOYMENT_FINISHED, {
