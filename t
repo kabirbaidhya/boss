@@ -13,12 +13,18 @@ setup_ci() {
   pip install -U --editable .
 }
 
-publish() {
-  echo "Publishing"
+publish_legacy() {
+  echo "Publishing (legacy way)"
   python setup.py egg_info
   python setup.py build
   python setup.py install
   python setup.py sdist upload -r pypi
+}
+
+publish() {
+  echo "Publishing"
+  python setup.py sdist bdist_wheel
+  twine upload dist/*
 }
 
 pep8() {
