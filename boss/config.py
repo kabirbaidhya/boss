@@ -126,6 +126,7 @@ def get_base_config(resolved_config=None):
     return {
         'user': config.get('user'),
         'port': config.get('port'),
+        'vault': config.get('vault'),
         'branch': config.get('branch'),
         'app_dir': config.get('app_dir'),
         'deployment': config.get('deployment'),

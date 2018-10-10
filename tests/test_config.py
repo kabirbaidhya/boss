@@ -98,14 +98,27 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
         'deployment': {
             'base_dir': '~/some/directory'
         },
+        'vault': {
+            'enabled': True,
+            'path': 'root/path'
+        },
         'stages': {
             'stage1': {
                 'host': 'stage1.example.com',
-                'remote_env_path': 'best'
+                'remote_env_path': 'best',
+                'vault': {
+                    'path': 'root/path/stage1'
+                }
             },
             'stage2': {
                 'host': 'stage2.example.com',
-                'port': '4321'
+                'port': '4321',
+                'vault': {
+                    'path': 'root/path/stage2'
+                }
+            },
+            'stage3': {
+
             }
         }
     }
@@ -121,6 +134,9 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
     assert stage1_config['deployment'][
         'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
 
+    assert stage1_config['vault']['enabled'] is True
+    assert stage1_config['vault']['path'] == 'root/path/stage1'
+
     # Stage 2
     stage2_config = result['stages']['stage2']
     assert stage2_config['port'] == raw_config['stages']['stage2']['port']
@@ -130,6 +146,14 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
         'base_dir'] == raw_config['deployment']['base_dir']
     assert stage2_config['deployment'][
         'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
+
+    assert stage2_config['vault']['enabled'] is True
+    assert stage2_config['vault']['path'] == 'root/path/stage2'
+
+    # Stage 3
+    stage3_config = result['stages']['stage3']
+    assert stage3_config['vault']['enabled'] is True
+    assert stage3_config['vault']['path'] == 'root/path'
 
 
 @patch('boss.core.fs.read')
