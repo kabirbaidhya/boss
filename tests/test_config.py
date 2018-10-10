@@ -6,10 +6,11 @@ from boss.core.util.string import strip_ansi
 from boss.core.constants.config import DEFAULT_CONFIG
 from boss.config import (
     load,
+    parse_config,
     merge_config,
+    is_vault_enabled,
     resolve_dotenv_file,
-    get_deployment_preset,
-    is_vault_enabled
+    get_deployment_preset
 )
 
 
@@ -265,3 +266,10 @@ def test_is_vault_enabled_returns_false():
     '''
 
     assert is_vault_enabled(raw_config) is False
+
+
+def test_parse_config_returns_defaults_if_empty_config():
+    ''' Test parse_config() returns defaults for empty config. '''
+    result = parse_config('')
+
+    assert result == DEFAULT_CONFIG

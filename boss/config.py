@@ -9,8 +9,9 @@ from copy import deepcopy
 from .constants import DEFAULT_CONFIG_FILE
 from .core import fs
 from .core.output import halt, info
-from .core.util.object import merge
 from .core.util.colors import cyan
+from .core.util.object import merge
+from .core.util.types import is_dict
 from .core.constants.config import DEFAULT_CONFIG, PSD
 
 
@@ -48,7 +49,7 @@ def resolve_dotenv_file(path, stage=None):
 def get_deployment_preset(raw_config):
     ''' Get the deployment preset for a raw config. '''
     has_preset = (
-        isinstance(raw_config.get('deployment'), dict) and
+        is_dict(raw_config.get('deployment')) and
         'preset' in raw_config.get('deployment')
     )
 
@@ -86,7 +87,7 @@ def parse_config(raw_config):
     Parse a raw config yaml encoded string,
     and merge it with the defaults before it's used everywhere.
     '''
-    parsed = yaml.load(raw_config)
+    parsed = yaml.load(raw_config) or {}
 
     return merge_config(parsed)
 
