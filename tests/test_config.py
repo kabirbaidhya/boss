@@ -1,5 +1,6 @@
 ''' Unit tests for boss.config module. '''
 
+import os
 from mock import patch
 from boss.core.util.string import strip_ansi
 from boss.core.constants.config import DEFAULT_CONFIG
@@ -147,6 +148,34 @@ def test_load(read_mock):
     # Default values resolved
     assert boss_config['port'] == 22
     assert boss_config['port'] == 22
+
+
+@patch('boss.core.fs.read')
+def test_load_with_env_vars(read_mock):
+    ''' Test load() function loads yaml file correctly. '''
+    read_mock.return_value = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+    port: 23
+    deployment:
+        preset: 'web'
+        base_dir: ${TEST_BASE_DIR}
+    '''
+    os.environ['TEST_USER'] = 'test-user'
+    os.environ['TEST_PROJECT'] = 'test-project'
+    os.environ['TEST_BASE_DIR'] = '~/source/deployment'
+
+    config_filename = 'test.yml'
+    boss_config = load(config_filename)
+
+    read_mock.assert_called_with(config_filename)
+
+    # Configured options
+    assert boss_config['user'] == 'test-user'
+    assert boss_config['port'] == 23
+    assert boss_config['project_name'] == 'test-project'
+    assert boss_config['deployment']['preset'] == 'web'
+    assert boss_config['deployment']['base_dir'] == '~/source/deployment'
 
 
 @patch('boss.config.info')
