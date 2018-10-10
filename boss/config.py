@@ -7,7 +7,7 @@ from copy import deepcopy
 
 
 from .constants import DEFAULT_CONFIG_FILE
-from .core import fs
+from .core import fs, vault
 from .core.output import halt, info
 from .core.util.colors import cyan
 from .core.util.object import merge
@@ -96,13 +96,14 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
         # pass
-        raw_config = fs.read(filename)
+        config_str = fs.read(filename)
         resolve_dotenv_file(os.path.dirname(filename), stage)
 
         # Check if vault is configured.
+        use_vault_if_enabled(config_str, stage)
 
         # Expand the environment variables used in the yaml config.
-        loaded_config = os.path.expandvars(raw_config)
+        loaded_config = os.path.expandvars(config_str)
 
         # Parse the yaml configuration.
         merged_config = parse_config(loaded_config)
@@ -145,6 +146,22 @@ def get_stage_config(stage):
 
 def is_vault_enabled(raw_config):
     ''' Check if vault is configured using raw config. '''
-    parsed = parse_config(raw_config)
+    return raw_config['vault']['enabled']
 
-    return parsed['vault']['enabled']
+
+def use_vault_if_enabled(config_str, stage):
+    ''' Check if vault is configured using raw config. '''
+    raw_config = parse_config(config_str)
+
+    # Skip if vault is not enabled.
+    if not is_vault_enabled(raw_config):
+        return
+
+    # Load secrets from vault and inject into env.
+    if stage and stage in raw_config['stages']:
+        path = raw_config['stages'][stage]['vault']['path']
+    else:
+        path = raw_config['vault']['path']
+
+    client = vault.connect()
+    vault.env_inject_secrets(client, path)

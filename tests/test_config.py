@@ -248,26 +248,14 @@ def test_is_vault_enabled_returns_true():
     '''
     Test is_vault_enabled() returns True when it should.
     '''
-    raw_config = '''
-    vault:
-        enabled: true
-    '''
-
-    assert is_vault_enabled(raw_config) is True
+    assert is_vault_enabled({'vault': {'enabled': True}}) is True
 
 
 def test_is_vault_enabled_returns_false():
     '''
     Test is_vault_enabled() returns False when it should.
     '''
-    assert is_vault_enabled('') is False
-
-    raw_config = '''
-    vault:
-        enabled: false
-    '''
-
-    assert is_vault_enabled(raw_config) is False
+    assert is_vault_enabled({'vault': {'enabled': False}}) is False
 
 
 def test_parse_config_returns_defaults_if_empty_config():
