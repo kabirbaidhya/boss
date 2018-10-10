@@ -81,20 +81,30 @@ def merge_config(raw_config):
     return result
 
 
+def parse_config(raw_config):
+    '''
+    Parse a raw config yaml encoded string,
+    and merge it with the defaults before it's used everywhere.
+    '''
+    parsed = yaml.load(raw_config)
+
+    return merge_config(parsed)
+
+
 def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     ''' Load the configuration and return it. '''
     try:
         # pass
-        file_contents = fs.read(filename)
+        raw_config = fs.read(filename)
         resolve_dotenv_file(os.path.dirname(filename), stage)
 
+        # Check if vault is configured.
+
         # Expand the environment variables used in the yaml config.
-        loaded_config = os.path.expandvars(file_contents)
+        loaded_config = os.path.expandvars(raw_config)
 
         # Parse the yaml configuration.
-        # And merge it with the defaults before it's used everywhere.
-        loaded_config = yaml.load(loaded_config)
-        merged_config = merge_config(loaded_config)
+        merged_config = parse_config(loaded_config)
 
         _config.update(merged_config)
 
@@ -130,3 +140,10 @@ def get_stage_config(stage):
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
         ))
+
+
+def is_vault_enabled(raw_config):
+    ''' Check if vault is configured using raw config. '''
+    parsed = parse_config(raw_config)
+
+    return parsed['vault']['enabled']

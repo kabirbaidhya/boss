@@ -8,7 +8,8 @@ from boss.config import (
     load,
     merge_config,
     resolve_dotenv_file,
-    get_deployment_preset
+    get_deployment_preset,
+    is_vault_enabled
 )
 
 
@@ -240,3 +241,27 @@ def test_resolve_dotenv_file_loads_env_file_if_stage_specific_file_doesnt_exist(
         msg = strip_ansi(info_m.call_args[0][0])
 
         assert msg == 'Resolving env file: .env'
+
+
+def test_is_vault_enabled_returns_true():
+    '''
+    Test is_vault_enabled() returns True when it should.
+    '''
+    raw_config = '''
+    vault:
+        enabled: true
+    '''
+
+    assert is_vault_enabled(raw_config) is True
+
+
+def test_is_vault_enabled_returns_false():
+    '''
+    Test is_vault_enabled() returns False when it should.
+    '''
+    raw_config = '''
+    vault:
+        enabled: false
+    '''
+
+    assert is_vault_enabled(raw_config) is False
