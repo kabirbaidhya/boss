@@ -4,6 +4,7 @@ import os
 
 from mock import Mock
 from boss.core import vault
+from boss.core.util.types import is_dict
 
 
 def test_read_secrets():
@@ -35,7 +36,7 @@ def test_read_secrets_with_no_response():
 
     result = vault.read_secrets(client, '')
     assert result is not None
-    assert isinstance(result, dict)
+    assert is_dict(result)
 
 
 def test_read_secrets_with_no_data():
@@ -47,7 +48,7 @@ def test_read_secrets_with_no_data():
 
     result = vault.read_secrets(client, '')
     assert result is not None
-    assert isinstance(result, dict)
+    assert is_dict(result)
 
 
 def test_env_inject_secrets():
