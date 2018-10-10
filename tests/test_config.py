@@ -178,7 +178,9 @@ def test_load(read_mock):
 
 @patch('boss.core.fs.read')
 def test_load_with_env_vars(read_mock):
-    ''' Test load() function loads yaml file correctly. '''
+    '''
+    Test load() function loads yaml file with env vars interpolation.
+    '''
     read_mock.return_value = '''
     user: ${TEST_USER}
     project_name: ${TEST_PROJECT}
@@ -202,6 +204,73 @@ def test_load_with_env_vars(read_mock):
     assert boss_config['project_name'] == 'test-project'
     assert boss_config['deployment']['preset'] == 'web'
     assert boss_config['deployment']['base_dir'] == '~/source/deployment'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+    os.environ['TEST_BASE_DIR'] = ''
+
+
+@patch('boss.core.fs.read')
+@patch('boss.core.vault.read_secrets')
+def test_load_with_env_vars_from_vault(read_secrets_mock, read_mock):
+    '''
+    Test load() function loads yaml file with
+    env vars interpolation from vault.
+    '''
+    read_mock.return_value = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+    port: 24
+
+    vault:
+        enabled: true
+
+    deployment:
+        base_dir: ${TEST_BASE_DIR}
+
+    test_var: $TEST_TEST_VAR
+
+    stages:
+        dev:
+            test: test
+
+        prod:
+            user: $TEST_PROD_USER
+    '''
+    os.environ['TEST_USER'] = 'test-user-from-host'
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+        'TEST_BASE_DIR': 'test-base-dir-from-vault',
+        'TEST_TEST_VAR': 'test-test-var-from-vault',
+        'TEST_PROD_USER': 'test-prod-user-from-vault'
+    }
+
+    config_filename = 'test.yml'
+    boss_config = load(config_filename)
+
+    read_mock.assert_called_with(config_filename)
+    read_secrets_mock.assert_called_with(DEFAULT_CONFIG['vault']['path'])
+
+    # Configured options
+    assert boss_config['user'] == 'test-user-from-host'
+    assert boss_config['port'] == 24
+    assert boss_config['project_name'] == 'test-project-from-vault'
+    assert boss_config['deployment']['preset'] == 'remote-source'
+    assert boss_config['deployment']['base_dir'] == 'test-base-dir-from-vault'
+
+    # Stage specific
+    assert boss_config['stages']['dev']['test'] == 'test'
+    assert boss_config['stages']['dev']['user'] == 'test-user-from-host'
+    assert boss_config['stages']['prod']['user'] == 'test-prod-user-from-vault'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+    os.environ['TEST_BASE_DIR'] = ''
+    os.environ['TEST_TEST_VAR'] = ''
+    os.environ['TEST_PROD_USER'] = ''
 
 
 @patch('boss.config.info')

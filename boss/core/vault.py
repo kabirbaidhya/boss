@@ -19,8 +19,9 @@ def connect():
     return client
 
 
-def read_secrets(client, path):
+def read_secrets(path):
     ''' Read secrets from the given path. '''
+    client = connect()
     result = client.read(path)
 
     if not result or not result.get('data'):
@@ -29,12 +30,12 @@ def read_secrets(client, path):
     return result['data']
 
 
-def env_inject_secrets(client, path):
+def env_inject_secrets(path):
     '''
     Read secrets from the vault (from the given path),
     and inject them into the environment as env vars.
     '''
-    secrets = read_secrets(client, path)
+    secrets = read_secrets(path)
 
     for key, value in secrets.iteritems():
         os.environ[key] = value
