@@ -260,6 +260,8 @@ def test_is_vault_enabled_returns_false():
     '''
     Test is_vault_enabled() returns False when it should.
     '''
+    assert is_vault_enabled('') is False
+
     raw_config = '''
     vault:
         enabled: false
