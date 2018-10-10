@@ -150,7 +150,7 @@ def is_vault_enabled(raw_config):
     return raw_config['vault']['enabled']
 
 
-def use_vault_if_enabled(config_str, stage):
+def use_vault_if_enabled(config_str, stage=None):
     ''' Check if vault is configured using raw config. '''
     raw_config = parse_config(config_str)
 

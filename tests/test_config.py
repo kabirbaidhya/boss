@@ -10,6 +10,7 @@ from boss.config import (
     merge_config,
     is_vault_enabled,
     resolve_dotenv_file,
+    use_vault_if_enabled,
     get_deployment_preset
 )
 
@@ -356,3 +357,108 @@ def test_parse_config_returns_defaults_if_empty_config():
     result = parse_config('')
 
     assert result == DEFAULT_CONFIG
+
+
+@patch('boss.core.vault.read_secrets')
+def test_use_vault_if_enabled(read_secrets_mock):
+    ''' Test use_vault_if_enabled() when vault enabled. '''
+    config_str = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+
+    vault:
+        enabled: true
+        path: root/path
+    '''
+
+    os.environ['TEST_USER'] = 'test-user-from-host'
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+    }
+
+    use_vault_if_enabled(config_str)
+
+    read_secrets_mock.assert_called_with('root/path')
+    # Configured options
+    assert os.environ['TEST_USER'] == 'test-user-from-host'
+    assert os.environ['TEST_PROJECT'] == 'test-project-from-vault'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+
+
+@patch('boss.core.vault.read_secrets')
+def test_use_vault_if_enabled_with_stage(read_secrets_mock):
+    '''
+    Test use_vault_if_enabled() when vault enabled
+    with specific stage given.
+    '''
+    config_str = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+
+    vault:
+        enabled: true
+        path: root/path
+
+    stages:
+        stage1:
+            vault:
+                path: root/path/stage1
+        stage2:
+            test: test
+    '''
+
+    os.environ['TEST_USER'] = 'test-user-from-host'
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+    }
+
+    # Invoke with stage=stage1
+    use_vault_if_enabled(config_str, 'stage1')
+    read_secrets_mock.assert_called_with('root/path/stage1')
+
+    # Invoke with stage=stage2
+    use_vault_if_enabled(config_str, 'stage2')
+    read_secrets_mock.assert_called_with('root/path')
+
+    # Env interpolation
+    assert os.environ['TEST_USER'] == 'test-user-from-host'
+    assert os.environ['TEST_PROJECT'] == 'test-project-from-vault'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+
+
+@patch('boss.core.vault.read_secrets')
+def test_use_vault_if_enabled_when_not_enabled(read_secrets_mock):
+    '''
+    Test use_vault_if_enabled() when vault is not enabled.
+    It should just use the env vars from the host.
+    '''
+    config_str = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+    '''
+
+    os.environ['TEST_USER'] = 'test-user-from-host'
+    os.environ['TEST_PROJECT'] = ''
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+    }
+
+    # Invoke with stage=stage1
+    use_vault_if_enabled(config_str)
+    read_secrets_mock.assert_not_called()
+
+    # Env interpolation
+    assert os.environ['TEST_USER'] == 'test-user-from-host'
+    assert not os.environ['TEST_PROJECT']
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
