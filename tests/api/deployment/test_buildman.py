@@ -85,7 +85,6 @@ def test_build(get_config_m, load_env_m, capfd):
             }
         },
         'scripts': {
-            'install': 'echo 1',
             'build': 'sh ' + script_path
         }
     })
