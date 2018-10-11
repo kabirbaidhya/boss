@@ -12,3 +12,8 @@ def is_iterable(obj):
     has_get_item = hasattr(obj, '__getitem__')
 
     return has_iter or has_get_item
+
+
+def is_dict(obj):
+    ''' Check if the object is a dictionary. '''
+    return isinstance(obj, dict)

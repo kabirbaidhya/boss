@@ -67,7 +67,8 @@ setup(
         'inquirer==2.2.0',
         'python-dotenv==0.6.5',
         'terminaltables==3.1.0',
-        'click==6.7'
+        'click==6.7',
+        'hvac==0.6.4'
     ],
     extras_require={
         'test': ['mock', 'coverage', 'pytest', 'pytest-cov', 'pylint'],

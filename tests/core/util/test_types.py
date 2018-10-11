@@ -1,6 +1,10 @@
 ''' Unit tests for boss.core.util.types module. '''
 
-from boss.core.util.types import is_iterable, is_string
+from boss.core.util.types import (
+    is_iterable,
+    is_string,
+    is_dict
+)
 
 
 def test_is_iterable_v0():
@@ -34,3 +38,15 @@ def test_is_string():
     assert is_string(u"Hello") is True
     assert is_string(True) is False
     assert is_string(None) is False
+
+
+def test_is_dict():
+    ''' Test is_dict() function. '''
+    assert is_dict('') is False
+    assert is_dict('Test') is False
+    assert is_dict(u"Hello") is False
+    assert is_dict(None) is False
+    assert is_dict([]) is False
+    assert is_dict({}) is True
+    assert is_dict({'foo': 'bar'}) is True
+    assert is_dict(dict()) is True

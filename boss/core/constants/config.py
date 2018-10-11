@@ -24,6 +24,11 @@ DEFAULT_CONFIG = {
     'remote_env_path': None,
     'stages': {},
     'scripts': {},
+    'vault': {
+        'enabled': False,
+        'path': 'secret',
+        'silent': False
+    },
     'ci': {
         'base_url': ci.TRAVIS_PAID_BASE_URL
     },
