@@ -26,7 +26,8 @@ DEFAULT_CONFIG = {
     'scripts': {},
     'vault': {
         'enabled': False,
-        'path': 'secret'
+        'path': 'secret',
+        'silent': False
     },
     'ci': {
         'base_url': ci.TRAVIS_PAID_BASE_URL

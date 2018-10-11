@@ -164,4 +164,4 @@ def use_vault_if_enabled(config_str, stage=None):
     else:
         path = raw_config['vault']['path']
 
-    vault.env_inject_secrets(path)
+    vault.env_inject_secrets(path, silent=raw_config['vault']['silent'])
