@@ -2,11 +2,12 @@
 Vault client util functions.
 '''
 import os
-from boss.core.output import info, halt
 from hvac import Client
 
+from boss.core.output import info, halt
 
-def connect(silent=False):
+
+def connect():
     '''
     Connect to the vault server and return the
     connected vault client instance.
@@ -21,19 +22,12 @@ def connect(silent=False):
             '`VAULT_ADDR` and `VAULT_TOKEN` must be set in your environment.'
         )
 
-    if not silent:
-        info('Connecting to vault')
-
     return Client(url=url, token=token)
 
 
-def read_secrets(path, silent=False):
+def read_secrets(path):
     ''' Read secrets from the given path. '''
-    client = connect(silent)
-
-    if not silent:
-        info('Reading vault secrets from: {}'.format(path))
-
+    client = connect()
     result = client.read(path)
 
     if not result or not result.get('data'):
@@ -47,10 +41,10 @@ def env_inject_secrets(path, silent=False):
     Read secrets from the vault (from the given path),
     and inject them into the environment as env vars.
     '''
-    secrets = read_secrets(path, silent)
+    secrets = read_secrets(path)
 
     if not silent:
-        info('Using env vars from vault')
+        info('Using secrets from vault ({})'.format(path))
 
     for key, value in secrets.iteritems():
         os.environ[key] = value

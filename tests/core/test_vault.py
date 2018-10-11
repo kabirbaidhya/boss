@@ -21,7 +21,7 @@ def test_read_secrets(connect_m):
             'BAR': 'bar'
         }
     }
-    result = vault.read_secrets('test/vault/path', True)
+    result = vault.read_secrets('test/vault/path')
 
     client.read.assert_called_with('test/vault/path')
     assert result['FOO'] == 'foo'
@@ -37,7 +37,7 @@ def test_read_secrets_with_no_response(connect_m):
     connect_m.return_value = client
     client.read.return_value = None
 
-    result = vault.read_secrets('', True)
+    result = vault.read_secrets('')
     assert result is not None
     assert is_dict(result)
 
@@ -51,7 +51,7 @@ def test_read_secrets_with_no_data(connect_m):
     connect_m.return_value = client
     client.read.return_value = {'data': None}
 
-    result = vault.read_secrets('', True)
+    result = vault.read_secrets('')
     assert result is not None
     assert is_dict(result)
 
@@ -100,9 +100,7 @@ def test_env_inject_secrets_with_output(client_m, capsys):
 
     out, _ = capsys.readouterr()
 
-    assert 'Connecting to vault' in out
-    assert 'Reading vault secrets from: vault/path' in out
-    assert 'Using env vars from vault' in out
+    assert 'Using secrets from vault (vault/path)' in out
 
 
 @patch('boss.core.vault.Client')
