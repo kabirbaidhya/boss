@@ -1,7 +1,7 @@
 ''' Unit tests for boss.core.vault. '''
 
 import os
-
+import pytest
 from mock import Mock, patch
 from boss.core import vault
 from boss.core.util.types import is_dict
@@ -88,6 +88,9 @@ def test_env_inject_secrets_with_output(client_m, capsys):
     Test env_inject_secrets() with silent=False prints output.
     '''
 
+    os.environ['VAULT_ADDR'] = 'vault_addr'
+    os.environ['VAULT_TOKEN'] = 'vault_token'
+
     client = Mock()
     client_m.return_value = client
     client.read.return_value = {}
@@ -108,6 +111,9 @@ def test_env_inject_secrets_in_silent_mode(client_m, capsys):
     Test env_inject_secrets() with silent=True prints no output.
     '''
 
+    os.environ['VAULT_ADDR'] = 'vault_addr'
+    os.environ['VAULT_TOKEN'] = 'vault_token'
+
     client = Mock()
     client_m.return_value = client
     client.read.return_value = {}
@@ -118,3 +124,23 @@ def test_env_inject_secrets_in_silent_mode(client_m, capsys):
     out, _ = capsys.readouterr()
 
     assert out.strip() == ''
+
+
+@patch('boss.core.vault.Client')
+def test_connect_throws_error(client_m):
+    '''
+    Test connect() throws error if
+    VAULT_ADDR and VAULT_TOKEN not found in the environment.
+    '''
+
+    os.environ['VAULT_ADDR'] = ''
+    os.environ['VAULT_TOKEN'] = ''
+
+    error_message = (
+        'Failed connecting to vault. ' +
+        '`VAULT_ADDR` and `VAULT_TOKEN` must be set in your environment.'
+    )
+    with pytest.raises(SystemExit, match=error_message):
+        vault.connect()
+
+    client_m.assert_not_called()

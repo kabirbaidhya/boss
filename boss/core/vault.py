@@ -2,7 +2,7 @@
 Vault client util functions.
 '''
 import os
-from boss.core.output import info
+from boss.core.output import info, halt
 from hvac import Client
 
 
@@ -11,8 +11,15 @@ def connect(silent=False):
     Connect to the vault server and return the
     connected vault client instance.
     '''
-    url = os.environ['VAULT_ADDR']
-    token = os.environ['VAULT_TOKEN']
+
+    url = os.environ.get('VAULT_ADDR')
+    token = os.environ.get('VAULT_TOKEN')
+
+    if not url or not token:
+        halt(
+            'Failed connecting to vault. ' +
+            '`VAULT_ADDR` and `VAULT_TOKEN` must be set in your environment.'
+        )
 
     if not silent:
         info('Connecting to vault')
