@@ -21,7 +21,7 @@ def test_read_secrets(connect_m):
             'BAR': 'bar'
         }
     }
-    result = vault.read_secrets('test/vault/path')
+    result = vault.read_secrets('test/vault/path', True)
 
     client.read.assert_called_with('test/vault/path')
     assert result['FOO'] == 'foo'
@@ -37,7 +37,7 @@ def test_read_secrets_with_no_response(connect_m):
     connect_m.return_value = client
     client.read.return_value = None
 
-    result = vault.read_secrets('')
+    result = vault.read_secrets('', True)
     assert result is not None
     assert is_dict(result)
 
@@ -51,7 +51,7 @@ def test_read_secrets_with_no_data(connect_m):
     connect_m.return_value = client
     client.read.return_value = {'data': None}
 
-    result = vault.read_secrets('')
+    result = vault.read_secrets('', True)
     assert result is not None
     assert is_dict(result)
 
@@ -72,7 +72,7 @@ def test_env_inject_secrets(connect_m):
         }
     }
 
-    vault.env_inject_secrets('path')
+    vault.env_inject_secrets('path', True)
     client.read.assert_called_with('path')
 
     assert os.environ['TEST_FOO'] == 'foo'
@@ -80,3 +80,41 @@ def test_env_inject_secrets(connect_m):
 
     os.environ['TEST_FOO'] = ''
     os.environ['TEST_BAR'] = ''
+
+
+@patch('boss.core.vault.Client')
+def test_env_inject_secrets_with_output(client_m, capsys):
+    '''
+    Test env_inject_secrets() with silent=False prints output.
+    '''
+
+    client = Mock()
+    client_m.return_value = client
+    client.read.return_value = {}
+
+    vault.env_inject_secrets('vault/path', silent=False)
+    client.read.assert_called_with('vault/path')
+
+    out, _ = capsys.readouterr()
+
+    assert 'Connecting to vault' in out
+    assert 'Reading vault secrets from: vault/path' in out
+    assert 'Using env vars from vault' in out
+
+
+@patch('boss.core.vault.Client')
+def test_env_inject_secrets_in_silent_mode(client_m, capsys):
+    '''
+    Test env_inject_secrets() with silent=True prints no output.
+    '''
+
+    client = Mock()
+    client_m.return_value = client
+    client.read.return_value = {}
+
+    vault.env_inject_secrets('vault/path', silent=True)
+    client.read.assert_called_with('vault/path')
+
+    out, _ = capsys.readouterr()
+
+    assert out.strip() == ''
