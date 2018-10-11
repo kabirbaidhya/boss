@@ -25,6 +25,10 @@ publish_legacy() {
 publish() {
   test
   echo "Publishing"
+  python setup.py clean
+  python setup.py egg_info
+  python setup.py build
+  python setup.py install
   python setup.py sdist bdist_wheel
   twine upload dist/*
 }

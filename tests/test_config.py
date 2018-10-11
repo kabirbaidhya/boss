@@ -1,12 +1,16 @@
 ''' Unit tests for boss.config module. '''
 
+import os
 from mock import patch
 from boss.core.util.string import strip_ansi
 from boss.core.constants.config import DEFAULT_CONFIG
 from boss.config import (
     load,
+    parse_config,
     merge_config,
+    is_vault_enabled,
     resolve_dotenv_file,
+    use_vault_if_enabled,
     get_deployment_preset
 )
 
@@ -95,14 +99,27 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
         'deployment': {
             'base_dir': '~/some/directory'
         },
+        'vault': {
+            'enabled': True,
+            'path': 'root/path'
+        },
         'stages': {
             'stage1': {
                 'host': 'stage1.example.com',
-                'remote_env_path': 'best'
+                'remote_env_path': 'best',
+                'vault': {
+                    'path': 'root/path/stage1'
+                }
             },
             'stage2': {
                 'host': 'stage2.example.com',
-                'port': '4321'
+                'port': '4321',
+                'vault': {
+                    'path': 'root/path/stage2'
+                }
+            },
+            'stage3': {
+
             }
         }
     }
@@ -118,6 +135,9 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
     assert stage1_config['deployment'][
         'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
 
+    assert stage1_config['vault']['enabled'] is True
+    assert stage1_config['vault']['path'] == 'root/path/stage1'
+
     # Stage 2
     stage2_config = result['stages']['stage2']
     assert stage2_config['port'] == raw_config['stages']['stage2']['port']
@@ -127,6 +147,14 @@ def test_merge_config_base_config_is_merged_to_each_stage_specfic_config():
         'base_dir'] == raw_config['deployment']['base_dir']
     assert stage2_config['deployment'][
         'build_dir'] == DEFAULT_CONFIG['deployment']['build_dir']
+
+    assert stage2_config['vault']['enabled'] is True
+    assert stage2_config['vault']['path'] == 'root/path/stage2'
+
+    # Stage 3
+    stage3_config = result['stages']['stage3']
+    assert stage3_config['vault']['enabled'] is True
+    assert stage3_config['vault']['path'] == 'root/path'
 
 
 @patch('boss.core.fs.read')
@@ -147,6 +175,104 @@ def test_load(read_mock):
     # Default values resolved
     assert boss_config['port'] == 22
     assert boss_config['port'] == 22
+
+
+@patch('boss.core.fs.read')
+def test_load_with_env_vars(read_mock):
+    '''
+    Test load() function loads yaml file with env vars interpolation.
+    '''
+    read_mock.return_value = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+    port: 23
+    deployment:
+        preset: 'web'
+        base_dir: ${TEST_BASE_DIR}
+    '''
+    os.environ['TEST_USER'] = 'test-user'
+    os.environ['TEST_PROJECT'] = 'test-project'
+    os.environ['TEST_BASE_DIR'] = '~/source/deployment'
+
+    config_filename = 'test.yml'
+    boss_config = load(config_filename)
+
+    read_mock.assert_called_with(config_filename)
+
+    # Configured options
+    assert boss_config['user'] == 'test-user'
+    assert boss_config['port'] == 23
+    assert boss_config['project_name'] == 'test-project'
+    assert boss_config['deployment']['preset'] == 'web'
+    assert boss_config['deployment']['base_dir'] == '~/source/deployment'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+    os.environ['TEST_BASE_DIR'] = ''
+
+
+@patch('boss.core.fs.read')
+@patch('boss.core.vault.read_secrets')
+def test_load_with_env_vars_from_vault(read_secrets_mock, read_mock):
+    '''
+    Test load() function loads yaml file with
+    env vars interpolation from vault.
+    '''
+    read_mock.return_value = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+    port: 24
+
+    vault:
+        enabled: true
+        silent: true
+
+    deployment:
+        base_dir: ${TEST_BASE_DIR}
+
+    test_var: $TEST_TEST_VAR
+
+    stages:
+        dev:
+            test: test
+
+        prod:
+            user: $TEST_PROD_USER
+    '''
+    os.environ['TEST_USER'] = 'test-user-from-host'
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+        'TEST_BASE_DIR': 'test-base-dir-from-vault',
+        'TEST_TEST_VAR': 'test-test-var-from-vault',
+        'TEST_PROD_USER': 'test-prod-user-from-vault'
+    }
+
+    config_filename = 'test.yml'
+    boss_config = load(config_filename)
+
+    read_mock.assert_called_with(config_filename)
+    read_secrets_mock.assert_called_with(DEFAULT_CONFIG['vault']['path'])
+
+    # Configured options
+    assert boss_config['user'] == 'test-user-from-host'
+    assert boss_config['port'] == 24
+    assert boss_config['project_name'] == 'test-project-from-vault'
+    assert boss_config['deployment']['preset'] == 'remote-source'
+    assert boss_config['deployment']['base_dir'] == 'test-base-dir-from-vault'
+
+    # Stage specific
+    assert boss_config['stages']['dev']['test'] == 'test'
+    assert boss_config['stages']['dev']['user'] == 'test-user-from-host'
+    assert boss_config['stages']['prod']['user'] == 'test-prod-user-from-vault'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+    os.environ['TEST_BASE_DIR'] = ''
+    os.environ['TEST_TEST_VAR'] = ''
+    os.environ['TEST_PROD_USER'] = ''
 
 
 @patch('boss.config.info')
@@ -211,3 +337,133 @@ def test_resolve_dotenv_file_loads_env_file_if_stage_specific_file_doesnt_exist(
         msg = strip_ansi(info_m.call_args[0][0])
 
         assert msg == 'Resolving env file: .env'
+
+
+def test_is_vault_enabled_returns_true():
+    '''
+    Test is_vault_enabled() returns True when it should.
+    '''
+    assert is_vault_enabled({'vault': {'enabled': True}}) is True
+
+
+def test_is_vault_enabled_returns_false():
+    '''
+    Test is_vault_enabled() returns False when it should.
+    '''
+    assert is_vault_enabled({'vault': {'enabled': False}}) is False
+
+
+def test_parse_config_returns_defaults_if_empty_config():
+    ''' Test parse_config() returns defaults for empty config. '''
+    result = parse_config('')
+
+    assert result == DEFAULT_CONFIG
+
+
+@patch('boss.core.vault.read_secrets')
+def test_use_vault_if_enabled(read_secrets_mock):
+    ''' Test use_vault_if_enabled() when vault enabled. '''
+    config_str = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+
+    vault:
+        enabled: true
+        path: root/path
+        silent: true
+    '''
+
+    os.environ['TEST_USER'] = 'test-user-from-host'
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+    }
+
+    use_vault_if_enabled(config_str)
+
+    read_secrets_mock.assert_called_with('root/path')
+    # Configured options
+    assert os.environ['TEST_USER'] == 'test-user-from-host'
+    assert os.environ['TEST_PROJECT'] == 'test-project-from-vault'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+
+
+@patch('boss.core.vault.read_secrets')
+def test_use_vault_if_enabled_with_stage(read_secrets_mock):
+    '''
+    Test use_vault_if_enabled() when vault enabled
+    with specific stage given.
+    '''
+    config_str = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+
+    vault:
+        enabled: true
+        path: root/path
+        silent: true
+
+    stages:
+        stage1:
+            vault:
+                path: root/path/stage1
+        stage2:
+            test: test
+    '''
+
+    os.environ['TEST_USER'] = 'test-user-from-host'
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+    }
+
+    # Test when invoked with stage=stage1
+    # takes vault path for stage1
+    use_vault_if_enabled(config_str, 'stage1')
+    read_secrets_mock.assert_called_with('root/path/stage1')
+
+    # Test when invoked with stage=stage2
+    # takes the default vault path
+    use_vault_if_enabled(config_str, 'stage2')
+    read_secrets_mock.assert_called_with('root/path')
+
+    # Env interpolation
+    assert os.environ['TEST_USER'] == 'test-user-from-host'
+    assert os.environ['TEST_PROJECT'] == 'test-project-from-vault'
+
+    # Teardown
+    os.environ['TEST_USER'] = ''
+    os.environ['TEST_PROJECT'] = ''
+
+
+@patch('boss.core.vault.read_secrets')
+def test_use_vault_if_enabled_when_not_enabled(read_secrets_mock):
+    '''
+    Test use_vault_if_enabled() when vault is not enabled.
+    It should just use the env vars from the host.
+    '''
+    config_str = '''
+    user: ${TEST_USER}
+    project_name: ${TEST_PROJECT}
+    '''
+
+    os.environ['TEST_USER'] = 'test-user-from-host'
+    os.environ['TEST_PROJECT'] = ''
+
+    read_secrets_mock.return_value = {
+        'TEST_PROJECT': 'test-project-from-vault',
+    }
+
+    # Invoke with stage=stage1
+    use_vault_if_enabled(config_str)
+    read_secrets_mock.assert_not_called()
+
+    # Env interpolation
+    assert os.environ['TEST_USER'] == 'test-user-from-host'
+    assert not os.environ['TEST_PROJECT']
+
+    # Teardown
+    os.environ['TEST_USER'] = ''

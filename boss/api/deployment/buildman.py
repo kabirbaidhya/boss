@@ -402,13 +402,13 @@ def get_build_env_vars(stage, config):
     # via an environment variable STAGE.
     # This could be useful for creating specific builds for
     # different environments.
-    env_vars = {
+    env_vars = merge(os.environ, {
         'STAGE': stage
-    }
+    })
 
     # If either remote env injection is not enabled,
     # or remote_env_path is not provided skip it.
-    if not config['remote_env_injection'] or not config['remote_env_path']:
+    if not config['remote_env_injection']:
         return env_vars
 
     try:
@@ -417,6 +417,7 @@ def get_build_env_vars(stage, config):
         remote_env_path = config['stages'][stage]['remote_env_path']
         remote_vars = load_remote_env_vars(remote_env_path)
 
+        print(remote_vars)
         return merge(remote_vars, env_vars)
     except IOError as e:
         warn(
@@ -435,7 +436,7 @@ def build(stage, config):
 
     # Trigger the install script
     runner.run_script_safely(known_scripts.PRE_INSTALL, remote=False)
-    runner.run_script(known_scripts.INSTALL, remote=False)
+    runner.run_script_safely(known_scripts.INSTALL, remote=False)
     runner.run_script_safely(known_scripts.POST_INSTALL, remote=False)
 
     env_vars = get_build_env_vars(stage, config)

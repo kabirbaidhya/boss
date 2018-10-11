@@ -1,6 +1,11 @@
 ''' Tests for boss.api.deployment.buildman module. '''
 
+import os
 from mock import patch
+from tempfile import mkstemp
+from boss.core import fs
+from boss.core.util.object import merge
+from boss.core.constants.config import DEFAULT_CONFIG
 from boss.api.deployment import buildman
 
 
@@ -142,3 +147,62 @@ def test_get_prev_build_info_if_empty_builds_or_current():
     prev_build = buildman.get_prev_build_info(history)
 
     assert prev_build is None
+
+
+@patch('boss.api.deployment.buildman.load_remote_env_vars')
+@patch('boss.api.runner._get_config')
+def test_build_with_loaded_env_vars(get_config_m, remote_env_m, capfd):
+    '''
+    Test build() with env vars injected from remote path and vault.
+
+    Precedence:
+        - Env vars injected from OS
+        - Env vars injected by boss (eg: STAGE=stage)
+        - Env vars injected from remote (remote_env_path if remote_env_injection = True)
+        - Env vars injected from vault
+    '''
+
+    build_script = '''
+    echo STAGE = $STAGE
+    echo FOO = $FOO
+    echo BAR = $BAR
+    echo BAT = $BAT
+    echo BAZ = $BAZ
+    '''
+
+    (_, script_path) = mkstemp()
+    fs.write(script_path, build_script)
+    test_config = merge(DEFAULT_CONFIG, {
+        'remote_env_injection': True,
+        'stages': {
+            'stage1': {
+                'remote_env_path': 'remote/env/path',
+            }
+        },
+        'scripts': {
+            'build': 'sh ' + script_path
+        }
+    })
+    get_config_m.return_value = test_config
+    remote_env_m.return_value = {
+        'BAR': 'bar-from-remote',
+        'BAT': 'bat-from-remote'
+    }
+    # Injected from host os
+    os.environ['FOO'] = 'foo-from-host'
+
+    # Vault's env vars are injected into the Host's env
+    os.environ['BAT'] = 'bat-from-vault'
+    os.environ['BAZ'] = 'baz-from-vault'
+
+    buildman.build('stage1', test_config)
+
+    out, _ = capfd.readouterr()
+
+    # Assert all the environment varialbes have been injected
+    # in the build script
+    assert 'STAGE = stage1' in out
+    assert 'FOO = foo-from-host' in out
+    assert 'BAR = bar-from-remote' in out
+    assert 'BAT = bat-from-vault' in out
+    assert 'BAZ = baz-from-vault' in out
