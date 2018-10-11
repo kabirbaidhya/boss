@@ -11,12 +11,7 @@ def connect():
     Connect to the vault server and return the
     connected vault client instance.
     '''
-    client = Client(
-        url=os.environ['VAULT_ADDR'],
-        token=os.environ['VAULT_TOKEN']
-    )
-
-    return client
+    return Client(url=os.environ['VAULT_ADDR'], token=os.environ['VAULT_TOKEN'])
 
 
 def read_secrets(path):
