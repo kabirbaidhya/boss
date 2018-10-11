@@ -417,11 +417,13 @@ def test_use_vault_if_enabled_with_stage(read_secrets_mock):
         'TEST_PROJECT': 'test-project-from-vault',
     }
 
-    # Invoke with stage=stage1
+    # Test when invoked with stage=stage1
+    # takes vault path for stage1
     use_vault_if_enabled(config_str, 'stage1')
     read_secrets_mock.assert_called_with('root/path/stage1')
 
-    # Invoke with stage=stage2
+    # Test when invoked with stage=stage2
+    # takes the default vault path
     use_vault_if_enabled(config_str, 'stage2')
     read_secrets_mock.assert_called_with('root/path')
 
