@@ -377,9 +377,9 @@ def get_build_env_vars(stage, config):
     # via an environment variable STAGE.
     # This could be useful for creating specific builds for
     # different environments.
-    env_vars = {
-        'STAGE': stage
-    }
+    env_vars = merge(os.environ, {
+        'STAGE': stage,
+    })
 
     # If remote env injection is not enabled skip it.
     if not config['remote_env_injection']:

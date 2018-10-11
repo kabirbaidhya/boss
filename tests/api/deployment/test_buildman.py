@@ -1,6 +1,11 @@
 ''' Tests for boss.api.deployment.buildman module. '''
 
+import os
 from mock import patch
+from tempfile import mkstemp
+from boss.core import fs
+from boss.core.util.object import merge
+from boss.core.constants.config import DEFAULT_CONFIG
 from boss.api.deployment import buildman
 
 
@@ -58,3 +63,48 @@ def test_resolve_local_build_dir_when_build_dir_none_with_fallback_directory(gsc
     result = buildman.resolve_local_build_dir()
 
     assert result in buildman.LOCAL_BUILD_DIRECTORIES[0]
+
+
+@patch('boss.api.deployment.buildman.load_remote_env_vars')
+@patch('boss.api.runner._get_config')
+def test_build(get_config_m, load_env_m, capfd):
+    build_script = '''
+    echo STAGE = $STAGE
+    echo FOO = $FOO
+    echo BAR = $BAR
+    echo BAZ = $BAZ
+    '''
+
+    (_, script_path) = mkstemp()
+    fs.write(script_path, build_script)
+    test_config = merge(DEFAULT_CONFIG, {
+        'remote_env_injection': True,
+        'stages': {
+            'stage1': {
+                'remote_env_path': 'remote/env/path',
+            }
+        },
+        'scripts': {
+            'install': 'echo 1',
+            'build': 'sh ' + script_path
+        }
+    })
+    get_config_m.return_value = test_config
+    load_env_m.return_value = {
+        'BAR': 'bar-from-remote'
+    }
+
+    # Vault's env vars are injected into the Host's env
+    os.environ['FOO'] = 'foo-from-host'
+    os.environ['BAZ'] = 'baz-from-vault'
+
+    buildman.build('stage1', test_config)
+
+    out, _ = capfd.readouterr()
+
+    # Assert all the environment varialbes have been injected
+    # in the build script
+    assert 'STAGE = stage1' in out
+    assert 'FOO = foo-from-host' in out
+    assert 'BAR = bar-from-remote' in out
+    assert 'BAZ = baz-from-vault' in out
