@@ -226,6 +226,7 @@ def test_load_with_env_vars_from_vault(read_secrets_mock, read_mock):
 
     vault:
         enabled: true
+        silent: true
 
     deployment:
         base_dir: ${TEST_BASE_DIR}
@@ -252,7 +253,9 @@ def test_load_with_env_vars_from_vault(read_secrets_mock, read_mock):
     boss_config = load(config_filename)
 
     read_mock.assert_called_with(config_filename)
-    read_secrets_mock.assert_called_with(DEFAULT_CONFIG['vault']['path'])
+    read_secrets_mock.assert_called_with(
+        DEFAULT_CONFIG['vault']['path'], True
+    )
 
     # Configured options
     assert boss_config['user'] == 'test-user-from-host'
@@ -369,6 +372,7 @@ def test_use_vault_if_enabled(read_secrets_mock):
     vault:
         enabled: true
         path: root/path
+        silent: true
     '''
 
     os.environ['TEST_USER'] = 'test-user-from-host'
@@ -379,7 +383,7 @@ def test_use_vault_if_enabled(read_secrets_mock):
 
     use_vault_if_enabled(config_str)
 
-    read_secrets_mock.assert_called_with('root/path')
+    read_secrets_mock.assert_called_with('root/path', True)
     # Configured options
     assert os.environ['TEST_USER'] == 'test-user-from-host'
     assert os.environ['TEST_PROJECT'] == 'test-project-from-vault'
@@ -402,6 +406,7 @@ def test_use_vault_if_enabled_with_stage(read_secrets_mock):
     vault:
         enabled: true
         path: root/path
+        silent: true
 
     stages:
         stage1:
@@ -420,12 +425,12 @@ def test_use_vault_if_enabled_with_stage(read_secrets_mock):
     # Test when invoked with stage=stage1
     # takes vault path for stage1
     use_vault_if_enabled(config_str, 'stage1')
-    read_secrets_mock.assert_called_with('root/path/stage1')
+    read_secrets_mock.assert_called_with('root/path/stage1', True)
 
     # Test when invoked with stage=stage2
     # takes the default vault path
     use_vault_if_enabled(config_str, 'stage2')
-    read_secrets_mock.assert_called_with('root/path')
+    read_secrets_mock.assert_called_with('root/path', True)
 
     # Env interpolation
     assert os.environ['TEST_USER'] == 'test-user-from-host'
