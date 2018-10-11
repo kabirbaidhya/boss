@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.0.0-alpha.19](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.19) (2018-10-11)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.18...v1.0.0-alpha.19)
+
+**Implemented enhancements:**
+
+- Make install script optional for node and web deployments [\#133](https://github.com/kabirbaidhya/boss/pull/133) [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[enhancement](https://github.com/kabirbaidhya/boss/labels/enhancement)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Fixed bugs:**
+
+- Deployment fails if public\_url is not provided for each stage [\#111](https://github.com/kabirbaidhya/boss/issues/111) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)]
+
+**Improvements:**
+
+- Support vault integration for injection of secrets in boss.yml and local execution context [\#132](https://github.com/kabirbaidhya/boss/pull/132) [[config](https://github.com/kabirbaidhya/boss/labels/config)] [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.18](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.18) (2018-10-09)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.17...v1.0.0-alpha.18)
 
