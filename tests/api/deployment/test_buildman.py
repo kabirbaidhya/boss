@@ -67,11 +67,22 @@ def test_resolve_local_build_dir_when_build_dir_none_with_fallback_directory(gsc
 
 @patch('boss.api.deployment.buildman.load_remote_env_vars')
 @patch('boss.api.runner._get_config')
-def test_build(get_config_m, load_env_m, capfd):
+def test_build_with_loaded_env_vars(get_config_m, remote_env_m, capfd):
+    '''
+    Test build() with env vars injected from remote path and vault.
+
+    Precedence:
+        - Env vars injected from OS
+        - Env vars injected by boss (eg: STAGE=stage)
+        - Env vars injected from remote (remote_env_path if remote_env_injection = True)
+        - Env vars injected from vault
+    '''
+
     build_script = '''
     echo STAGE = $STAGE
     echo FOO = $FOO
     echo BAR = $BAR
+    echo BAT = $BAT
     echo BAZ = $BAZ
     '''
 
@@ -89,12 +100,15 @@ def test_build(get_config_m, load_env_m, capfd):
         }
     })
     get_config_m.return_value = test_config
-    load_env_m.return_value = {
-        'BAR': 'bar-from-remote'
+    remote_env_m.return_value = {
+        'BAR': 'bar-from-remote',
+        'BAT': 'bat-from-remote'
     }
+    # Injected from host os
+    os.environ['FOO'] = 'foo-from-host'
 
     # Vault's env vars are injected into the Host's env
-    os.environ['FOO'] = 'foo-from-host'
+    os.environ['BAT'] = 'bat-from-vault'
     os.environ['BAZ'] = 'baz-from-vault'
 
     buildman.build('stage1', test_config)
@@ -106,4 +120,5 @@ def test_build(get_config_m, load_env_m, capfd):
     assert 'STAGE = stage1' in out
     assert 'FOO = foo-from-host' in out
     assert 'BAR = bar-from-remote' in out
+    assert 'BAT = bat-from-vault' in out
     assert 'BAZ = baz-from-vault' in out
