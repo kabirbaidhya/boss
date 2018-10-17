@@ -7,6 +7,9 @@ ANSI_CODES_REGEX = '\x1b[^m]*m'
 
 def strip_ansi(text):
     ''' Strip ANSI escape character codes from a string. '''
+    if not text:
+        return text
+
     return re.sub(ANSI_CODES_REGEX, '', text)
 
 

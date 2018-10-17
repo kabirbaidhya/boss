@@ -3,10 +3,12 @@
 import os
 import time
 from StringIO import StringIO
+
 from fabric.api import hide, put, get
 from fabric.contrib import files, project
 
 from . import runner
+from boss.core.util.string import strip_ansi
 from boss.core.util.types import is_iterable, is_string
 
 
@@ -69,7 +71,8 @@ def tar_extract(src, dest, remote=True):
 def glob(path, remote=True):
     ''' Glob a directory path to get the list of files. '''
     with hide('everything'):
-        return runner.run('ls -1 {}'.format(path), remote=remote).split()
+        result = runner.run('ls -1 {}'.format(path), remote=remote)
+        return strip_ansi(result).split()
 
 
 def exists(path, remote=True):
