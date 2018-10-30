@@ -66,5 +66,12 @@ changelog() {
     --exclude-labels=unnecessary,duplicate,question,invalid,wontfix
 }
 
+bump() {
+  # Bump package version and generate changelog
+  VERSION="${NEXT/v/}"
+  sed -i "s/__version__ = .*/__version__ = '${VERSION}'/" boss/__init__.py
+  changelog
+}
+
 # Run command received from args.
 $1
