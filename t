@@ -13,20 +13,10 @@ setup_ci() {
   pip install -U --editable .
 }
 
-publish_legacy() {
-  echo "Publishing (legacy way)"
-  python setup.py egg_info
-  python setup.py build
-  python setup.py install
-  python setup.py sdist upload -r pypi
-}
-
 publish() {
   echo "Publishing"
-  python setup.py clean
-  python setup.py egg_info
-  python setup.py build
-  python setup.py install
+  rm -rf dist build boss_cli.egg-info
+  pip install -U .
   python setup.py sdist bdist_wheel
   twine upload dist/*
 }
