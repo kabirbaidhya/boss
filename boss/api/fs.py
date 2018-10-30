@@ -3,6 +3,7 @@
 import time
 
 from boss.api import ssh
+from boss.core.util.string import strip_ansi
 from boss.core.util.types import is_iterable, is_string
 
 
@@ -62,7 +63,9 @@ def tar_extract(src, dest):
 
 def glob(path):
     ''' Glob a directory path to get the list of files. '''
-    return ssh.run('ls -1 {}'.format(path))
+    result = ssh.run('ls -1 {}'.format(path))
+
+    return map(strip_ansi, result)
 
 
 def exists(path):

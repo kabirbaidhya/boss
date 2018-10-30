@@ -61,9 +61,10 @@ setup(
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
     install_requires=[
-        'fabric==1.13.2',
+        'fabric==1.14.0',
+        'paramiko==2.4.2',
         'pyyaml==3.12',
-        'requests==2.17.3',
+        'requests==2.20.0',
         'inquirer==2.2.0',
         'python-dotenv==0.6.5',
         'terminaltables==3.1.0',

@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.0.0-alpha.20](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.20) (2018-10-30)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.19...v1.0.0-alpha.20)
+
+**Fixed bugs:**
+
+- Fix build directory removal issue due to fs.glob\(\) having ANSI color codes in it [\#134](https://github.com/kabirbaidhya/boss/pull/134) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Closed issues:**
+
+- Ability to use vault for credentials for deployment [\#131](https://github.com/kabirbaidhya/boss/issues/131) [[config](https://github.com/kabirbaidhya/boss/labels/config)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)]
+
+**Improvements:**
+
+- Fix CVE-2018-18074 vulnerablility due to requests [\#137](https://github.com/kabirbaidhya/boss/pull/137) [[security](https://github.com/kabirbaidhya/boss/labels/security)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Upgrade fabric and paramiko version [\#136](https://github.com/kabirbaidhya/boss/pull/136) ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.19](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.19) (2018-10-11)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.18...v1.0.0-alpha.19)
 
