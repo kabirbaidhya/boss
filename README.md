@@ -282,6 +282,11 @@ More information, examples and documentation coming soon :).
 * [Capistrano](https://github.com/capistrano/capistrano)
 * [Fabric](http://www.fabfile.org/)
 
+## Change Log
+
+Check the [CHANGELOG](CHANGELOG.md) for full release history.
+
+
 ## Contributors
 
 1. [Shirish Shikhrakar](https://github.com/sshikhrakar)
@@ -295,10 +300,6 @@ More information, examples and documentation coming soon :).
 ## Contributing
 
 All kinds of contributions are welcome. Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose PRs, report bugs and suggest improvements.
-
-## Change Log
-
-Check the [CHANGELOG](CHANGELOG.md) for full release history.
 
 ## License
 
