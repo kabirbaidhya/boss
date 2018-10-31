@@ -57,9 +57,20 @@ changelog() {
 bump() {
   # Bump package version and generate changelog
   VERSION="${NEXT/v/}"
+
+  # Update version in the following files
   sed -i "s/__version__ = .*/__version__ = '${VERSION}'/" boss/__init__.py
   sed -i "s/.*pip install boss-cli==.*/\$ pip install boss-cli==${VERSION}/" README.md
+  
+  # Generate change log
   changelog
+
+  echo ""
+  # Prepare to commit
+  git add README.md boss/__init__.py CHANGELOG.md && \
+    git commit -v --edit -m "Bump version $(git describe --abbrev=0 --tags) → ${VERSION}" && \
+    git tag "$NEXT" && \
+    echo -e "\nRelease tagged $NEXT"
 }
 
 # Run command received from args.
