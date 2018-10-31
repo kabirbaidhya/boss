@@ -1,11 +1,7 @@
 ''' Configuration Constants. '''
 
 from . import ci, presets
-from .known_scripts import (
-    INSTALL,
-    INSTALL_REMOTE,
-    BUILD
-)
+from .known_scripts import (INSTALL, INSTALL_REMOTE)
 
 
 DEFAULT_CONFIG = {
@@ -81,7 +77,6 @@ PSD[presets.NODE] = {
     },
     'scripts': {
         INSTALL: 'npm install',
-        INSTALL_REMOTE: 'npm install',
-        BUILD: 'npm run build'
+        INSTALL_REMOTE: 'npm install'
     }
 }

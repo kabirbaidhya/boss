@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-beta.1](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.1) (2018-10-31)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.20...v1.0.0-beta.1)
+
+**Improvements:**
+
+- Make build script optional supporting node projects w/o build script [\#138](https://github.com/kabirbaidhya/boss/pull/138) [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-alpha.20](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.20) (2018-10-30)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.19...v1.0.0-alpha.20)
 
