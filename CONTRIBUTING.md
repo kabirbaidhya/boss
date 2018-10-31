@@ -59,7 +59,6 @@ $ ./t test
 ```
 
 #### Run tests in watch mode.
-This uses [`chokidar`](https://github.com/kimmobrunfeldt/chokidar-cli) to watch for file changes to re-run tests.
 ```bash
 $ ./t testw
 ```

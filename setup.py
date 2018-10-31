@@ -72,7 +72,7 @@ setup(
         'hvac==0.6.4'
     ],
     extras_require={
-        'test': ['mock', 'coverage', 'pytest', 'pytest-cov', 'pylint'],
+        'test': ['mock', 'coverage', 'pytest', 'pytest-cov', 'pylint', 'pytest-watch'],
     },
     entry_points={
         'console_scripts': [

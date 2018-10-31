@@ -33,11 +33,8 @@ test() {
 }
 
 testw() {
-  # NOTE: This requires chokidar to be installed.
-  # Install it with `npm install -g chokidar-cli if you haven't.
-  # https://github.com/kimmobrunfeldt/chokidar-cli
   echo "Running tests (watch mode)"
-  chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest -s"
+  ptw --runner "python -m pytest -s"
 }
 
 changelog() {
