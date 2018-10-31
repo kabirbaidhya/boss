@@ -57,6 +57,7 @@ bump() {
   # Bump package version and generate changelog
   VERSION="${NEXT/v/}"
   sed -i "s/__version__ = .*/__version__ = '${VERSION}'/" boss/__init__.py
+  sed -i "s/.*pip install boss-cli==.*/\$ pip install boss-cli==${VERSION}/" README.md
   changelog
 }
 
