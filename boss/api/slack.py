@@ -10,7 +10,7 @@ from boss.core.util.func import as_is
 
 def send(notif_type, **params):
     ''' Send slack notifications. '''
-    url = slack_url(config()['base_url'] + config()['endpoint'])
+    url = slack_url(config()['base_url'], config()['endpoint'])
 
     (text, color) = notification.get(
         notif_type,
