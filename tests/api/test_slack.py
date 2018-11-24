@@ -24,6 +24,25 @@ def test_create_link():
     assert slack.create_link(url, title) == expected_link
 
 
+def test_slack_url():
+    ''' Test slack_url() works. '''
+    assert slack.slack_url('', '') == ''
+    assert slack.slack_url(
+        'https://hooks.slack.com/services',
+        '/foo/bar'
+    ) == 'https://hooks.slack.com/services/foo/bar'
+
+    assert slack.slack_url(
+        'https://hooks.slack.com/services',
+        'https://hooks.slack.com/services/foo/bar'
+    ) == 'https://hooks.slack.com/services/foo/bar'
+
+    assert slack.slack_url(
+        '',
+        'https://hooks.slack.com/services/foo/bar'
+    ) == 'https://hooks.slack.com/services/foo/bar'
+
+
 def test_create_link_supports_empty_url():
     ''' Test slack.create_link() supports empty url. '''
     assert slack.create_link(None, 'Test') == 'Test'
