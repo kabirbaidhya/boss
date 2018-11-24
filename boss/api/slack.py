@@ -10,7 +10,7 @@ from boss.core.util.func import as_is
 
 def send(notif_type, **params):
     ''' Send slack notifications. '''
-    url = config()['base_url'] + config()['endpoint']
+    url = slack_url(config()['base_url'], config()['endpoint'])
 
     (text, color) = notification.get(
         notif_type,
@@ -53,6 +53,17 @@ def create_link(url, title):
         url=url,
         title=title
     )
+
+
+def slack_url(base_url, endpoint):
+    ''' Return slack endpoint by concatinating the base_url if required '''
+    base_url = base_url.strip('/')
+    endpoint = endpoint.strip('/')
+
+    if base_url in endpoint:
+        return endpoint
+
+    return base_url + '/' + endpoint
 
 
 def pre_format(text):

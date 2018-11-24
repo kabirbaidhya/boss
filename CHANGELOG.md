@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.0-beta.2](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.2) (2018-11-24)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.1...v1.0.0-beta.2)
+
+**Improvements:**
+
+- Improvements and tests on the slack url config [\#143](https://github.com/kabirbaidhya/boss/pull/143) [[test](https://github.com/kabirbaidhya/boss/labels/test)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Support full slack endpoint url in the config [\#141](https://github.com/kabirbaidhya/boss/pull/141) [[notification](https://github.com/kabirbaidhya/boss/labels/notification)] ([squgeim](https://github.com/squgeim))
+
 ## [v1.0.0-beta.1](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.1) (2018-10-31)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.20...v1.0.0-beta.1)
 

@@ -37,6 +37,14 @@ testw() {
   ptw --runner "python -m pytest -s"
 }
 
+testw_chokidar() {
+  # NOTE: This requires chokidar to be installed.
+  # Install it with `npm install -g chokidar-cli if you haven't.
+  # https://github.com/kimmobrunfeldt/chokidar-cli
+  echo "Running tests (watch mode)"
+  chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest -s"
+}
+
 changelog() {
   # NOTE: This requires github_changelog_generator to be installed.
   # https://github.com/skywinder/github-changelog-generator
