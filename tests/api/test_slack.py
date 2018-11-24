@@ -12,8 +12,11 @@ from boss.core.constants.notification_types import (
 
 
 @fixture(scope='function')
-def base_url():
-    return slack.config()['base_url'] + slack.config()['endpoint']
+def slack_url():
+    return slack.slack_url(
+        slack.config()['base_url'],
+        slack.config()['endpoint']
+    )
 
 
 def test_create_link():
@@ -22,6 +25,11 @@ def test_create_link():
     title = 'Test link'
     expected_link = '<{url}|{title}>'.format(url=url, title=title)
     assert slack.create_link(url, title) == expected_link
+
+
+def test_create_link_supports_empty_url():
+    ''' Test slack.create_link() supports empty url. '''
+    assert slack.create_link(None, 'Test') == 'Test'
 
 
 def test_slack_url():
@@ -43,12 +51,15 @@ def test_slack_url():
     ) == 'https://hooks.slack.com/services/foo/bar'
 
 
-def test_create_link_supports_empty_url():
-    ''' Test slack.create_link() supports empty url. '''
-    assert slack.create_link(None, 'Test') == 'Test'
+def test_slack_url_with_no_leading_trailing_slashes():
+    ''' Test no trailing or leading slashes are required. '''
+    assert slack.slack_url(
+        'https://hooks.slack.com/services',
+        'just-test'
+    ) == 'https://hooks.slack.com/services/just-test'
 
 
-def test_send(base_url):
+def test_send(slack_url):
     ''' Test slack.send(). '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -76,10 +87,10 @@ def test_send(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_send_deployment_started_with_no_repository_url(base_url):
+def test_send_deployment_started_with_no_repository_url(slack_url):
     ''' Test deployment started notification with no repository url. '''
     notify_params = dict(
         branch='temp',
@@ -107,10 +118,10 @@ def test_send_deployment_started_with_no_repository_url(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_send_deployment_finished_with_no_repository_url(base_url):
+def test_send_deployment_finished_with_no_repository_url(slack_url):
     ''' Test deployment finished notification with no repository url. '''
     notify_params = dict(
         branch='temp',
@@ -138,10 +149,10 @@ def test_send_deployment_finished_with_no_repository_url(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_send_with_no_branch_name(base_url):
+def test_send_with_no_branch_name(slack_url):
     '''
     Test slack.send() doesn't show the branch link,
     if branch name is not provided.
@@ -170,10 +181,10 @@ def test_send_with_no_branch_name(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deployed(base_url):
+def test_notity_deployed(slack_url):
     ''' Test slack.notify_deployed(). '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -200,10 +211,10 @@ def test_notity_deployed(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deployed_with_no_commit(base_url):
+def test_notity_deployed_with_no_commit(slack_url):
     ''' Test sending deployment finished notification with no commit. '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -228,10 +239,10 @@ def test_notity_deployed_with_no_commit(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deploying_with_no_commit(base_url):
+def test_notity_deploying_with_no_commit(slack_url):
     ''' Test sending deployment started notification with no commit. '''
     notify_params = dict(
         branch_url='http://branch-url',
@@ -256,10 +267,10 @@ def test_notity_deploying_with_no_commit(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deployed_with_no_branch_name(base_url):
+def test_notity_deployed_with_no_branch_name(slack_url):
     '''
     Test slack.notify_deployed() doesn't show the branch link,
     if branch name is not provided.
@@ -288,10 +299,10 @@ def test_notity_deployed_with_no_branch_name(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deployment_finished_with_no_commit_no_branch(base_url):
+def test_notity_deployment_finished_with_no_commit_no_branch(slack_url):
     ''' Test sending deployment finished notification with no commit and no branch. '''
     notify_params = dict(
         public_url='http://public-url',
@@ -314,10 +325,10 @@ def test_notity_deployment_finished_with_no_commit_no_branch(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deployment_started_with_no_commit_no_branch(base_url):
+def test_notity_deployment_started_with_no_commit_no_branch(slack_url):
     ''' Test sending deployment started notification with no commit and no branch. '''
     notify_params = dict(
         public_url='http://public-url',
@@ -340,10 +351,10 @@ def test_notity_deployment_started_with_no_commit_no_branch(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_notity_deployment_started_no_links_at_all(base_url):
+def test_notity_deployment_started_no_links_at_all(slack_url):
     ''' Test deployment started notification with no links or urls at all. '''
     notify_params = dict(
         project_name='project-name',
@@ -363,10 +374,10 @@ def test_notity_deployment_started_no_links_at_all(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(DEPLOYMENT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_send_running_script_started_notification(base_url):
+def test_send_running_script_started_notification(slack_url):
     ''' Test send() sends RUNNING_SCRIPT_STARTED notfication. '''
     notify_params = dict(
         public_url='http://public-url',
@@ -391,10 +402,10 @@ def test_send_running_script_started_notification(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(RUNNING_SCRIPT_STARTED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
 
 
-def test_send_running_script_finished_notification(base_url):
+def test_send_running_script_finished_notification(slack_url):
     ''' Test send() sends RUNNING_SCRIPT_FINISHED notfication. '''
     notify_params = dict(
         public_url='http://public-url',
@@ -419,4 +430,4 @@ def test_send_running_script_finished_notification(base_url):
 
     with patch('requests.post') as mock_post:
         slack.send(RUNNING_SCRIPT_FINISHED, **notify_params)
-        mock_post.assert_called_once_with(base_url, json=payload)
+        mock_post.assert_called_once_with(slack_url, json=payload)
