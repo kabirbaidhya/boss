@@ -54,9 +54,17 @@ def create_link(url, title):
         title=title
     )
 
+
 def slack_url(base_url, endpoint):
     ''' Return slack endpoint by concatinating the base_url if required '''
-    return endpoint if base_url in endpoint else (base_url + endpoint)
+    base_url = base_url.strip('/')
+    endpoint = endpoint.strip('/')
+
+    if base_url in endpoint:
+        return endpoint
+
+    return base_url + '/' + endpoint
+
 
 def pre_format(text):
     ''' Return pre-formatted text for slack. '''
