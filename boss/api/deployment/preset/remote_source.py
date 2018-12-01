@@ -82,6 +82,12 @@ def run_deploy_script(stage, branch):
         SCRIPT_POST_DEPLOY=runner.get_script_cmd(known_scripts.POST_DEPLOY)
     )
 
+    # Change None to ''
+    # TODO: Create a util function map for dictionary
+    for k, v in env_vars.iteritems():
+        if v is None:
+            env_vars[k] = ''
+
     with hide('running'):
         with shell_env(**env_vars):
             # Run the sync script on the remote
