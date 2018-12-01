@@ -17,12 +17,23 @@ if [ -d ".git" ]; then
   echo_info "Fetching the latest changes."
   git fetch --prune
 
-  echo_info "Checking out to branch ${BRANCH}."
+  echo_info "Checking out to ${BRANCH}."
   git checkout -f $BRANCH
   echo;
 
-  echo_info "Synchronizing with the latest changes on branch ${BRANCH}."
-  git reset --hard origin/$BRANCH
+  echo_info "Synchronizing with the latest changes of ${BRANCH}."
+
+  # Check if the remote branch exists.
+  cmd="$(git rev-parse --quiet --verify origin/$BRANCH)"
+  ret_val=$?
+
+  # If it does not exist assume it as a ref (commit / tag) and reset to it
+  # If it exists, reset to the remote branch
+  if [ $ret_val -ne 0 ]; then
+    git reset --hard $BRANCH
+  else
+    git reset --hard origin/$BRANCH
+  fi
 else
   git clone -b $BRANCH  $REPOSITORY_URL $REPOSITORY_PATH
 fi
