@@ -120,6 +120,11 @@ def check():
 
 def resolve_deployment_branch(stage):
     ''' Resolve the branch or ref for deployment. '''
+    stage_config = get_stage_config(stage)
+
+    if stage_config['deployment']['use_local_ref']:
+        return git.get_local_ref()
+
     # Resolve the default branch for the provided
     # `stage` from the config.
-    return get_stage_config(stage)['branch']
+    return stage_config['branch']
