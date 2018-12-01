@@ -40,6 +40,16 @@ def last_commit(remote=True, short=False):
         return result.strip()
 
 
+def get_local_ref():
+    ''' Get the current branch name or ref / commit if not available. '''
+    branch = current_branch(remote=False)
+
+    if branch != 'HEAD':
+        return branch
+
+    return last_commit(remote=False, short=True)
+
+
 def current_branch(remote=True):
     '''
     Get the current branch of the git repository.

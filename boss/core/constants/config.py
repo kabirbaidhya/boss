@@ -33,7 +33,8 @@ DEFAULT_CONFIG = {
         'build_dir': None,
         'base_dir': '~/deployment',
         'keep_builds': 5,
-        'include_files': []
+        'include_files': [],
+        'use_local_ref': True
     },
     'notifications': {
         'slack': {

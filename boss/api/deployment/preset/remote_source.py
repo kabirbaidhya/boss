@@ -23,8 +23,8 @@ def deploy(branch=None):
     ''' Deploy to remote source. '''
     stage = shell.get_stage()
     deployer_user = shell.get_user()
-    branch = branch or get_stage_config(stage)['branch']
-    commit = git.last_commit(short=True)
+    branch = branch or resolve_deployment_branch(stage)
+    commit = git.last_commit(remote=False, short=True)
     notif.send(notification_types.DEPLOYMENT_STARTED, {
         'user': deployer_user,
         'branch': branch,
@@ -116,3 +116,15 @@ def check():
         remote_print('Branch: {}'.format(remote_branch))
         # Show the last commit
         git.show_last_commit()
+
+
+def resolve_deployment_branch(stage):
+    ''' Resolve the branch or ref for deployment. '''
+    stage_config = get_stage_config(stage)
+
+    if stage_config['deployment']['use_local_ref']:
+        return git.get_local_ref()
+
+    # Resolve the default branch for the provided
+    # `stage` from the config.
+    return stage_config['branch']
