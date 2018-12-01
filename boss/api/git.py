@@ -21,10 +21,23 @@ def pull(branch):
     # TODO: Custom origin
 
 
-def sync(branch):
-    ''' Sync the current HEAD with the remote(origin)'s branch '''
-    run('git reset --hard origin/%s' % branch)
+def check_branch_exists(branch):
+    ''' Check if a git branch exists on the remote. '''
+    check = run('git rev-parse --verify ' + branch, quiet=True)
+
+    return check.succeeded
+
+
+def sync(ref):
+    ''' Sync the current HEAD with the remote (origin)'s ref. '''
     # TODO: Custom origin
+    branch_name = 'origin/' + ref
+
+    if check_branch_exists(branch_name):
+        run('git reset --hard ' + branch_name)
+        return
+
+    run('git reset --hard ' + ref)
 
 
 def last_commit(remote=True, short=False):
@@ -41,6 +54,16 @@ def last_commit(remote=True, short=False):
         result = run(cmd) if remote else local(cmd, capture=True)
 
         return result.strip()
+
+
+def get_local_ref():
+    ''' Get the current branch name or ref / commit if not available. '''
+    branch = current_branch(remote=False)
+
+    if branch != 'HEAD':
+        return branch
+
+    return last_commit(remote=False, short=True)
 
 
 def current_branch(remote=True):
