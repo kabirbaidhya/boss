@@ -34,7 +34,8 @@ DEFAULT_CONFIG = {
         'base_dir': '~/deployment',
         'keep_builds': 5,
         'include_files': [],
-        'smart_install': False
+        'smart_install': False,
+        'use_local_ref': True
     },
     'notifications': {
         'slack': {

@@ -27,7 +27,7 @@ REPOSITORY_PATH = '/repo'
 def deploy(branch=None):
     ''' Deploy to remote source. '''
     stage = shell.get_stage()
-    branch = branch or get_stage_config(stage)['branch']
+    branch = branch or resolve_deployment_branch(stage)
     params = dict(
         user=shell.get_user(),
         stage=stage,
@@ -82,6 +82,12 @@ def run_deploy_script(stage, branch):
         SCRIPT_POST_DEPLOY=runner.get_script_cmd(known_scripts.POST_DEPLOY)
     )
 
+    # Change None to ''
+    # TODO: Create a util function map for dictionary
+    for k, v in env_vars.iteritems():
+        if v is None:
+            env_vars[k] = ''
+
     with hide('running'):
         with shell_env(**env_vars):
             # Run the sync script on the remote
@@ -116,3 +122,15 @@ def check():
             remote_print('Branch: {}'.format(remote_branch))
             # Show the last commit
             git.show_last_commit()
+
+
+def resolve_deployment_branch(stage):
+    ''' Resolve the branch or ref for deployment. '''
+    stage_config = get_stage_config(stage)
+
+    if stage_config['deployment']['use_local_ref']:
+        return git.get_local_ref()
+
+    # Resolve the default branch for the provided
+    # `stage` from the config.
+    return stage_config['branch']

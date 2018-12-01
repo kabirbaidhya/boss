@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0-beta.3](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.3) (2018-12-01)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.2...v1.0.0-beta.3)
+
+**Fixed bugs:**
+
+- Fix issue with deploying with a specific commit on remote-source deployment preset [\#146](https://github.com/kabirbaidhya/boss/pull/146) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] [[remote-source](https://github.com/kabirbaidhya/boss/labels/remote-source)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Improvements:**
+
+- Support using local ref \(by default\) for remote-source deployment [\#145](https://github.com/kabirbaidhya/boss/pull/145) [[breaking-change](https://github.com/kabirbaidhya/boss/labels/breaking-change)] [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[feature](https://github.com/kabirbaidhya/boss/labels/feature)] [[remote-source](https://github.com/kabirbaidhya/boss/labels/remote-source)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-beta.2](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.2) (2018-11-24)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.1...v1.0.0-beta.2)
 
