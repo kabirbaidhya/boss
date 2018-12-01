@@ -71,7 +71,7 @@ def sync(branch=None):
     remote_info('Fetching the latest changes.')
     git.fetch()
     branch = branch or git.current_branch()
-    remote_info('Checking out to branch {}.'.format(cyan(branch)))
+    remote_info('Checking out to {}.'.format(cyan(branch)))
     git.checkout(branch, True)
     remote_info('Synchronizing with the latest changes.')
     git.sync(branch)
