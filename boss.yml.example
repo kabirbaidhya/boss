@@ -1,4 +1,3 @@
-cwd: /path/to/remote/app/directory
 project_name: 'projectname'
 project_description: 'Project Description'
 repository_url: YOUR_GIT_REPOSITORY_URL

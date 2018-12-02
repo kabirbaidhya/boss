@@ -310,7 +310,6 @@ stages:
   dev:
     host: dev.your-app.com
     public_url: http://dev.your-app.com
-    cwd: /path/to/your/app
     logging:
       files:
         - /path/to/error/log/file
@@ -318,7 +317,6 @@ stages:
   uat:
     host: uat.your-app.com
     public_url: http://uat.your-app.com
-    cwd: /path/to/your/app
     logging:
       files:
         - /path/to/error/log/file
@@ -328,7 +326,6 @@ stages:
     port: ${PRODUCTION_SERVER_SSH_PORT}
     username: ${PRODUCTION_SERVER_USERNAME}
     public_url: http://your-app.com
-    cwd: /path/to/your/app
     logging:
       files:
         - /path/to/error/log/file

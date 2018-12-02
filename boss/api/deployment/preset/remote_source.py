@@ -97,19 +97,22 @@ def run_deploy_script(stage, branch):
 @task
 def stop():
     ''' Stop the service. '''
-    runner.run_script_safely(known_scripts.STOP)
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.STOP)
 
 
 @task
 def restart():
     ''' Restart the service. '''
-    runner.run_script_safely(known_scripts.RELOAD)
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.RELOAD)
 
 
 @task
 def status():
     ''' Check the status of the service. '''
-    runner.run_script_safely(known_scripts.STATUS_CHECK)
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.STATUS_CHECK)
 
 
 @task
