@@ -10,7 +10,7 @@ DEFAULT_CONFIG = {
     'key_filename': '~/.ssh/id_rsa',
     'ssh_forward_agent': False,
     'verbose_logging': False,
-    'app_dir': '~/',
+    'cwd': '/home/app',
     'branch': 'master',
     'repository_url': '',
     'project_name': 'untitled',

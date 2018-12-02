@@ -8,12 +8,13 @@ It then builds the project and restarts the service if needed.
 '''
 
 
-from fabric.api import task, hide
+from fabric.api import task, hide, cd
 from fabric.context_managers import shell_env
 
 from boss.config import get_stage_config
 from boss.util import remote_info, remote_print
 from boss.api import git, notif, shell, runner
+from boss.api.deployment.buildman import get_deploy_dir
 from boss.core.util.colors import cyan
 from boss.core.constants import known_scripts, notification_types
 
@@ -31,16 +32,18 @@ def deploy(branch=None):
         'commit': commit,
         'stage': stage
     })
-    runner.run_script_safely(known_scripts.PRE_DEPLOY)
 
-    # Get the latest code from the repository
-    sync(branch)
-    install_dependencies()
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.PRE_DEPLOY)
 
-    # Building the app
-    build(stage)
-    reload_service()
-    runner.run_script_safely(known_scripts.POST_DEPLOY)
+        # Get the latest code from the repository
+        sync(branch)
+        install_dependencies()
+
+        # Building the app
+        build(stage)
+        reload_service()
+        runner.run_script_safely(known_scripts.POST_DEPLOY)
 
     notif.send(notification_types.DEPLOYMENT_FINISHED, {
         'user': deployer_user,
@@ -50,6 +53,11 @@ def deploy(branch=None):
     })
 
     remote_info('Deployment Completed')
+
+
+def get_repo_path():
+    ''' Get remote repository path. '''
+    return get_deploy_dir()
 
 
 def reload_service():
@@ -65,7 +73,6 @@ def install_dependencies():
     runner.run_script_safely(known_scripts.POST_INSTALL)
 
 
-@task
 def sync(branch=None):
     ''' Sync the changes on the branch with the remote (origin). '''
     remote_info('Fetching the latest changes.')
@@ -77,7 +84,6 @@ def sync(branch=None):
     git.sync(branch)
 
 
-@task
 def build(stage_name=None):
     ''' Build the application. '''
     stage = shell.get_stage()
@@ -92,30 +98,34 @@ def build(stage_name=None):
 @task
 def stop():
     ''' Stop the service. '''
-    runner.run_script_safely(known_scripts.STOP)
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.STOP)
 
 
 @task
 def restart():
     ''' Restart the service. '''
-    runner.run_script_safely(known_scripts.RELOAD)
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.RELOAD)
 
 
 @task
 def status():
     ''' Check the status of the service. '''
-    runner.run_script_safely(known_scripts.STATUS_CHECK)
+    with cd(get_repo_path()):
+        runner.run_script_safely(known_scripts.STATUS_CHECK)
 
 
 @task
 def check():
     ''' Check the current remote branch and the last commit. '''
-    with hide('running'):
-        # Show the current branch
-        remote_branch = git.current_branch()
-        remote_print('Branch: {}'.format(remote_branch))
-        # Show the last commit
-        git.show_last_commit()
+    with cd(get_repo_path()):
+        with hide('running'):
+            # Show the current branch
+            remote_branch = git.current_branch()
+            remote_print('Branch: {}'.format(remote_branch))
+            # Show the last commit
+            git.show_last_commit()
 
 
 def resolve_deployment_branch(stage):
