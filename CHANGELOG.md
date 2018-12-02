@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0-beta.4](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.4) (2018-12-03)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.3...v1.0.0-beta.4)
+
+**Closed issues:**
+
+- Use the local branch name by default on remote-source deployment too [\#144](https://github.com/kabirbaidhya/boss/issues/144) [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[remote-source](https://github.com/kabirbaidhya/boss/labels/remote-source)]
+
+**Improvements:**
+
+- Use deployment.base\_dir instead of app\_dir for remote-source deployment to make config consistent [\#148](https://github.com/kabirbaidhya/boss/pull/148) [[breaking-change](https://github.com/kabirbaidhya/boss/labels/breaking-change)] [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] [[remote-source](https://github.com/kabirbaidhya/boss/labels/remote-source)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-beta.3](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.3) (2018-12-01)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.2...v1.0.0-beta.3)
 
