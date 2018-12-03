@@ -78,6 +78,7 @@ bump() {
     git commit -v --edit -m "Bump version $(git describe --abbrev=0 --tags) → ${VERSION}" && \
     git tag "$NEXT" && \
     echo -e "\nRelease tagged $NEXT"
+  git push origin HEAD --tags
 }
 
 # Run command received from args.
