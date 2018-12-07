@@ -48,7 +48,9 @@ def read_secrets(path):
     except Forbidden:
         halt(
             'Permission denied. ' +
-            'Make sure the token is authorized to access the configured path on vault.'
+            'Make sure the token is authorized to access `{}` on vault.'.format(
+                path
+            )
         )
 
     except VaultError as e:
