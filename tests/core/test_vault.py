@@ -3,6 +3,9 @@
 import os
 import pytest
 from mock import Mock, patch
+from requests.exceptions import ConnectionError
+from hvac.exceptions import Forbidden, VaultError
+
 from boss.core import vault
 from boss.core.util.types import is_dict
 
@@ -142,3 +145,45 @@ def test_connect_throws_error(client_m):
         vault.connect()
 
     client_m.assert_not_called()
+
+
+@patch('boss.core.vault.connect')
+def test_read_secrets_shows_vault_connection_error(connect_m):
+    '''
+    Test read_secrets() gracefully displays vault errors.
+    '''
+    os.environ['VAULT_ADDR'] = 'https://test.vaultserver'
+    connect_m.side_effect = ConnectionError('Boom!')
+
+    error_message = 'Failed connecting to vault server at .*'
+    with pytest.raises(SystemExit, match=error_message):
+        vault.read_secrets('test/vault/path')
+
+
+@patch('boss.core.vault.connect')
+def test_read_secrets_shows_vault_forbidden_error(connect_m):
+    '''
+    Test read_secrets() gracefully displays vault errors.
+    '''
+    os.environ['VAULT_ADDR'] = 'https://test.vaultserver'
+    connect_m.side_effect = Forbidden('Boom!')
+
+    error_message = (
+        'Permission denied. ' +
+        'Make sure the token is authorized to access `test/vault/path`.*'
+    )
+    with pytest.raises(SystemExit, match=error_message):
+        vault.read_secrets('test/vault/path')
+
+
+@patch('boss.core.vault.connect')
+def test_read_secrets_shows_vault_vault_error(connect_m):
+    '''
+    Test read_secrets() gracefully displays vault errors.
+    '''
+    os.environ['VAULT_ADDR'] = 'https://test.vaultserver'
+    connect_m.side_effect = VaultError('Boom!')
+
+    error_message = 'Vault Error: Boom!'
+    with pytest.raises(SystemExit, match=error_message):
+        vault.read_secrets('test/vault/path')
