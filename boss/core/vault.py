@@ -1,8 +1,11 @@
 '''
 Vault client util functions.
 '''
+
 import os
 from hvac import Client
+from hvac.exceptions import Forbidden, VaultError
+from requests.exceptions import ConnectionError
 
 from boss.core.output import info, halt
 
@@ -27,13 +30,29 @@ def connect():
 
 def read_secrets(path):
     ''' Read secrets from the given path. '''
-    client = connect()
-    result = client.read(path)
+    try:
+        client = connect()
+        result = client.read(path)
 
-    if not result or not result.get('data'):
-        return {}
+        if not result or not result.get('data'):
+            return {}
 
-    return result['data']
+        return result['data']
+    except ConnectionError:
+        halt(
+            'Failed connecting to vault server at {}.'.format(
+                os.environ.get('VAULT_ADDR')
+            )
+        )
+
+    except Forbidden:
+        halt(
+            'Permission denied. ' +
+            'Make sure the token is authorized to access the configured path on vault.'
+        )
+
+    except VaultError as e:
+        halt('Vault Error: ' + e.message)
 
 
 def env_inject_secrets(path, silent=False):
