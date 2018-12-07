@@ -1,6 +1,13 @@
 # Change Log
 
-## [v1.0.0-beta.4](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.4) (2018-12-03)
+## [v1.0.0-beta.5](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.5) (2018-12-07)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.4...v1.0.0-beta.5)
+
+**Fixed bugs:**
+
+- Display specific vault error messages if boss halts due vault error [\#150](https://github.com/kabirbaidhya/boss/pull/150) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] [[config](https://github.com/kabirbaidhya/boss/labels/config)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+## [v1.0.0-beta.4](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.4) (2018-12-02)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.3...v1.0.0-beta.4)
 
 **Closed issues:**
