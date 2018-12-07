@@ -116,7 +116,7 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
         halt('Invalid configuration file "{}"'.format(filename))
 
     except IOError:
-        halt('Error loading config file "%s"' % filename)
+        halt('Error loading config file "{}"'.format(filename))
 
 
 def get_base_config(resolved_config=None):
