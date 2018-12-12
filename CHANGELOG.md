@@ -121,7 +121,7 @@
 
 **Fixed bugs:**
 
-- Fix weird `\<pre\>` tag hipchat notifcation issue  [\#102](https://github.com/kabirbaidhya/boss/pull/102) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Fix weird `\<pre\>` tag hipchat notification issue  [\#102](https://github.com/kabirbaidhya/boss/pull/102) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
 ## [v1.0.0-alpha.14](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.14) (2017-12-25)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.13...v1.0.0-alpha.14)
