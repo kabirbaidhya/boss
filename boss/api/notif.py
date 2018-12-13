@@ -2,12 +2,12 @@
 Notification API module.
 '''
 
+from boss.api import slack, git
 from boss.core.output import warn
-from boss.api import slack, hipchat, git
 from boss.config import get_stage_config, get as get_config
 
 # Notification Services
-notifiers = [slack, hipchat]
+notifiers = [slack]
 
 
 def send(notif_type, params):

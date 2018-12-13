@@ -171,11 +171,9 @@ The list of different chat/IRC clients through which notifications can be sent.
 notifications:
   slack:
     ...
-  hipchat:
-    ...
 ```
 
-Currently, only hipchat and slack are supported. Further integrations are welcome through pull-requests.
+Currently, only slack is supported. Further integrations are welcome through pull-requests.
 
 #### Slack
 
@@ -199,65 +197,6 @@ Slack channel endpoint token to let boss-cli access the slack for sending notifi
 endpoint: SLACK_ENDPOINT
 ```
 
-#### Hipchat
-
-##### `hipchat.enabled`
-
-`boolean`
-
-Enable/disable notifications from hipchat.
-
-```yml
-enabled: true
-```
-
-##### `hipchat.notify`
-
-`boolean`
-
-Enable/disable 'Do Not Disturb' mode for boss-cli notifications in hipchat.
-
-```yml
-notify: true
-```
-
-##### `hipchat.company_name`
-
-`string`
-
-Name of the company/organization/team you are involved in Hipchat.
-
-```yml
-company_name: HIPCHAT_COMPANY_NAME
-```
-
-##### `hipchat.room_id`
-
-`integer`
-
-The id of the room to which the notifications should be sent to.
-
-```yml
-room_id: HIPCHAT_ROOM_ID
-```
-
-##### `hipchat.auth_token`
-
-`string`
-
-Auth token to access the defined room by boss-cli for notifications.
-
-```yml
-auth_token: HIPCHAT_TOKEN
-```
-
-_**NOTE:** You can also use the applications's environment variables from `.env` file._
-
-```yml
-room_id: ${HIPCHAT_ROOM_ID}
-auth_token: ${HIPCHAT_AUTH_TOKEN}
-```
-
 ### Notified Scripts
 
 If you want to be notified for custom scripts just like deployments, you can list the scripts that should be notified in the `notified_hooks.scripts` block as shown below.
@@ -274,8 +213,6 @@ scripts:
 notifications:
   slack:
     ...
-  hipchat:
-    ...
 
 notified_hooks:
   scripts: ['reload', 'db_migration', 'db_rollback']
@@ -287,7 +224,7 @@ Now, if the user executes the command:
 $ fab staging run:db_migration
 ```
 
-In hipchat or slack, the notifications would look like:
+In slack, the notifications would look like:
 
 ```
 - kabir is running db_migration for my-app on staging server.
@@ -335,10 +272,4 @@ notifications:
   slack:
     enabled: true
     endpoint: ${SLACK_ENDPOINT}
-  hipchat:
-    enabled: true
-    notify: true
-    company_name: ${HIPCHAT_COMPANY_NAME}
-    room_id: ${HIPCHAT_ROOM_ID}
-    auth_token: ${HIPCHAT_TOKEN}
 ```

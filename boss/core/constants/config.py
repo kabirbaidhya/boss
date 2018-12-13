@@ -46,17 +46,6 @@ DEFAULT_CONFIG = {
             'ci_deploying_color': '#cccccc',
             'ci_deployed_color': '#7CD197',
             'base_url': 'https://hooks.slack.com/services'
-        },
-        'hipchat': {
-            'enabled': False,
-            'notify': True,
-            'company_name': '',
-            'room_id': '',
-            'auth_token': '',
-            'deploying_color': 'green',
-            'deployed_color': 'purple',
-            'ci_deploying_color': 'gray',
-            'ci_deployed_color': 'yellow',
         }
     },
     'notified_hooks': {
