@@ -63,7 +63,7 @@ setup(
     install_requires=[
         'fabric==1.14.0',
         'paramiko==2.4.2',
-        'pyyaml==3.12',
+        'pyyaml>=4.2b1',
         'requests==2.20.0',
         'inquirer==2.2.0',
         'python-dotenv==0.6.5',
