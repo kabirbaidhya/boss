@@ -87,7 +87,7 @@ def parse_config(raw_config):
     Parse a raw config yaml encoded string,
     and merge it with the defaults before it's used everywhere.
     '''
-    parsed = yaml.load(raw_config) or {}
+    parsed = yaml.load(raw_config, Loader=yaml.FullLoader) or {}
 
     return merge_config(parsed)
 
