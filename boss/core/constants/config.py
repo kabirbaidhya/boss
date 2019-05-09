@@ -7,7 +7,7 @@ from .known_scripts import (INSTALL, INSTALL_REMOTE)
 DEFAULT_CONFIG = {
     'user': 'app',
     'port': 22,
-    'cwd': '/home/app',
+    'cwd': None,
     'key_filename': '~/.ssh/id_rsa',
     'ssh_forward_agent': False,
     'verbose_logging': False,
