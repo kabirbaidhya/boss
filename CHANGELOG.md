@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.0.0-beta.6](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.6) (2019-05-09)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.5...v1.0.0-beta.6)
+
+**Fixed bugs:**
+
+- When vault server is not reachable - boss throws `Error loading config file "boss.yml"` error [\#149](https://github.com/kabirbaidhya/boss/issues/149) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)]
+- Resolve deprecation errors due to paramiko's cryptography dependency version and the cwd issue on run\(\) function [\#154](https://github.com/kabirbaidhya/boss/pull/154) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+**Improvements:**
+
+- Use yaml.FullLoader for loading yaml config [\#153](https://github.com/kabirbaidhya/boss/pull/153) [[security](https://github.com/kabirbaidhya/boss/labels/security)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Fix vulnerability CVE-2017-18342 - upgrade dependency pyyaml  [\#152](https://github.com/kabirbaidhya/boss/pull/152) ([kabirbaidhya](https://github.com/kabirbaidhya))
+
 ## [v1.0.0-beta.5](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.5) (2018-12-07)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.4...v1.0.0-beta.5)
 
@@ -121,7 +134,7 @@
 
 **Fixed bugs:**
 
-- Fix weird `\<pre\>` tag hipchat notifcation issue  [\#102](https://github.com/kabirbaidhya/boss/pull/102) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Fix weird `\<pre\>` tag hipchat notification issue  [\#102](https://github.com/kabirbaidhya/boss/pull/102) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] ([kabirbaidhya](https://github.com/kabirbaidhya))
 
 ## [v1.0.0-alpha.14](https://github.com/kabirbaidhya/boss/tree/v1.0.0-alpha.14) (2017-12-25)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-alpha.13...v1.0.0-alpha.14)
