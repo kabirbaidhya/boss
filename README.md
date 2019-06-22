@@ -285,7 +285,7 @@ More information, examples and documentation coming soon :).
 
 ## Special Thanks
 
-Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the Logo.
+Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the [logo](https://github.com/kabirbaidhya/boss/tree/dev/assets).
 
 ## Contributing
 
