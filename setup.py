@@ -36,7 +36,7 @@ requirements = [
     'fabric==1.14.1',
     'paramiko==2.5',
     'cryptography==2.7',
-    'pyyaml>=4.2b1',
+    'pyyaml==5.1.1',
     'requests==2.20.0',
     'inquirer==2.2.0',
     'python-dotenv==0.6.5',
