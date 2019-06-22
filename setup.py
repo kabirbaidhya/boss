@@ -76,11 +76,8 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Utilities',
-        'License :: MIT',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7'
     ],
     keywords='cli',
