@@ -31,10 +31,10 @@ testw_chokidar() {
 }
 
 publish() {
+  setup
+  test
   echo "Publishing"
   rm -rf dist build boss_cli.egg-info
-  pip install -U -e .[dev]
-  test
   python setup.py sdist bdist_wheel
   twine check dist/*
   twine upload --verbose dist/*
