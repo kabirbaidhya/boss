@@ -3,24 +3,9 @@
 
 setup() {
   echo "Setting things up"
-  pip install -r requirements-dev.txt
-  python setup.py develop
+  pip install -U -e .[dev]
 }
 
-setup_ci() {
-  echo "Setting things up for CI"
-  pip install -r requirements-dev.txt
-  pip install -U --editable .
-}
-
-publish() {
-  echo "Publishing"
-  rm -rf dist build boss_cli.egg-info
-  pip install -U .
-  python setup.py sdist bdist_wheel
-  twine check dist/*
-  twine upload --verbose dist/*
-}
 
 pep8() {
   echo "Running autopep8"
@@ -43,6 +28,16 @@ testw_chokidar() {
   # https://github.com/kimmobrunfeldt/chokidar-cli
   echo "Running tests (watch mode)"
   chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest -s"
+}
+
+publish() {
+  setup
+  test
+  echo "Publishing"
+  rm -rf dist build boss_cli.egg-info
+  python setup.py sdist bdist_wheel
+  twine check dist/*
+  twine upload --verbose dist/*
 }
 
 changelog() {
