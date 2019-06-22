@@ -18,7 +18,7 @@ publish() {
   rm -rf dist build boss_cli.egg-info
   pip install -U .
   python setup.py sdist bdist_wheel
-  twine upload dist/*
+  twine upload --verbose dist/*
 }
 
 pep8() {

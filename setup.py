@@ -39,7 +39,7 @@ setup(
     name='boss-cli',
     version=__version__,
     description='A lightweight deployment tool based upon fabric',
-    long_description=long_description,
+    long_description='boss - Yet another pythonic deployment tool built on top of fabric.',
     url='https://github.com/kabirbaidhya/boss-cli',
     author='Kabir Baidhya',
     author_email='kabirbaidhya@gmail.com',
