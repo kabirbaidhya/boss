@@ -53,14 +53,9 @@ requirements_dev = [
     'coverage==4.4.1',
     'mock==2.0.0',
     'pylint==1.7.4',
-    'python-dotenv==0.6.5',
-    'fabric==1.14.0',
-    'paramiko==2.4.2',
     'autopep8==1.3.3',
-    'inquirer==2.2.0',
     'mock-ssh-server==0.3.0',
-    'twine==1.13.0',
-    'hvac==0.6.4',
+    'twine==1.13.0'
 ]
 
 setup(
