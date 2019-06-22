@@ -42,6 +42,7 @@ stages:
   prod:
     host: your-server.com
     public_url: 'https://your-server.com'
+    branch: master
 
 scripts:
   hello: 'echo "Hello World!"'
@@ -282,24 +283,17 @@ More information, examples and documentation coming soon :).
 * [Capistrano](https://github.com/capistrano/capistrano)
 * [Fabric](http://www.fabfile.org/)
 
-## Change Log
+## Special Thanks
 
-Check the [CHANGELOG](CHANGELOG.md) for full release history.
-
-
-## Contributors
-
-1. [Shirish Shikhrakar](https://github.com/sshikhrakar)
-2. [Shreya Dahal](https://github.com/squgeim)
-3. [Sanjeev Kumar Pandit](https://github.com/sanjeevkpandit)
-4. [Srishan Bhattarai](https://github.com/srishanbhattarai)
-5. [Saugat Acharya](https://github.com/mesaugat)
-6. [Songkran Nethan](https://github.com/gigkokman)
-7. [enzosk8](https://github.com/enzosk8)
+Special Thanks to [Shirish Shikhrakar](https://github.com/sshikhrakar) for the [logo](https://github.com/kabirbaidhya/boss/tree/dev/assets).
 
 ## Contributing
 
 All kinds of contributions are welcome. Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose PRs, report bugs and suggest improvements.
+
+## Change Log
+
+Check the [CHANGELOG](CHANGELOG.md) for full release history.
 
 ## License
 

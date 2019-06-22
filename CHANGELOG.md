@@ -1,5 +1,8 @@
 # Change Log
 
+## [v1.0.0](https://github.com/kabirbaidhya/boss/tree/v1.0.0) (2019-06-22)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.6...v1.0.0)
+
 ## [v1.0.0-beta.6](https://github.com/kabirbaidhya/boss/tree/v1.0.0-beta.6) (2019-05-09)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.5...v1.0.0-beta.6)
 
