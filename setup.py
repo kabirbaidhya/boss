@@ -31,6 +31,38 @@ class RunTests(Command):
         raise SystemExit(errno)
 
 
+# Package requirements
+requirements = [
+    'fabric==1.14.0',
+    'paramiko==2.4.2',
+    'pyyaml>=4.2b1',
+    'requests==2.20.0',
+    'inquirer==2.2.0',
+    'python-dotenv==0.6.5',
+    'terminaltables==3.1.0',
+    'click==6.7',
+    'hvac==0.6.4',
+    'cryptography==2.4.2'
+]
+
+# Development requirements
+requirements_dev = [
+    'pytest==3.2.3',
+    'pytest-cov==2.5.1',
+    'pytest-watch==4.2.0',
+    'coverage==4.4.1',
+    'mock==2.0.0',
+    'pylint==1.7.4',
+    'python-dotenv==0.6.5',
+    'fabric==1.14.0',
+    'paramiko==2.4.2',
+    'autopep8==1.3.3',
+    'inquirer==2.2.0',
+    'mock-ssh-server==0.3.0',
+    'twine==1.13.0',
+    'hvac==0.6.4',
+]
+
 setup(
     name='boss-cli',
     version=__version__,
@@ -44,34 +76,17 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Utilities',
-        'License :: Public Domain',
+        'License :: MIT',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 2.7'
     ],
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
-    install_requires=[
-        'fabric==1.14.0',
-        'paramiko==2.4.2',
-        'pyyaml>=4.2b1',
-        'requests==2.20.0',
-        'inquirer==2.2.0',
-        'python-dotenv==0.6.5',
-        'terminaltables==3.1.0',
-        'click==6.7',
-        'hvac==0.6.4',
-        'cryptography==2.4.2'
-    ],
-    extras_require={
-        'test': ['mock', 'coverage', 'pytest', 'pytest-cov', 'pylint', 'pytest-watch'],
-    },
+    install_requires=requirements,
+    extras_require={'dev': requirements_dev},
     entry_points={
         'console_scripts': [
             'boss=boss.cli:main',
