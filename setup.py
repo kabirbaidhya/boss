@@ -8,14 +8,10 @@ from setuptools import Command, find_packages, setup
 
 from boss import __version__
 
+path = abspath(dirname(__file__))
 
-try:
-    this_dir = abspath(dirname(__file__))
-    with open(join(this_dir, 'README.md'), encoding='utf-8') as file:
-        long_description = file.read()
-except IOError:
-    # Handle file not found Exception.
-    long_description = 'boss - Yet another pythonic deployment tool built on top of fabric.'
+with open(join(path, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 
 class RunTests(Command):
@@ -38,7 +34,8 @@ class RunTests(Command):
 setup(
     name='boss-cli',
     version=__version__,
-    description='A lightweight deployment tool based upon fabric',
+    description='Yet another pythonic deployment tool built on top of fabric.',
+    long_description_content_type='text/markdown',
     long_description=long_description,
     url='https://github.com/kabirbaidhya/boss-cli',
     author='Kabir Baidhya',
