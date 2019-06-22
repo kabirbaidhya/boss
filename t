@@ -18,6 +18,7 @@ publish() {
   rm -rf dist build boss_cli.egg-info
   pip install -U .
   python setup.py sdist bdist_wheel
+  twine check dist/*
   twine upload --verbose dist/*
 }
 
@@ -68,7 +69,7 @@ bump() {
   # Update version in the following files
   sed -i "s/__version__ = .*/__version__ = '${VERSION}'/" boss/__init__.py
   sed -i "s/.*pip install boss-cli==.*/\$ pip install boss-cli==${VERSION}/" README.md
-  
+
   # Generate change log
   changelog
 
