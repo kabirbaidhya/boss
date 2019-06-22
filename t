@@ -71,7 +71,7 @@ bump() {
   echo ""
   # Prepare to commit
   git add README.md boss/__init__.py CHANGELOG.md && \
-    git commit -v --edit -m "Bump version $(git describe --abbrev=0 --tags) → ${VERSION}" && \
+    git commit -v --edit -m "Bump version ${VERSION}" && \
     git tag "$NEXT" && \
     echo -e "\nRelease tagged $NEXT"
   git push origin HEAD --tags
