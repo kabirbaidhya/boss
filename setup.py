@@ -8,14 +8,10 @@ from setuptools import Command, find_packages, setup
 
 from boss import __version__
 
+path = abspath(dirname(__file__))
 
-try:
-    this_dir = abspath(dirname(__file__))
-    with open(join(this_dir, 'README.md'), encoding='utf-8') as file:
-        long_description = file.read()
-except IOError:
-    # Handle file not found Exception.
-    long_description = 'boss - Yet another pythonic deployment tool built on top of fabric.'
+with open(join(path, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 
 class RunTests(Command):
@@ -35,10 +31,38 @@ class RunTests(Command):
         raise SystemExit(errno)
 
 
+# Package requirements
+requirements = [
+    'fabric==1.14.1',
+    'paramiko==2.5',
+    'cryptography==2.7',
+    'pyyaml==5.1.1',
+    'requests==2.20.0',
+    'inquirer==2.2.0',
+    'python-dotenv==0.6.5',
+    'terminaltables==3.1.0',
+    'click==6.7',
+    'hvac==0.6.4',
+]
+
+# Development requirements
+requirements_dev = [
+    'pytest==3.2.3',
+    'pytest-cov==2.5.1',
+    'pytest-watch==4.2.0',
+    'coverage==4.4.1',
+    'mock==2.0.0',
+    'pylint==1.7.4',
+    'autopep8==1.3.3',
+    'mock-ssh-server==0.3.0',
+    'twine==1.13.0'
+]
+
 setup(
     name='boss-cli',
     version=__version__,
-    description='A lightweight deployment tool based upon fabric',
+    description='Yet another pythonic deployment tool built on top of fabric.',
+    long_description_content_type='text/markdown',
     long_description=long_description,
     url='https://github.com/kabirbaidhya/boss-cli',
     author='Kabir Baidhya',
@@ -47,34 +71,14 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Utilities',
-        'License :: Public Domain',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 2.7'
     ],
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
-    install_requires=[
-        'fabric==1.14.0',
-        'paramiko==2.4.2',
-        'pyyaml>=4.2b1',
-        'requests==2.20.0',
-        'inquirer==2.2.0',
-        'python-dotenv==0.6.5',
-        'terminaltables==3.1.0',
-        'click==6.7',
-        'hvac==0.6.4',
-        'cryptography==2.4.2'
-    ],
-    extras_require={
-        'test': ['mock', 'coverage', 'pytest', 'pytest-cov', 'pylint', 'pytest-watch'],
-    },
+    install_requires=requirements,
+    extras_require={'dev': requirements_dev},
     entry_points={
         'console_scripts': [
             'boss=boss.cli:main',

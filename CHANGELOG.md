@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.1](https://github.com/kabirbaidhya/boss/tree/v1.0.1) (2019-06-22)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.1-alpha.1...v1.0.1)
+
+**Improvements:**
+
+- Upgrade core dependencies - paramiko, cryptography, fabric and pyyaml [\#157](https://github.com/kabirbaidhya/boss/pull/157) [[internals](https://github.com/kabirbaidhya/boss/labels/internals)] ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Use setuptools for development and remove requirements-dev.txt [\#156](https://github.com/kabirbaidhya/boss/pull/156) ([kabirbaidhya](https://github.com/kabirbaidhya))
+- Display README.md correctly on pypi repository [\#155](https://github.com/kabirbaidhya/boss/pull/155) ([kabirbaidhya](https://github.com/kabirbaidhya))
+
+## [v1.0.1-alpha.1](https://github.com/kabirbaidhya/boss/tree/v1.0.1-alpha.1) (2019-06-22)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0...v1.0.1-alpha.1)
+
 ## [v1.0.0](https://github.com/kabirbaidhya/boss/tree/v1.0.0) (2019-06-22)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.0-beta.6...v1.0.0)
 

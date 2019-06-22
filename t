@@ -3,24 +3,9 @@
 
 setup() {
   echo "Setting things up"
-  pip install -r requirements-dev.txt
-  python setup.py develop
+  pip install -U -e .[dev]
 }
 
-setup_ci() {
-  echo "Setting things up for CI"
-  pip install -r requirements-dev.txt
-  pip install -U --editable .
-}
-
-publish() {
-  test
-  echo "Publishing"
-  rm -rf dist build boss_cli.egg-info
-  pip install -U .
-  python setup.py sdist bdist_wheel
-  twine upload dist/*
-}
 
 pep8() {
   echo "Running autopep8"
@@ -43,6 +28,16 @@ testw_chokidar() {
   # https://github.com/kimmobrunfeldt/chokidar-cli
   echo "Running tests (watch mode)"
   chokidar "**/*.py" --debounce=1000 --initial -c "python -m pytest -s"
+}
+
+publish() {
+  setup
+  test
+  echo "Publishing"
+  rm -rf dist build boss_cli.egg-info
+  python setup.py sdist bdist_wheel
+  twine check dist/*
+  twine upload --verbose dist/*
 }
 
 changelog() {
@@ -69,14 +64,14 @@ bump() {
   # Update version in the following files
   sed -i "s/__version__ = .*/__version__ = '${VERSION}'/" boss/__init__.py
   sed -i "s/.*pip install boss-cli==.*/\$ pip install boss-cli==${VERSION}/" README.md
-  
+
   # Generate change log
   changelog
 
   echo ""
   # Prepare to commit
   git add README.md boss/__init__.py CHANGELOG.md && \
-    git commit -v --edit -m "Bump version $(git describe --abbrev=0 --tags) → ${VERSION}" && \
+    git commit -v --edit -m "Bump version ${VERSION}" && \
     git tag "$NEXT" && \
     echo -e "\nRelease tagged $NEXT"
   git push origin HEAD --tags
