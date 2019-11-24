@@ -58,6 +58,15 @@ def upload_included_files(files, remote_path):
 
 
 @task
+def build():
+    ''' Build the code locally. '''
+    config = get_config()
+    stage = shell.get_stage()
+
+    buildman.build(stage, config)
+
+
+@task
 def deploy():
     ''' Zero-Downtime deployment for the backend. '''
     config = get_config()
