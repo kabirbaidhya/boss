@@ -46,6 +46,15 @@ def setup():
 
 
 @task
+def build():
+    ''' Build the code locally. '''
+    config = get_config()
+    stage = shell.get_stage()
+
+    buildman.build(stage, config)
+
+
+@task
 def deploy():
     ''' Zero-Downtime deployment for the web. '''
     config = get_config()
