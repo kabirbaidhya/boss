@@ -8,7 +8,6 @@
 
 [![Travis branch](https://img.shields.io/travis/kabirbaidhya/boss/master.svg?style=flat-square)](https://travis-ci.org/kabirbaidhya/boss)
 [![PyPI](https://img.shields.io/pypi/v/boss-cli.svg?style=flat-square)](https://pypi.python.org/pypi/boss-cli)
-![Code Climate](https://img.shields.io/codeclimate/github/kabirbaidhya/boss-cli.svg?style=flat-square)
 [![PyPI](https://img.shields.io/pypi/l/boss-cli.svg?style=flat-square)](https://github.com/kabirbaidhya/boss/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
@@ -194,7 +193,7 @@ You can define two scripts `install` and `build` in your `boss.yml`, to install 
 
 You also have to set the location of the output directory for the `build` script as `deployment.build_dir`. In our case, this would be the `build/` directory.
 
-#### Available tasks
+#### Available Tasks
 
 You can check the available tasks for this preset with `fab --list`.
 
@@ -203,6 +202,7 @@ You can check the available tasks for this preset with `fab --list`.
 
 Available commands:
 
+    build      Build the code locally.
     buildinfo  Print the build information.
     builds     Display the build history.
     deploy     Zero-Downtime deployment for the web.
