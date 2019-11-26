@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.2](https://github.com/kabirbaidhya/boss/tree/v1.0.2) (2019-11-26)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.1...v1.0.2)
+
+**Closed issues:**
+
+- Feature Discussion: A public "reflection" or "introspection" API [\#123](https://github.com/kabirbaidhya/boss/issues/123) [[feature request](https://github.com/kabirbaidhya/boss/labels/feature%20request)] [[under discussion](https://github.com/kabirbaidhya/boss/labels/under%20discussion)]
+
+**Improvements:**
+
+- Remove codeclimate badge [\#160](https://github.com/kabirbaidhya/boss/pull/160) ([mesaugat](https://github.com/mesaugat))
+- Add new task: 'build' [\#159](https://github.com/kabirbaidhya/boss/pull/159) ([mesaugat](https://github.com/mesaugat))
+
 ## [v1.0.1](https://github.com/kabirbaidhya/boss/tree/v1.0.1) (2019-06-22)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.1-alpha.1...v1.0.1)
 
