@@ -9,7 +9,7 @@ from copy import deepcopy
 
 from .constants import DEFAULT_CONFIG_FILE
 from .core import fs, vault
-from .core.output import halt, info, warn
+from .core.output import halt, info
 from .core.util.colors import cyan
 from .core.util.object import merge
 from .core.util.types import is_dict
