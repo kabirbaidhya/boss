@@ -118,7 +118,7 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
 
     except IOError as err:
         if os.environ.get('DEBUG') == 'true':
-            logging.exception("IOError")
+            logging.exception('IOError')
 
         halt('Error loading config file "{}"'.format(filename))
 
