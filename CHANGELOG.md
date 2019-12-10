@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.3-test.1](https://github.com/kabirbaidhya/boss/tree/v1.0.3-test.1) (2019-12-10)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.2...v1.0.3-test.1)
+
+**Improvements:**
+
+- Verbose debugging on DEBUG=true [\#161](https://github.com/kabirbaidhya/boss/pull/161) [[experimental](https://github.com/kabirbaidhya/boss/labels/experimental)] ([cham11ng](https://github.com/cham11ng))
+
 ## [v1.0.2](https://github.com/kabirbaidhya/boss/tree/v1.0.2) (2019-11-26)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.1...v1.0.2)
 
