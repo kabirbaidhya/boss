@@ -3,12 +3,13 @@
 import os
 import yaml
 import dotenv
+import logging
 from copy import deepcopy
 
 
 from .constants import DEFAULT_CONFIG_FILE
 from .core import fs, vault
-from .core.output import halt, info
+from .core.output import halt, info, warn
 from .core.util.colors import cyan
 from .core.util.object import merge
 from .core.util.types import is_dict
@@ -115,7 +116,10 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     except KeyError:
         halt('Invalid configuration file "{}"'.format(filename))
 
-    except IOError:
+    except IOError as err:
+        if os.environ.get('DEBUG') == 'true':
+            logging.exception("IOError")
+
         halt('Error loading config file "{}"'.format(filename))
 
 
@@ -143,7 +147,6 @@ def get_stage_config(stage):
         halt('Unknown stage %s. Stage should be any one of %s' % (
             stage, _config['stages'].keys()
         ))
-
 
 def is_vault_enabled(raw_config):
     ''' Check if vault is configured using raw config. '''
