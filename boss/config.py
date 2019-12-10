@@ -3,6 +3,7 @@
 import os
 import yaml
 import dotenv
+import logging
 from copy import deepcopy
 
 
@@ -117,7 +118,10 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
     except KeyError:
         halt('Invalid configuration file "{}"'.format(filename))
 
-    except IOError:
+    except IOError as err:
+        if os.environ.get('DEBUG') == 'true':
+            logging.exception('IOError')
+
         halt('Error loading config file "{}"'.format(filename))
 
 
