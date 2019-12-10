@@ -117,10 +117,11 @@ def load(filename=DEFAULT_CONFIG_FILE, stage=None):
         halt('Invalid configuration file "{}"'.format(filename))
 
     except IOError as err:
+        # TODO: Handle from logger util.
         if os.environ.get('DEBUG') == 'true':
-            logging.exception('IOError')
+            logging.exception(err)
 
-        halt('Error loading config file "{}"'.format(filename))
+        halt(err)
 
 
 def get_base_config(resolved_config=None):
