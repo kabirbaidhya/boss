@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.0.3](https://github.com/kabirbaidhya/boss/tree/v1.0.3) (2019-12-10)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.3-alpha.1...v1.0.3)
+
+**Fixed bugs:**
+
+- Config loading - Display specific error message instead of the same error every time on failure [\#162](https://github.com/kabirbaidhya/boss/pull/162) [[bug](https://github.com/kabirbaidhya/boss/labels/bug)] [[config](https://github.com/kabirbaidhya/boss/labels/config)] [[deployment](https://github.com/kabirbaidhya/boss/labels/deployment)] ([cham11ng](https://github.com/cham11ng))
+
+## [v1.0.3-alpha.1](https://github.com/kabirbaidhya/boss/tree/v1.0.3-alpha.1) (2019-12-10)
+[Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.3-test.1...v1.0.3-alpha.1)
+
 ## [v1.0.3-test.1](https://github.com/kabirbaidhya/boss/tree/v1.0.3-test.1) (2019-12-10)
 [Full Changelog](https://github.com/kabirbaidhya/boss/compare/v1.0.2...v1.0.3-test.1)
 
