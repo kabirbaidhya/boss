@@ -34,7 +34,7 @@ class RunTests(Command):
 # Package requirements
 requirements = [
     'fabric==1.14.1',
-    'paramiko==2.5',
+    'paramiko==2.10.1',
     'cryptography==2.7',
     'pyyaml==5.1.1',
     'requests==2.20.0',
